@@ -1,6 +1,6 @@
 /* FULL NPPL INSIDER — service worker
    Cache-first for static shell/study assets; network-first for live weather/NOTAM APIs. */
-const CACHE_VERSION = 'nppl-insider-v9-20261021-ghpages';
+const CACHE_VERSION = 'nppl-insider-v10-20261021-ghpages';
 const SHELL = [
   './',
   './index.html',
