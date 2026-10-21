@@ -144,6 +144,11 @@ const TripUI = (() => {
         <li><a href="https://www.metoffice.gov.uk/services/transport/aviation/regulated/national-met" target="_blank" rel="noopener">Met Office aviation (GA)</a></li>
         <li><a href="https://nats-uk.ead-it.com/cms-nats/opencms/en/Publications/AIP/" target="_blank" rel="noopener">NATS AIS / AIP &amp; NOTAMs</a></li>
       </ul>`;
+    // Static hosting (GitHub Pages) has no /api proxy — don't even try.
+    if (/\.github\.io$/i.test(location.hostname)) {
+      if (status) status.innerHTML = `<span class="wx-offline">In-app live weather isn't available on this web version. Open the official sources for ${esc(icao)}:</span>${officialLinks}`;
+      return;
+    }
     try {
       const [mR, tR, nR] = await Promise.all([apiJson('metar'), apiJson('taf'), apiJson('notam')]);
       if (metarEl) {

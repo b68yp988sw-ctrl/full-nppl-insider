@@ -94,6 +94,7 @@ const DailyPacksUI = (() => {
         const el = document.getElementById('met-live');
         if (el) el.textContent = 'Fetching ' + icao + '…';
         try {
+          if (/\.github\.io$/i.test(location.hostname)) throw new Error('NO_PROXY');
           const r = await fetch('api/metar?icao=' + encodeURIComponent(icao));
           if (!(r.headers.get('content-type') || '').includes('json')) throw new Error('NO_PROXY');
           const j = await r.json();
