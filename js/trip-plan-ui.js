@@ -141,7 +141,7 @@ const TripUI = (() => {
     const officialLinks = `
       <ul class="wx-links" style="margin:6px 0 0 18px;line-height:1.7">
         <li><a href="https://aviationweather.gov/data/metar/?id=${encodeURIComponent(icao)}&decoded=1&taf=1" target="_blank" rel="noopener">METAR + TAF for ${esc(icao)} (aviationweather.gov)</a></li>
-        <li><a href="https://www.metoffice.gov.uk/services/transport/aviation/regulated/national-met" target="_blank" rel="noopener">Met Office aviation (GA)</a></li>
+        <li><a href="https://www.metoffice.gov.uk/services/transport/aviation/regulated" target="_blank" rel="noopener">Met Office aviation (GA)</a></li>
         <li><a href="https://nats-uk.ead-it.com/cms-nats/opencms/en/Publications/AIP/" target="_blank" rel="noopener">NATS AIS / AIP &amp; NOTAMs</a></li>
       </ul>`;
     // Static hosting (GitHub Pages) has no /api proxy — don't even try.
