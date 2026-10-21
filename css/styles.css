@@ -219,7 +219,7 @@ body { overflow-x: hidden; }
 }
 .quick-tile {
   background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 16px 12px; text-align: center; cursor: pointer;
+  border-radius: var(--radius); padding: 16px 12px; text-align: center; cursor: pointer; color: var(--text); font: inherit;
 }
 .quick-tile:active { border-color: var(--sky); }
 .quick-tile .qico { font-size: 1.6rem; display: block; margin-bottom: 6px; }
