@@ -24,7 +24,7 @@ Mobile-first **UK NPPL Microlight** study aid for Christopher (C42 student-pilot
 - **Take-off & Landing** — aileron / rudder / speed / crosswind corrections with Speak + videos
 - **Emergencies** — step checklists with Speak (forced landing, EFATO, fire, CO, electrics, fuel, radio, lost)
 - **Flight preparation** — hub before you fly: aircraft pre-flight overview (links into C42 Checks / CHIFFTAPWE) + destination aerodrome brief (PPR, hours, freqs, runway, weather/NOTAMs, fuel, alternate, docs) with ticks + localStorage
-- **C42 Checks** — C42 pre-flight digital checklist (External → Internal → Start → CHIFFTAPWE (Controls… Eventualities) → FREDA → freqs → FARTT HH → Shutdown) with tick-off, Speak, SVG walk-round/panel highlights
+- **C42 Checks** — C42 pre-flight digital checklist (External → Internal → Start → CHIFFTAPWE (Controls… Eventualities) → FREDA → FARTTHH → Shutdown) as tappable sections with tick-off rows, mnemonic letters, Speak and per-section reset
 - **Plan a trip** — airfield planning checklist (destination, weather, NOTAMs, PPR, radio, fuel, alternates, docs, final brief) with multi-draft localStorage, progress %, Speak, suggested freqs
 - **Abbreviations A–Z** — ~130 UK NPPL / microlight / FRTOL terms & mnemonics (MATZ, ATZ, FREDA, CHIFFTAPWE…) with live filter
 - **Microlights** — UK NPPL types (C42 + others): labelled SVG parts, specs by **engine/power/MTOW (Maximum Take-Off Weight) variant**, live fuel↔weight calculator with AUW (All-Up Weight) / SG (Specific Gravity 0.72)
@@ -90,7 +90,7 @@ The in-app live METAR/TAF/NOTAM proxy (`/api/*` in `server.js`) is not part of t
 - **Narrated circuit video** (4 min 13 s) on Flying skills → Circuits. It loads only when you tap play and is not saved offline.
 - **Questions:** 352 → 402. The 50 new questions are original, and the answer order is now shuffled for each sitting.
 - **Airfields:** 10 → 29 quick cards for south England and South Wales. Each card names its source (UK AIP AIRAC 29 Oct 2026 or the airfield's website). Blanks mean "not verified". **Always check the current AIP/website and get PPR.**
-- **C42 check photos:** the school logo is blurred.
+- **C42 checks:** the app's own checklist design (no photos or school branding); Useful Frequencies omitted.
 - **Translations:** stale or half-English content was removed (it falls back to English), and the missing UI strings were added in all 7 languages. **All non-English text still needs a check by a native speaker.**
 - **Bug fixes:** the exam timer kept running after you left the exam; the exam answer key was biased; airfield seeds were missing for existing users; the service worker cache was scoped wrongly; translated choices could mismatch the answer key.
 - **Saved progress is kept:** same storage keys as before. Airfield cards move to a new key (`full-nppl-airfields-v3`); your custom cards, edits and deletions carry over.

@@ -40,13 +40,6 @@ const FLIGHT_PREP = {
       speak: 'En route F R E D A.'
     },
     {
-      id: 'freqs',
-      title: 'Useful frequencies',
-      blurb: 'Study sheet freqs (confirm AIP / plates on the day).',
-      c42Mode: 'freqs',
-      speak: 'Useful frequencies. Confirm current values before flight.'
-    },
-    {
       id: 'fartt',
       title: 'FARTT HH (Fuel, Altimeter, Radio, Traffic, Ts & Ps, Hatches, Harnesses)',
       blurb: 'Pre-landing checks before joining / final.',

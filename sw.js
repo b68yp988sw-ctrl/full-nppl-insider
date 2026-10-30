@@ -5,7 +5,7 @@
    caches ('nppl-insider-*'). Preview caches ('nppl-preview-*') are left alone. */
 const CACHE_PREFIX = 'nppl-live-';
 const OLD_LIVE_PREFIXES = [CACHE_PREFIX, 'nppl-insider-'];
-const CACHE_VERSION = CACHE_PREFIX + 'v3-20261030';
+const CACHE_VERSION = CACHE_PREFIX + 'v4-20261030-checks';
 const SHELL = [
   './',
   './index.html',
@@ -61,9 +61,7 @@ const SHELL = [
   './js/pwa.js',
   './data/crp-drills.js',
   './data/frtol-drills.js',
-  './data/airfields.js',
-  './assets/c42-checks/sheet-1-preview.jpg',
-  './assets/c42-checks/sheet-2-preview.jpg'
+  './data/airfields.js'
 ];
 
 const LANG_FILES = ['cy', 'pl', 'fr', 'de', 'es', 'pt', 'ro'].map(

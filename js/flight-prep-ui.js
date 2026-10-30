@@ -166,7 +166,7 @@ const FlightPrepUI = (() => {
 
     document.querySelectorAll('[data-fp-c42]').forEach(btn => {
       btn.addEventListener('click', () => {
-        // C42 UI may ignore mode; still open checks
+        if (btn.dataset.fpC42 && typeof C42UI !== 'undefined') C42UI.setMode(btn.dataset.fpC42);
         ctx.go('c42');
       });
     });
