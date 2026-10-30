@@ -41,6 +41,18 @@ const C42UI = (() => {
 
   loadTicks();
 
+  // Animated visual aids (original artwork, "typical" set-up). Rows without art render as normal rows.
+  const VIZ = {
+    'ext-elec': { src: 'assets/img/c42/ext-elec.svg', cap: 'Typical key-type master: turn ON, check strobe, nav & landing lights. Panels vary.' },
+    'ext-prop': { src: 'assets/img/c42/ext-prop.svg', cap: 'Typical 3-blade prop: run along the leading edge for nicks; check the spinner is secure.' },
+    'ext-fuel': { src: 'assets/img/c42/ext-fuel.svg', cap: 'Typical samples: good vs water vs debris. Water is heavier and sinks below the fuel.' },
+    'dep-p':    { src: 'assets/img/c42/dep-power.svg', cap: 'Typical Rotax 912 tach: brakes on, into wind, set 3500 rpm. Confirm with your POH / instructor.' }
+  };
+  const vizOpen = {};   // itemId -> true (opened by tap)
+  const vizShut = {};   // itemId -> true (closed by tap; stops auto-open as current step)
+  const currentOf = (m) => { const it = m.items.find(i => !ticks[i.id]); return it ? it.id : null; };
+  const isVizOpen = (m, id) => !!VIZ[id] && (vizOpen[id] || (currentOf(m) === id && !vizShut[id]));
+
   function sectionHead(m, idx) {
     const p = prog(m);
     const done = p.done === p.total;
@@ -61,6 +73,22 @@ const C42UI = (() => {
   }
 
   function row(m, it, i) {
+    const v = VIZ[it.id];
+    if (!v) return rowBtn(m, it, i);
+    const open = isVizOpen(m, it.id);
+    const cur = currentOf(m) === it.id;
+    return `
+      <div class="ck-item has-viz ${open ? 'viz-open' : ''} ${cur ? 'is-current' : ''}" data-ck-item="${esc(it.id)}">
+        ${rowBtn(m, it, i)}
+        <button type="button" class="ck-thumb" data-ck-viz="${esc(it.id)}" aria-expanded="${open}" aria-label="Show picture: ${esc(it.label)}"><img src="${v.src}" alt="" width="72" height="48" loading="lazy" decoding="async"/></button>
+        <div class="ck-viz" ${open ? '' : 'hidden'}>
+          <div class="ck-viz-img"><img src="${v.src}" alt="${esc(it.label)}: animated visual aid (typical set-up)" decoding="async"/></div>
+          <div class="ck-viz-cap"><span>${esc(v.cap)}</span><button type="button" class="ck-viz-close" data-ck-viz-close="${esc(it.id)}">Close</button></div>
+        </div>
+      </div>`;
+  }
+
+  function rowBtn(m, it, i) {
     const on = !!ticks[it.id];
     const mark = it.letter
       ? `<span class="ck-letter">${esc(it.letter)}</span>`
@@ -136,6 +164,19 @@ const C42UI = (() => {
     if (t) t.textContent = `${all.filter(i => ticks[i.id]).length} of ${all.length} ticked`;
   }
 
+  function setVizState(m) {
+    m.items.forEach(it => {
+      if (!VIZ[it.id]) return;
+      const el = document.querySelector(`[data-ck-item="${it.id}"]`);
+      if (!el) return;
+      const open = isVizOpen(m, it.id);
+      el.classList.toggle('viz-open', open);
+      el.classList.toggle('is-current', currentOf(m) === it.id);
+      el.querySelector('.ck-viz').hidden = !open;
+      el.querySelector('.ck-thumb').setAttribute('aria-expanded', String(open));
+    });
+  }
+
   function bind(ctx) {
     const openYours = document.getElementById('c42-open-yours');
     if (openYours) openYours.addEventListener('click', () => {
@@ -172,7 +213,28 @@ const C42UI = (() => {
         saveTicks();
         btn.classList.toggle('on', on);
         btn.setAttribute('aria-checked', String(on));
-        refreshCounts(btn.closest('[data-ck-sec]').dataset.ckSec);
+        const secId = btn.closest('[data-ck-sec]').dataset.ckSec;
+        refreshCounts(secId);
+        const m = modes().find(x => x.id === secId);
+        if (m) setVizState(m);
+      });
+    });
+
+    document.querySelectorAll('[data-ck-viz], [data-ck-viz-close]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.ckViz || btn.dataset.ckVizClose;
+        const m = modes().find(x => x.items.some(i => i.id === id));
+        if (!m) return;
+        if (btn.dataset.ckViz) { vizOpen[id] = true; delete vizShut[id]; }
+        else { delete vizOpen[id]; vizShut[id] = true; }
+        setVizState(m);
+        if (btn.dataset.ckViz) {
+          const el = document.querySelector(`[data-ck-item="${id}"] .ck-viz`);
+          if (el && el.getBoundingClientRect().bottom > window.innerHeight) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        } else {
+          const r = document.querySelector(`[data-ck-item="${id}"]`);
+          if (r && r.getBoundingClientRect().top < 60) r.scrollIntoView({ block: 'start' });
+        }
       });
     });
 

@@ -26,6 +26,7 @@ Mobile-first **UK NPPL Microlight** study aid for Christopher (C42 student-pilot
 - **Emergencies** — step checklists with Speak (forced landing, EFATO, fire, CO, electrics, fuel, radio, lost)
 - **Flight preparation** — hub before you fly: aircraft pre-flight overview (links into C42 Checks / CHIFFTAPWE) + destination aerodrome brief (PPR, hours, freqs, runway, weather/NOTAMs, fuel, alternate, docs) with ticks + localStorage
 - **C42 Checks** — C42 pre-flight digital checklist (External → Internal → Start → CHIFFTAPWE (Controls… Eventualities) → FREDA → FARTTHH → Shutdown) as tappable sections with tick-off rows, mnemonic letters, Speak and per-section reset
+- **C42 visual aids** — original animated illustrations ("typical" set-up) for Electrical System (master key), Propeller, Fuel (good vs water vs debris sample) and Power Check; current step shows the visual full width, other rows a tap-to-expand thumbnail; still image for reduced-motion
 - **Plan a trip** — airfield planning checklist (destination, weather, NOTAMs, PPR, radio, fuel, alternates, docs, final brief) with multi-draft localStorage, progress %, Speak, suggested freqs
 - **Abbreviations A–Z** — ~130 UK NPPL / microlight / FRTOL terms & mnemonics (MATZ, ATZ, FREDA, CHIFFTAPWE…) with live filter
 - **Microlights** — UK NPPL types (C42 + others): labelled SVG parts, specs by **engine/power/MTOW (Maximum Take-Off Weight) variant**, live fuel↔weight calculator with AUW (All-Up Weight) / SG (Specific Gravity 0.72)

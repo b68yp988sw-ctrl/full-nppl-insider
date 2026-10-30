@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="Fuel drain samples compared: a good sample is one uniform pale colour; with water present a clear layer settles at the bottom under the fuel with a sharp curved boundary; with debris, specks settle at the bottom. If water is found keep draining until clean, then re-check.">
+<title>Fuel sample — good vs water vs debris (typical)</title>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c0c16"/><stop offset="1" stop-color="#07070c"/></linearGradient>
+  <linearGradient id="fuel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3b0" stop-opacity=".86"/><stop offset="1" stop-color="#f5df7e" stop-opacity=".84"/></linearGradient>
+  <linearGradient id="water" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#dbeafe" stop-opacity=".34"/><stop offset=".5" stop-color="#e0f2fe" stop-opacity=".14"/><stop offset="1" stop-color="#dbeafe" stop-opacity=".34"/></linearGradient>
+  <clipPath id="c1"><rect x="26" y="36" width="36" height="55" rx="5"/></clipPath>
+  <clipPath id="c2"><rect x="102" y="36" width="36" height="55" rx="5"/></clipPath>
+  <clipPath id="c3"><rect x="178" y="36" width="36" height="55" rx="5"/></clipPath>
+</defs>
+<style>
+  text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .a{animation-duration:6s;animation-iteration-count:infinite}
+  .cyc{animation-name:cyc}
+  .fill{transform-box:fill-box;transform-origin:50% 100%;animation-name:fill;animation-timing-function:cubic-bezier(.3,0,.3,1)}
+  .drop{opacity:0;animation-name:drop;animation-timing-function:ease-in}
+  .d2{animation-delay:.25s}.d3{animation-delay:.5s}
+  .wl{transform-box:fill-box;transform-origin:50% 100%;animation-name:wl;animation-timing-function:ease-out}
+  .bnd{animation-name:bnd}
+  .glow{animation-name:glow}
+  .grit{animation-name:grit;animation-timing-function:ease-in}
+  .g2{animation-delay:.2s}.g3{animation-delay:.4s}
+  .v1,.v2,.v3{transform-box:fill-box;transform-origin:50% 50%;animation-name:pop}
+  .v2{animation-name:pop2}.v3{animation-name:pop3}
+  .call{animation-name:call}
+  @keyframes cyc{0%,90%{opacity:1}97%,100%{opacity:0}}
+  @keyframes fill{0%,4%{transform:scaleY(0)}20%,100%{transform:scaleY(1)}}
+  @keyframes drop{0%,12%{opacity:0;transform:translateY(0)}15%{opacity:1}35%{opacity:1;transform:translateY(30px)}38%,100%{opacity:0;transform:translateY(30px)}}
+  @keyframes wl{0%,26%{transform:scaleY(0)}42%,100%{transform:scaleY(1)}}
+  @keyframes bnd{0%,38%{opacity:0}44%,100%{opacity:1}}
+  @keyframes glow{0%,50%{opacity:0}56%{opacity:1}66%{opacity:.35}74%{opacity:1}82%{opacity:.35}88%,100%{opacity:1}}
+  @keyframes grit{0%,12%{opacity:0;transform:translateY(-34px)}16%{opacity:1}38%,100%{opacity:1;transform:translateY(0)}}
+  @keyframes pop{0%,44%{opacity:0;transform:scale(.3)}48%{opacity:1;transform:scale(1.2)}51%,100%{opacity:1;transform:scale(1)}}
+  @keyframes pop2{0%,49%{opacity:0;transform:scale(.3)}53%{opacity:1;transform:scale(1.2)}56%,100%{opacity:1;transform:scale(1)}}
+  @keyframes pop3{0%,54%{opacity:0;transform:scale(.3)}58%{opacity:1;transform:scale(1.2)}61%,100%{opacity:1;transform:scale(1)}}
+  @keyframes call{0%,60%{opacity:0;transform:translateY(4px)}65%,100%{opacity:1;transform:translateY(0)}}
+  @media (prefers-reduced-motion:reduce){.a{animation-play-state:paused!important;animation-delay:-4.6s!important}}
+</style>
+<rect width="240" height="160" rx="12" fill="url(#bg)"/>
+<!-- header + fuel colour legend -->
+<text x="12" y="13" font-size="7" font-weight="800" letter-spacing=".8" fill="#c9ced8">DRAIN SAMPLE · hold cup up to the light</text>
+<rect x="12" y="19.5" width="7" height="7" rx="1.5" fill="#fbe9a0"/>
+<text x="22" y="25.5" font-size="5.8" fill="#a6acbb">mogas: pale straw</text>
+<rect x="76" y="19.5" width="7" height="7" rx="1.5" fill="#60a5fa" fill-opacity=".6"/>
+<text x="86" y="25.5" font-size="5.8" fill="#a6acbb">100LL: blue</text>
+<text x="228" y="25.5" text-anchor="end" font-size="5.8" fill="#a6acbb">water is heavier → sinks</text>
+
+<!-- CUP 1: GOOD -->
+<g class="a cyc"><g clip-path="url(#c1)">
+  <rect class="a fill" x="26" y="46" width="36" height="45" fill="url(#fuel)"/>
+</g></g>
+<!-- CUP 2: WATER -->
+<g class="a cyc"><g clip-path="url(#c2)">
+  <rect class="a fill" x="102" y="46" width="36" height="45" fill="url(#fuel)"/>
+  <!-- clear water layer: replaces fuel at bottom -->
+  <path class="a wl" d="M102 73 Q120 79 138 73 V91 H102Z" fill="#1a2436"/>
+  <path class="a wl" d="M102 73 Q120 79 138 73 V91 H102Z" fill="url(#water)"/>
+  <path class="a bnd" d="M108 81 Q110 86 116 88 M131 80 V86" fill="none" stroke="#f0f9ff" stroke-opacity=".5" stroke-width=".8" stroke-linecap="round"/>
+  <circle class="a drop" cx="113" cy="48" r="2.2" fill="#cfe8ff" fill-opacity=".35" stroke="#f0f9ff" stroke-width=".7"/>
+  <circle class="a drop d2" cx="125" cy="46" r="2.8" fill="#cfe8ff" fill-opacity=".35" stroke="#f0f9ff" stroke-width=".7"/>
+  <circle class="a drop d3" cx="119" cy="44" r="1.8" fill="#cfe8ff" fill-opacity=".35" stroke="#f0f9ff" stroke-width=".7"/>
+</g>
+  <path class="a bnd" d="M102.6 73 Q120 79 137.4 73" fill="none" stroke="#f8fafc" stroke-width="1.1"/>
+  <path class="a glow" d="M102.6 73 Q120 79 137.4 73" fill="none" stroke="#60a5fa" stroke-width="3" stroke-opacity=".55"/>
+  <g class="a bnd" font-size="5.4" font-weight="800" fill="#c9ced8">
+    <path d="M139 58 H146" stroke="#8d93a4" stroke-width=".6"/><text x="148" y="60">FUEL</text>
+    <path d="M136 76 H146" stroke="#f8fafc" stroke-width=".6"/><text x="148" y="74" fill="#f8fafc">sharp</text><text x="148" y="80" fill="#f8fafc">line</text>
+    <path d="M139 86 H146" stroke="#93c5fd" stroke-width=".6"/><text x="148" y="88" fill="#93c5fd">WATER</text>
+  </g>
+</g>
+<!-- CUP 3: DEBRIS -->
+<g class="a cyc"><g clip-path="url(#c3)">
+  <rect class="a fill" x="178" y="46" width="36" height="45" fill="url(#fuel)"/>
+  <g class="a grit"><circle cx="186" cy="88.4" r="1.6" fill="#6b5a3e"/><rect x="193" y="87.6" width="2.6" height="1.6" rx=".4" fill="#c9ced8"/><circle cx="205" cy="88.6" r="1.2" fill="#4a3c28"/></g>
+  <g class="a grit g2"><circle cx="199" cy="88.2" r="1.8" fill="#5a4a32"/><circle cx="190" cy="89" r=".8" fill="#e2e5ec"/><path d="M201 86.5 l3 -1.4" stroke="#a6acbb" stroke-width=".7"/></g>
+  <g class="a grit g3"><circle cx="209" cy="88.6" r="1.4" fill="#6b5a3e"/><circle cx="196" cy="89.2" r=".9" fill="#7b6b50"/><circle cx="183" cy="89" r=".7" fill="#c9ced8"/></g>
+</g></g>
+
+<!-- cup outlines (on top) -->
+<g fill="#ffffff" fill-opacity=".04" stroke="#c9ced8" stroke-width="1.5">
+  <rect x="24" y="34" width="40" height="59" rx="6"/><rect x="100" y="34" width="40" height="59" rx="6"/><rect x="176" y="34" width="40" height="59" rx="6"/>
+</g>
+<g stroke="#fff" stroke-opacity=".3" stroke-width="1.3" stroke-linecap="round"><path d="M29 40 V86M105 40 V86M181 40 V86"/></g>
+<g stroke="#8d93a4" stroke-width=".6"><path d="M58 55h4M58 70h4M134 55h4M134 70h4M210 55h4M210 70h4"/></g>
+
+<!-- verdicts -->
+<g class="a cyc">
+<g class="a v1"><circle cx="20" cy="104" r="5.5" fill="#16a34a"/><path d="M17.3 104.2 l1.9 1.9 3.6 -3.8" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="28" y="106.3" font-size="6.6" font-weight="800" fill="#4ade80">GOOD SAMPLE</text>
+<text x="28" y="113.5" font-size="5" fill="#8d93a4">one colour · clear</text>
+<g class="a v2"><circle cx="94" cy="104" r="5.5" fill="#dc2626"/><path d="M91.8 101.8 l4.4 4.4 M96.2 101.8 l-4.4 4.4" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></g>
+<text x="102" y="106.3" font-size="6.6" font-weight="800" fill="#f87171">WATER PRESENT</text>
+<text x="102" y="113.5" font-size="5" fill="#8d93a4">clear layer at bottom</text>
+<g class="a v3"><circle cx="176" cy="104" r="5.5" fill="#dc2626"/><path d="M173.8 101.8 l4.4 4.4 M178.2 101.8 l-4.4 4.4" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></g>
+<text x="184" y="106.3" font-size="6.6" font-weight="800" fill="#f87171">DEBRIS</text>
+<text x="184" y="113.5" font-size="5" fill="#8d93a4">specks / grit settle</text>
+
+</g>
+<!-- action callout -->
+<g class="a cyc">
+<g class="a call">
+  <rect x="12" y="121" width="216" height="19" rx="6" fill="#2a0f12" stroke="#f87171"/>
+  <path d="M116 121 L120 116.5 L124 121" fill="#2a0f12" stroke="#f87171"/><rect x="115" y="120" width="10" height="2" fill="#2a0f12"/>
+  <text x="120" y="133.2" text-anchor="middle" font-size="7.1" font-weight="800" fill="#fecaca">Water found: keep draining until clean, then re-check</text>
+</g></g>
+<text x="228" y="153" text-anchor="end" font-size="6" fill="#8d93a4">TYPICAL · drain location &amp; cup vary</text>
+</svg>

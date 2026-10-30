@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="Typical master key switch: key goes in and turns to ON, panel light comes on, wingtip strobe flashes">
+<title>Electrical system — master key ON, strobe check (typical)</title>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c0c16"/><stop offset="1" stop-color="#07070c"/></linearGradient>
+  <radialGradient id="bez" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#3a3a5c"/><stop offset="1" stop-color="#14142a"/></radialGradient>
+  <radialGradient id="cyl" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#e9ecf3"/><stop offset=".6" stop-color="#9aa0b2"/><stop offset="1" stop-color="#5b6072"/></radialGradient>
+  <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3dc8f"/><stop offset=".5" stop-color="#d4af37"/><stop offset="1" stop-color="#8a6d1c"/></linearGradient>
+  <radialGradient id="flash"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#e6f0ff" stop-opacity=".9"/><stop offset="1" stop-color="#60a5fa" stop-opacity="0"/></radialGradient>
+  <radialGradient id="grn"><stop offset="0" stop-color="#a7f3d0"/><stop offset=".5" stop-color="#34d399" stop-opacity=".7"/><stop offset="1" stop-color="#34d399" stop-opacity="0"/></radialGradient>
+  <linearGradient id="wing" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2a46"/><stop offset="1" stop-color="#171729"/></linearGradient>
+  <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff4cf" stop-opacity=".55"/><stop offset="1" stop-color="#fff4cf" stop-opacity="0"/></linearGradient>
+</defs>
+<style>
+  text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .rot{transform-origin:70px 86px;animation:rot 4s cubic-bezier(.45,0,.3,1) infinite}
+  .keyin{transform-origin:70px 86px;animation:keyin 4s ease-out infinite}
+  .arc{animation:arc 4s linear infinite}
+  .lamp-on{animation:on 4s linear infinite}
+  .onlbl{animation:onlbl 4s linear infinite}
+  .strobe{transform-origin:222px 70px;animation:strobe 4s linear infinite}
+  .flow{stroke-dasharray:3 5;animation:flow .6s linear infinite, on 4s linear infinite}
+  .ldg{animation:ldg 4s linear infinite}
+  @keyframes rot{0%,24%{transform:rotate(0)}34%,84%{transform:rotate(90deg)}95%,100%{transform:rotate(0)}}
+  @keyframes keyin{0%{opacity:0;transform:scale(1.55)}16%{opacity:1;transform:scale(1)}93%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.55)}}
+  @keyframes arc{0%,21%{opacity:0}26%,33%{opacity:1}40%,100%{opacity:0}}
+  @keyframes on{0%,33%{opacity:0}36%,84%{opacity:1}88%,100%{opacity:0}}
+  @keyframes onlbl{0%,33%{fill:#8d93a4}36%,84%{fill:#e8c96a}88%,100%{fill:#8d93a4}}
+  @keyframes ldg{0%,40%{opacity:0}44%,84%{opacity:1}88%,100%{opacity:0}}
+  @keyframes strobe{0%,47%{opacity:0;transform:scale(.6)}48%{opacity:1;transform:scale(1)}50%{opacity:0;transform:scale(.8)}51.5%{opacity:1;transform:scale(1.05)}54%{opacity:0;transform:scale(.7)}
+    68%{opacity:0;transform:scale(.6)}69%{opacity:1;transform:scale(1)}71%{opacity:0;transform:scale(.8)}72.5%{opacity:1;transform:scale(1.05)}75%,100%{opacity:0;transform:scale(.6)}}
+  @keyframes flow{to{stroke-dashoffset:-8}}
+  @media (prefers-reduced-motion:reduce){.rot,.keyin,.arc,.lamp-on,.onlbl,.strobe,.flow,.ldg{animation-duration:0s;animation-iteration-count:1;animation-delay:-1.8s}}
+</style>
+<rect width="240" height="160" rx="12" fill="url(#bg)"/>
+<!-- panel -->
+<rect x="8" y="12" width="124" height="136" rx="10" fill="#14142a" stroke="#2a2a46"/>
+<text x="70" y="27" text-anchor="middle" font-size="8" font-weight="700" letter-spacing="1.4" fill="#a6acbb">MASTER</text>
+<!-- position marks -->
+<g stroke="#c9ced8" stroke-width="1.6" stroke-linecap="round"><path d="M70 47v5"/><path d="M109 86h-5"/></g>
+<text x="70" y="43" text-anchor="middle" font-size="7.5" font-weight="700" fill="#a6acbb">OFF</text>
+<text class="onlbl" x="112" y="89" font-size="7.5" font-weight="700" fill="#8d93a4">ON</text>
+<!-- bezel + cylinder -->
+<circle cx="70" cy="86" r="31" fill="url(#bez)" stroke="#3d3d6b" stroke-width="1.5"/>
+<circle cx="70" cy="86" r="21" fill="url(#cyl)" stroke="#2a2a46"/>
+<g class="rot"><rect x="67.6" y="74" width="4.8" height="24" rx="1.6" fill="#07070c"/></g>
+<!-- turn arrow -->
+<path class="arc" d="M80.6 50.5A37 37 0 0 1 105.5 75.6" fill="none" stroke="#d4af37" stroke-width="2.2" stroke-linecap="round"/>
+<path class="arc" d="M101 74.5l5 2.6 1.4-5.6" fill="none" stroke="#d4af37" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- key -->
+<g class="rot"><g class="keyin">
+  <ellipse cx="72" cy="88" rx="12" ry="25" fill="#000" opacity=".35"/>
+  <path d="M63 86 C63 70 62 64 61 58 C60 50 64 45 70 45 C76 45 80 50 79 58 C78 64 77 70 77 86 C77 92 74 97 70 97 C66 97 63 92 63 86Z" fill="url(#brass)" stroke="#8a6d1c" stroke-width=".8"/>
+  <circle cx="70" cy="55" r="3.6" fill="#14142a" stroke="#8a6d1c" stroke-width=".6"/>
+  <path d="M66.5 66h7M66.5 70h7" stroke="#8a6d1c" stroke-width=".8" opacity=".7"/>
+</g></g>
+<!-- panel lamp -->
+<circle cx="26" cy="134" r="5" fill="#25253c" stroke="#3d3d6b"/>
+<g class="lamp-on"><circle cx="26" cy="134" r="11" fill="url(#grn)"/><circle cx="26" cy="134" r="4.4" fill="#34d399"/></g>
+<text x="36" y="137" font-size="7" font-weight="700" fill="#a6acbb">POWER ON</text>
+<!-- power flow -->
+<path class="flow" d="M132 128 H144 Q148 128 148 124 V99" fill="none" stroke="#60a5fa" stroke-width="1.4"/>
+<!-- wingtip (top view) -->
+<text x="186" y="27" text-anchor="middle" font-size="7.5" font-weight="700" letter-spacing="1" fill="#a6acbb">R WINGTIP</text>
+<path d="M140 58 H214 Q228 58 229 70 V86 Q228 98 214 98 H140Z" fill="url(#wing)" stroke="#3d3d6b"/>
+<path d="M140 58 H214" stroke="#60a5fa" stroke-opacity=".5" stroke-width="1.2"/>
+<path d="M150 98 H200" stroke="#8b5cf6" stroke-opacity=".5" stroke-width="2.4"/>
+<text x="176" y="108" text-anchor="middle" font-size="6" fill="#8d93a4">aileron</text>
+<!-- nav (green) + strobe lens -->
+<g class="lamp-on"><circle cx="223" cy="66" r="12" fill="url(#grn)"/></g>
+<rect x="219" y="62" width="8" height="8" rx="2.5" fill="#1f3b33" stroke="#34d399" stroke-width=".8"/>
+<rect x="219" y="72" width="8" height="6" rx="2" fill="#2b2f3e" stroke="#c9ced8" stroke-width=".8"/>
+<g class="strobe">
+  <circle cx="223" cy="75" r="22" fill="url(#flash)"/>
+  <g stroke="#fff" stroke-width="1.3" stroke-linecap="round"><path d="M223 47v8M223 95v8M195 75h8M243 75h-0"/><path d="M203 55l5 5M203 95l5-5"/></g>
+</g>
+<!-- landing light on leading edge (typical position varies) -->
+<rect x="164" y="55" width="12" height="5" rx="2" fill="#3a3a52" stroke="#c9ced8" stroke-width=".6"/>
+<g class="ldg"><path d="M164 56 L150 32 H190 L176 56Z" fill="url(#beam)"/><rect x="164" y="55" width="12" height="5" rx="2" fill="#fff4cf"/></g>
+<text x="190" y="124" text-anchor="middle" font-size="7" font-weight="700" fill="#e8c96a">strobe · nav · landing</text>
+<text x="232" y="152" text-anchor="end" font-size="6" fill="#8d93a4">TYPICAL · panels vary</text>
+</svg>
