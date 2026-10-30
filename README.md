@@ -19,6 +19,7 @@ Mobile-first **UK NPPL Microlight** study aid for Christopher (C42 student-pilot
 - Flashcards per subject (shuffle, known/unknown, progress)
 - Practice exams (timed/untimed, auto-mark, review with explanations) — **original** question bank
 - Flight computer guide + interactive calculator + **Video / How to use** (animated walkthrough + curated YouTube embeds)
+- **Opening splash** — full-screen logo on every open (~1.2 s, tap to skip, reduced-motion aware, never blocks), then the sign-in/disclaimer screen (pre-ticked for returning users); matching iOS launch images
 - **Pilot Log** (localStorage) — hours & landings summary
 - **Circuits** — animated UK LH circuit + joining · lookout · runway closures · final conflicts · climbs underneath · go-around priorities · hard vs grass taxi/vacate + videos
 - **Take-off & Landing** — aileron / rudder / speed / crosswind corrections with Speak + videos

@@ -5,7 +5,7 @@
    caches ('nppl-insider-*'). Preview caches ('nppl-preview-*') are left alone. */
 const CACHE_PREFIX = 'nppl-live-';
 const OLD_LIVE_PREFIXES = [CACHE_PREFIX, 'nppl-insider-'];
-const CACHE_VERSION = CACHE_PREFIX + 'v4-20261030-checks';
+const CACHE_VERSION = CACHE_PREFIX + 'v5-20261030-splash';
 const SHELL = [
   './',
   './index.html',
@@ -17,6 +17,8 @@ const SHELL = [
   './assets/icons/icon-maskable-512.png',
   './assets/icons/favicon-32.png',
   './assets/icons/splash-logo.jpg',
+  './assets/img/splash-portrait.jpg',
+  './assets/img/splash-landscape.jpg',
   './assets/img/logo-small.jpg',
   './assets/img/web.svg',
   './assets/video/circuit-poster.jpg',

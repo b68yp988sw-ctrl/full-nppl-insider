@@ -1718,21 +1718,13 @@
     }
     if (typeof AircraftPref !== 'undefined') AircraftPref.applyTheme();
     const st = Store.load();
-    if (st.disclaimerOk) {
-      gate.classList.add('hidden');
-      if (typeof I18n !== 'undefined' && !I18n.hasLang()) {
-        showLangPicker();
-      } else if (typeof AircraftPref !== 'undefined' && !AircraftPref.hasAircraft()) {
-        showAircraftPicker();
-      } else {
-        enterApp();
-      }
-      return;
-    }
+    // The sign-in screen is shown on every app open (straight after the splash).
+    // Returning users already accepted the disclaimer, so it is pre-ticked and they just tap Continue.
     gate.classList.remove('hidden');
     if (typeof I18n !== 'undefined') I18n.applyStaticChrome();
     const ack = document.getElementById('gate-ack');
     const enter = document.getElementById('gate-enter');
+    if (st.disclaimerOk) { ack.checked = true; enter.disabled = false; }
     ack.addEventListener('change', () => { enter.disabled = !ack.checked; });
     enter.addEventListener('click', () => {
       Store.update(s => { s.disclaimerOk = true; });

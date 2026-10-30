@@ -1819,3 +1819,27 @@ button, input, select, textarea { font-family: inherit; }
 .ck-reset { color: var(--silver); }
 .ck-reset.armed { color: var(--red); border-color: rgba(248,113,113,.5); background: rgba(248,113,113,.1); }
 @media (prefers-reduced-motion: reduce) { .ck-chev, .ck-bar i, .ck-box, .ck-box svg { transition: none; } }
+
+/* Sign-in (disclaimer) screen: shown on every open after the splash. Scrollable + safe-area aware so the
+   Continue button is always reachable on short / landscape phones. */
+.gate {
+  overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+}
+.gate-card { margin: auto; }
+@media (max-height: 520px) {
+  .gate-card { padding: 16px 18px; }
+  .gate-logo { margin-bottom: 2px; }
+  .gate-logo img { width: 48px; height: 48px; }
+  .gate-sub { margin: 2px 0 10px; }
+  .disclaimer-box { padding: 8px 12px; margin-bottom: 10px; }
+  .check-row { margin-bottom: 10px; }
+}
+@media (max-height: 430px) {
+  .gate-logo { display: none; }
+  .gate-card h1 { font-size: 1.15rem; }
+  .gate-sub { font-size: 0.82rem; margin: 0 0 8px; }
+  .disclaimer-box { font-size: 0.8rem; line-height: 1.4; }
+  .check-row { font-size: 0.8rem; }
+  .gate-card .btn { min-height: 44px; padding-top: 8px; padding-bottom: 8px; }
+}

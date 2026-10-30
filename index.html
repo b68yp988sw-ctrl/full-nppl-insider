@@ -15,28 +15,84 @@
   <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png" />
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="preload" as="image" href="assets/img/splash-portrait.jpg" media="(max-aspect-ratio: 1/1)" />
+  <link rel="preload" as="image" href="assets/img/splash-landscape.jpg" media="(min-aspect-ratio: 1/1)" />
+  <!-- iOS home-screen launch images: same artwork as the in-app splash, so the native launch blends into it -->
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-1320x2868.jpg" media="(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-2868x1320.jpg" media="(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-1290x2796.jpg" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-2796x1290.jpg" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-1284x2778.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-2778x1284.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-1260x2736.jpg" media="(device-width: 420px) and (device-height: 912px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-2736x1260.jpg" media="(device-width: 420px) and (device-height: 912px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-1242x2688.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-2688x1242.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-828x1792.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-1792x828.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-1206x2622.jpg" media="(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-2622x1206.jpg" media="(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-1179x2556.jpg" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-2556x1179.jpg" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-1170x2532.jpg" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-2532x1170.jpg" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-1125x2436.jpg" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-2436x1125.jpg" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-750x1334.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="assets/splash/launch-1334x750.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
   <style>
-    /* Opening splash: full logo on black, fades after ~1.5 s. pointer-events:none so it never blocks taps. */
-    #splash{position:fixed;inset:0;z-index:9999;background:#05050b;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:1;transition:opacity .5s ease}
-    #splash img{width:min(88vw,88vh,560px);height:auto;display:block}
-    #splash.splash-out{opacity:0}
-    html.no-splash #splash{display:none}
-    @media (prefers-reduced-motion: reduce){#splash{transition:none}}
+    /* Opening splash: full-bleed logo artwork on every app open (~1.2 s), then fades to the sign-in screen.
+       Tap to skip. Respects prefers-reduced-motion. Never blocks the app (hard 2.5 s fallback).
+       Art: the original logo, untouched in the centre, with the web extended to a tall (9:16) and a wide (16:9) frame. */
+    html,body{background:#05050b}
+    #splash{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;z-index:9999;overflow:hidden;background:#000;
+      display:flex;align-items:center;justify-content:center;cursor:pointer;
+      opacity:1;transition:opacity .45s ease,visibility 0s linear .45s;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+      --sa-t:env(safe-area-inset-top,0px);--sa-b:env(safe-area-inset-bottom,0px);--sa-l:env(safe-area-inset-left,0px);--sa-r:env(safe-area-inset-right,0px)}
+    #splash picture{display:contents}
+    /* Tall screens: 9:16 art. Fill the width always; grow to cover the height unless that would crop the wordmark (cap 118vw). */
+    #splash img{display:block;flex:none;max-width:none;object-fit:cover;
+      width:max(100vw,min(56.25vh,118vw));width:max(100vw,min(56.25dvh,118vw));height:auto;aspect-ratio:9/16;
+      transform:scale(1.035);transition:transform 1.6s ease-out}
+    /* Wide screens: 16:9 art. Fill the height; grow to cover the width unless that would crop the gold star (cap 104dvh). */
+    @media (min-aspect-ratio: 1/1){
+      #splash img{aspect-ratio:16/9;height:max(100vh,min(56.25vw,104vh));height:max(100dvh,min(56.25vw,104dvh));width:auto;
+        margin-left:calc(var(--sa-l) - var(--sa-r))}
+    }
+    #splash.splash-in img{transform:scale(1)}
+    #splash.splash-out{opacity:0;visibility:hidden;pointer-events:none}
+    @media (prefers-reduced-motion: reduce){#splash{transition:none}#splash img{transform:none;transition:none}}
   </style>
-  <script>try{if(sessionStorage.getItem('nppl_splash_seen'))document.documentElement.classList.add('no-splash');}catch(e){}</script>
 </head>
 <body>
-  <div id="splash" aria-hidden="true"><img src="assets/icons/splash-logo.jpg" alt="" width="720" height="720" decoding="async" /></div>
+  <div id="splash" aria-hidden="true"><picture><source media="(min-aspect-ratio: 1/1)" srcset="assets/img/splash-landscape.jpg" /><img src="assets/img/splash-portrait.jpg" alt="" decoding="sync" fetchpriority="high" draggable="false" /></picture></div>
   <script>
     (function () {
       var el = document.getElementById('splash');
       if (!el) return;
-      if (document.documentElement.classList.contains('no-splash')) { el.remove(); return; }
-      try { sessionStorage.setItem('nppl_splash_seen', '1'); } catch (e) {}
-      var done = false;
-      function hide() { if (done) return; done = true; el.classList.add('splash-out'); setTimeout(function () { el.remove(); }, 600); }
-      setTimeout(hide, 1500);
-      el.addEventListener('click', hide);
+      var img = el.querySelector('img');
+      var reduce = false;
+      try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+      var SHOW_MS = reduce ? 1000 : 1200, FADE_MS = reduce ? 0 : 450;
+      var done = false, timer = null;
+      function hide() {
+        if (done) return; done = true;
+        clearTimeout(timer);
+        el.classList.add('splash-out');
+        setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, FADE_MS + 80);
+      }
+      function start() {
+        if (timer || done) return;
+        if (!reduce) requestAnimationFrame(function () { el.classList.add('splash-in'); });
+        timer = setTimeout(hide, SHOW_MS);
+      }
+      // Start the 1.2 s clock once the logo is on screen; never wait more than 2.5 s for it.
+      if (img && !img.complete) { img.addEventListener('load', start); img.addEventListener('error', hide); }
+      else start();
+      setTimeout(hide, 2500);
+      el.addEventListener('pointerdown', function (e) { e.preventDefault(); hide(); });
+      el.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); hide(); });
+      window.addEventListener('keydown', function (e) { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') hide(); }, { once: true });
     })();
   </script>
   <div id="app">
