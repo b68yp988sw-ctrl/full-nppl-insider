@@ -8,11 +8,62 @@ const AirfieldsUI = (() => {
     return (typeof AIRFIELDS_SEED !== 'undefined' ? AIRFIELDS_SEED : []).map(a => ({ ...a, freqs: { ...(a.freqs || {}) } }));
   }
 
+  function seedVersion() {
+    return (typeof AIRFIELDS_META !== 'undefined' && AIRFIELDS_META.seedVersion) || 1;
+  }
+
+  /* Storage key bumped (v2 -> v3) so existing users get the new seed cards.
+     Carried over from older keys (read-only; old keys are never written, so a rollback still works):
+     - custom cards the user added;
+     - seed cards the user edited (detected by comparing with the old live v2 seed);
+     - seed cards the user deleted stay deleted.
+     Unedited old seed cards are replaced by the updated, source-checked versions. */
+  const V2_SEED_SIG = {"egtb":"1whnoik","egld":"1g2lcqr","egtr":"1k3ej0d","eglm":"1f9di2a","egtf":"1epwbm3","eghp":"jredad","turweston":"bcf7zi","hinton":"d920vn","bicester":"1irt0tv","amersham-local":"ucttok"};
+  const SIG_FIELDS = ['icao', 'name', 'area', 'runway', 'ppr', 'notes', 'circuit', 'tags'];
+  function sig(a) {
+    const f = a.freqs || {};
+    const str = JSON.stringify(SIG_FIELDS.map(k => String(a[k] == null ? '' : a[k]).trim())
+      .concat(['afis', 'atis', 'other'].map(k => String(f[k] == null ? '' : f[k]).trim())));
+    let x = 5381;
+    for (let i = 0; i < str.length; i++) x = ((x * 33) ^ str.charCodeAt(i)) >>> 0;
+    return x.toString(36);
+  }
+
+  function migrate() {
+    const base = seed();
+    const legacy = (typeof AIRFIELDS_META !== 'undefined' && AIRFIELDS_META.legacyKeys) || [];
+    const seen = new Set();
+    const extras = [];
+    const edited = {};
+    const deleted = new Set();
+    legacy.forEach(k => {
+      try {
+        const old = JSON.parse(localStorage.getItem(k) || 'null');
+        const items = (old && old.items) || [];
+        if (k === 'full-nppl-airfields-v2' && items.length) {
+          const have = new Set(items.map(a => a && a.id));
+          Object.keys(V2_SEED_SIG).forEach(id => { if (!have.has(id)) deleted.add(id); });
+        }
+        items.forEach(a => {
+          if (!a || !a.id || seen.has(a.id)) return;
+          seen.add(a.id);
+          if (V2_SEED_SIG[a.id]) {
+            if (sig(a) !== V2_SEED_SIG[a.id]) edited[a.id] = a;
+          } else if (!base.some(b => b.id === a.id)) {
+            extras.push(a);
+          }
+        });
+      } catch (_) { /* ignore */ }
+    });
+    const items = base.filter(a => !deleted.has(a.id)).map(a => edited[a.id] || a);
+    return { items: extras.concat(items), seeded: true, seedVersion: seedVersion() };
+  }
+
   function load() {
     try {
       const raw = localStorage.getItem(key());
       if (!raw) {
-        const s = { items: seed(), seeded: true };
+        const s = migrate();
         localStorage.setItem(key(), JSON.stringify(s));
         return s;
       }
@@ -20,6 +71,12 @@ const AirfieldsUI = (() => {
       if (!data.items || !data.items.length) {
         data.items = seed();
         data.seeded = true;
+        data.seedVersion = seedVersion();
+        localStorage.setItem(key(), JSON.stringify(data));
+      } else if ((data.seedVersion || 0) < seedVersion()) {
+        const have = new Set(data.items.map(a => a.id));
+        seed().forEach(a => { if (!have.has(a.id)) data.items.push(a); });
+        data.seedVersion = seedVersion();
         localStorage.setItem(key(), JSON.stringify(data));
       }
       return data;
@@ -90,7 +147,7 @@ const AirfieldsUI = (() => {
   let filter = '';
 
   function view(ctx) {
-    ctx.setNav('theory');
+    ctx.setNav('plan');
     ctx.titleEl.textContent = 'Airfields';
     const confirmLbl = 'Confirm with PPR / instructor before flight — study aid only.';
     ctx.btnBack.hidden = false;
@@ -112,14 +169,10 @@ const AirfieldsUI = (() => {
     const disc = (typeof AIRFIELDS_META !== 'undefined' && AIRFIELDS_META.disclaimer) || '';
     return `
       <div class="disclaimer-inline">${esc(disc)}</div>
-      <div class="hero" style="padding-top:0">
-        <div class="hero-badge">UK microlight · quick cards</div>
-        <h1 style="font-size:1.2rem">Saved airfields</h1>
-        <p class="meta">Freqs · PPR · runway · notes — editable offline</p>
-      </div>
-      <div class="wx-live-row">
-        <input type="search" id="af-q" placeholder="Search ICAO, name, area…" value="${esc(filter)}" />
-        <button type="button" class="btn btn-primary" id="af-new">＋</button>
+      <p class="meta" style="margin:10px 0 12px">${all().length} quick cards · runway, frequency, PPR · editable offline</p>
+      <div class="af-tools">
+        <input type="search" id="af-q" placeholder="Search ICAO, name, area…" aria-label="Search airfields" value="${esc(filter)}" />
+        <button type="button" class="btn btn-primary" id="af-new" aria-label="Add airfield card">＋ Add</button>
       </div>
       <div class="chip-row" style="margin-bottom:10px">
         <button type="button" class="chip" data-go="trip">Plan a trip</button>

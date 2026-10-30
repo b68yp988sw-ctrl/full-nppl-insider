@@ -70,25 +70,25 @@ const ChartUI = (() => {
 
   function frame(inner) {
     return `<svg class="chart-svg" viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect width="120" height="72" rx="8" fill="#0c1a30" stroke="rgba(79,195,247,0.25)"/>
+      <rect width="120" height="72" rx="8" fill="#0a0a12" stroke="rgba(96,165,250,0.25)"/>
       ${inner}
     </svg>`;
   }
 
   function svgScale() {
     return frame(`
-      <text x="10" y="18" fill="#8ba0bc" font-size="8" font-family="system-ui">1:500,000</text>
+      <text x="10" y="18" fill="#a6acbb" font-size="8" font-family="system-ui">1:500,000</text>
       <line x1="10" y1="40" x2="110" y2="40" stroke="#4fc3f7" stroke-width="2"/>
       <line x1="10" y1="34" x2="10" y2="46" stroke="#4fc3f7" stroke-width="2"/>
       <line x1="60" y1="34" x2="60" y2="46" stroke="#4fc3f7" stroke-width="2"/>
       <line x1="110" y1="34" x2="110" y2="46" stroke="#4fc3f7" stroke-width="2"/>
-      <text x="8" y="60" fill="#c9d6e8" font-size="7">0</text>
-      <text x="52" y="60" fill="#c9d6e8" font-size="7">5 km</text>
-      <text x="95" y="60" fill="#c9d6e8" font-size="7">10</text>`);
+      <text x="8" y="60" fill="#c9ced8" font-size="7">0</text>
+      <text x="52" y="60" fill="#c9ced8" font-size="7">5 km</text>
+      <text x="95" y="60" fill="#c9ced8" font-size="7">10</text>`);
   }
   function svgGrid() {
     return frame(`
-      <g stroke="rgba(79,195,247,0.35)" stroke-width="0.8">
+      <g stroke="rgba(96,165,250,0.35)" stroke-width="0.8">
         <line x1="20" y1="8" x2="20" y2="64"/><line x1="40" y1="8" x2="40" y2="64"/>
         <line x1="60" y1="8" x2="60" y2="64"/><line x1="80" y1="8" x2="80" y2="64"/>
         <line x1="100" y1="8" x2="100" y2="64"/>
@@ -102,9 +102,9 @@ const ChartUI = (() => {
     return frame(`
       <circle cx="40" cy="36" r="2.5" fill="#f5c842"/>
       <text x="48" y="40" fill="#f5c842" font-size="11" font-weight="700">842</text>
-      <text x="48" y="52" fill="#8ba0bc" font-size="7">ft AMSL</text>
+      <text x="48" y="52" fill="#a6acbb" font-size="7">ft AMSL</text>
       <path d="M85 55 Q95 30 105 50" fill="none" stroke="#86efac" stroke-width="1.2" opacity="0.7"/>
-      <text x="88" y="20" fill="#8ba0bc" font-size="6">MEF</text>
+      <text x="88" y="20" fill="#a6acbb" font-size="6">MEF</text>
       <text x="88" y="30" fill="#86efac" font-size="9" font-weight="700">12</text>`);
   }
   function svgIsogonal() {
@@ -112,14 +112,14 @@ const ChartUI = (() => {
       <path d="M5 50 Q40 20 70 40 T115 25" fill="none" stroke="#fb923c" stroke-width="1.5"
         stroke-dasharray="6 4"/>
       <text x="42" y="28" fill="#fb923c" font-size="8">1°W</text>
-      <text x="70" y="60" fill="#8ba0bc" font-size="7">isogonal</text>`);
+      <text x="70" y="60" fill="#a6acbb" font-size="7">isogonal</text>`);
   }
   function svgSwatch(bg, border, label, solid) {
     return frame(`
       <rect x="18" y="14" width="84" height="44" rx="4" fill="${bg}"
         stroke="${border}" stroke-width="${solid ? 2.5 : 1.5}"
         stroke-dasharray="${solid ? '0' : '5 3'}" opacity="0.95"/>
-      <text x="60" y="42" text-anchor="middle" fill="#e8eef7" font-size="16" font-weight="800">${label}</text>`);
+      <text x="60" y="42" text-anchor="middle" fill="#f1f3f8" font-size="16" font-weight="800">${label}</text>`);
   }
   function svgDashedCircle(color, label) {
     return frame(`
@@ -136,17 +136,17 @@ const ChartUI = (() => {
   function svgBand(color, label) {
     return frame(`
       <rect x="10" y="8" width="100" height="20" fill="rgba(56,189,248,0.35)" stroke="${color}" stroke-width="1.5"/>
-      <text x="60" y="22" text-anchor="middle" fill="#e8eef7" font-size="9" font-weight="700">${label} upper</text>
+      <text x="60" y="22" text-anchor="middle" fill="#f1f3f8" font-size="9" font-weight="700">${label} upper</text>
       <rect x="10" y="28" width="100" height="16" fill="rgba(134,239,172,0.12)" stroke="#86efac" stroke-width="1" stroke-dasharray="3 2"/>
       <text x="60" y="40" text-anchor="middle" fill="#86efac" font-size="8">under base · Class G?</text>
-      <text x="60" y="62" text-anchor="middle" fill="#8ba0bc" font-size="7">read vertical limits</text>`);
+      <text x="60" y="62" text-anchor="middle" fill="#a6acbb" font-size="7">read vertical limits</text>`);
   }
   function svgSteps(color, label) {
     return frame(`
       <path d="M10 55 L10 40 L40 40 L40 28 L70 28 L70 16 L110 16 L110 55 Z"
         fill="rgba(59,130,246,0.25)" stroke="${color}" stroke-width="2"/>
-      <text x="75" y="36" fill="#e8eef7" font-size="10" font-weight="700">${label}</text>
-      <text x="14" y="66" fill="#8ba0bc" font-size="6">stepped bases</text>`);
+      <text x="75" y="36" fill="#f1f3f8" font-size="10" font-weight="700">${label}</text>
+      <text x="14" y="66" fill="#a6acbb" font-size="6">stepped bases</text>`);
   }
   function svgMatz() {
     return frame(`
@@ -168,14 +168,14 @@ const ChartUI = (() => {
       </pattern></defs>
       <rect x="18" y="12" width="84" height="44" rx="2" fill="url(#hatch-${label.replace(/[^a-z0-9]/gi,'')})"
         stroke="${color}" stroke-width="2"/>
-      <text x="60" y="40" text-anchor="middle" fill="#e8eef7" font-size="14" font-weight="800">${label}</text>`);
+      <text x="60" y="40" text-anchor="middle" fill="#f1f3f8" font-size="14" font-weight="800">${label}</text>`);
   }
   function svgGlider() {
     return frame(`
       <line x1="20" y1="38" x2="100" y2="38" stroke="#e2e8f0" stroke-width="2.5"/>
       <line x1="60" y1="30" x2="60" y2="48" stroke="#e2e8f0" stroke-width="2"/>
       <path d="M55 30 L60 22 L65 30 Z" fill="#e2e8f0"/>
-      <text x="60" y="64" text-anchor="middle" fill="#8ba0bc" font-size="7">gliding</text>`);
+      <text x="60" y="64" text-anchor="middle" fill="#a6acbb" font-size="7">gliding</text>`);
   }
   function svgChute() {
     return frame(`
@@ -191,7 +191,7 @@ const ChartUI = (() => {
       <line x1="52" y1="40" x2="68" y2="40" stroke="#fb923c" stroke-width="1.5"/>
       <circle cx="60" cy="12" r="3" fill="#fb923c"/>
       <text x="72" y="20" fill="#fb923c" font-size="9" font-weight="700">1240</text>
-      <text x="72" y="30" fill="#8ba0bc" font-size="6">(300)</text>`);
+      <text x="72" y="30" fill="#a6acbb" font-size="6">(300)</text>`);
   }
   function svgAero(color) {
     return frame(`
@@ -201,9 +201,9 @@ const ChartUI = (() => {
   }
   function svgAeroHollow() {
     return frame(`
-      <circle cx="60" cy="36" r="18" fill="none" stroke="#8ba0bc" stroke-width="1.5" stroke-dasharray="3 3"/>
-      <rect x="42" y="33" width="36" height="6" rx="1" fill="none" stroke="#8ba0bc" stroke-width="1.5"/>
-      <text x="60" y="64" text-anchor="middle" fill="#8ba0bc" font-size="7">disused</text>`);
+      <circle cx="60" cy="36" r="18" fill="none" stroke="#a6acbb" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <rect x="42" y="33" width="36" height="6" rx="1" fill="none" stroke="#a6acbb" stroke-width="1.5"/>
+      <text x="60" y="64" text-anchor="middle" fill="#a6acbb" font-size="7">disused</text>`);
   }
   function svgHeli() {
     return frame(`
@@ -212,7 +212,7 @@ const ChartUI = (() => {
   }
   function svgTriangle(color) {
     return frame(`
-      <path d="M60 14 L90 58 L30 58 Z" fill="${color}" stroke="#0a1628" stroke-width="1"/>
+      <path d="M60 14 L90 58 L30 58 Z" fill="${color}" stroke="#05050b" stroke-width="1"/>
       <text x="60" y="68" text-anchor="middle" fill="${color}" font-size="8">VRP</text>`);
   }
   function svgDiamond(color) {
@@ -222,10 +222,10 @@ const ChartUI = (() => {
   }
   function svgNote() {
     return frame(`
-      <rect x="16" y="12" width="88" height="44" rx="4" fill="#152a4a" stroke="#f87171" stroke-width="1.5"/>
+      <rect x="16" y="12" width="88" height="44" rx="4" fill="#1e1e36" stroke="#f87171" stroke-width="1.5"/>
       <text x="24" y="28" fill="#f87171" font-size="7" font-weight="700">D026 · H24 / NOTAM</text>
-      <text x="24" y="42" fill="#c9d6e8" font-size="7">SFC–FL100 · see ENR</text>
-      <text x="24" y="54" fill="#8ba0bc" font-size="6">activation note (schematic)</text>`);
+      <text x="24" y="42" fill="#c9ced8" font-size="7">SFC–FL100 · see ENR</text>
+      <text x="24" y="54" fill="#a6acbb" font-size="6">activation note (schematic)</text>`);
   }
   function svgTopo() {
     return frame(`
@@ -233,17 +233,17 @@ const ChartUI = (() => {
       <line x1="50" y1="50" x2="110" y2="28" stroke="#94a3b8" stroke-width="3"/>
       <line x1="50" y1="54" x2="110" y2="32" stroke="#e2e8f0" stroke-width="0.8" stroke-dasharray="2 2"/>
       <path d="M10 20 Q40 10 70 22 T115 18" fill="none" stroke="#38bdf8" stroke-width="2"/>
-      <text x="16" y="28" fill="#8ba0bc" font-size="6">town</text>`);
+      <text x="16" y="28" fill="#a6acbb" font-size="6">town</text>`);
   }
   function svgRadio() {
     return frame(`
-      <rect x="28" y="20" width="64" height="32" rx="4" fill="#152a4a" stroke="#4fc3f7" stroke-width="1.5"/>
+      <rect x="28" y="20" width="64" height="32" rx="4" fill="#1e1e36" stroke="#4fc3f7" stroke-width="1.5"/>
       <text x="60" y="34" text-anchor="middle" fill="#4fc3f7" font-size="9" font-weight="700">118.700</text>
-      <text x="60" y="46" text-anchor="middle" fill="#8ba0bc" font-size="7">APP / TWR</text>
+      <text x="60" y="46" text-anchor="middle" fill="#a6acbb" font-size="7">APP / TWR</text>
       <circle cx="22" cy="28" r="3" fill="#34d399"/><circle cx="22" cy="40" r="3" fill="#34d399"/>`);
   }
   function svgGeneric() {
-    return frame(`<text x="60" y="40" text-anchor="middle" fill="#8ba0bc" font-size="10">symbol</text>`);
+    return frame(`<text x="60" y="40" text-anchor="middle" fill="#a6acbb" font-size="10">symbol</text>`);
   }
 
   function filtered(q, cat) {
@@ -340,17 +340,17 @@ const ChartUI = (() => {
       </g>
       <!-- Spot / MEF -->
       <text x="480" y="60" fill="#86efac" font-size="12" font-weight="700">MEF 12</text>
-      <text x="480" y="74" fill="#8ba0bc" font-size="8">×100 ft</text>
+      <text x="480" y="74" fill="#a6acbb" font-size="8">×100 ft</text>
       <!-- Scale bar -->
       <g transform="translate(40 370)">
         <line x1="0" y1="0" x2="100" y2="0" stroke="#4fc3f7" stroke-width="2"/>
         <line x1="0" y1="-5" x2="0" y2="5" stroke="#4fc3f7"/><line x1="50" y1="-5" x2="50" y2="5" stroke="#4fc3f7"/><line x1="100" y1="-5" x2="100" y2="5" stroke="#4fc3f7"/>
-        <text x="0" y="16" fill="#8ba0bc" font-size="8">0</text>
-        <text x="40" y="16" fill="#8ba0bc" font-size="8">5 km</text>
-        <text x="88" y="16" fill="#8ba0bc" font-size="8">10</text>
+        <text x="0" y="16" fill="#a6acbb" font-size="8">0</text>
+        <text x="40" y="16" fill="#a6acbb" font-size="8">5 km</text>
+        <text x="88" y="16" fill="#a6acbb" font-size="8">10</text>
       </g>
       <text x="200" y="24" fill="#7dd3fc" font-size="12" font-weight="700">STUDY MOCK · 1:500,000 style · NOT a NATS/CAA chart</text>
-      <text x="200" y="40" fill="#8ba0bc" font-size="9">Original schematic for NPPL microlight legend training</text>
+      <text x="200" y="40" fill="#a6acbb" font-size="9">Original schematic for NPPL microlight legend training</text>
     </svg>`;
   }
 

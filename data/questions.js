@@ -4928,6 +4928,756 @@ const QUESTIONS_DATA = [
     "ans": 0,
     "exp": "Admit it early and use a radar fix if you can. If the flight’s safety is in doubt, for example you’re losing VMC, make an urgency or distress call. Don’t call a real situation a training fix.",
     "lesson": "radio-10"
+  },
+  {
+    "id": "law-q-59",
+    "subject": "law",
+    "q": "In Class G below 3,000 ft AMSL at 140 kt IAS or less, the UK VFR minima are:",
+    "choices": [
+      "Clear of cloud, surface in sight, 1,500 m flight visibility",
+      "1,000 ft vertically from cloud and 8 km visibility",
+      "Clear of cloud with 500 m visibility",
+      "5 km visibility and 1,500 m horizontally from cloud"
+    ],
+    "ans": 0,
+    "exp": "These are the reduced UK Class G minima at low level and low speed. Your own personal minima should be higher, and check the current rules with your instructor.",
+    "lesson": "law-05",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "law-q-60",
+    "subject": "law",
+    "q": "In the signals area, a red square panel with one yellow diagonal means:",
+    "choices": [
+      "Landing is prohibited",
+      "The manoeuvring area is in poor condition, so take special care when landing",
+      "Gliding is in progress",
+      "Use paved surfaces only"
+    ],
+    "ans": 1,
+    "exp": "One diagonal means take special care. A red square with a yellow cross (two diagonals) means landings are prohibited.",
+    "lesson": "law-signs",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "law-q-61",
+    "subject": "law",
+    "q": "An aircraft in flight sees a flashing red light from the tower. It means:",
+    "choices": [
+      "Cleared to land",
+      "Return to the aerodrome",
+      "Aerodrome not available, do not land",
+      "Give way and continue circling"
+    ],
+    "ans": 2,
+    "exp": "Flashing red in flight means do not land here. Steady red means give way and keep circling.",
+    "lesson": "law-signs",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "law-q-62",
+    "subject": "law",
+    "q": "An NPPL holder can usually meet the medical requirement by:",
+    "choices": [
+      "No medical requirement exists for microlights",
+      "A class 1 medical only",
+      "A yearly eyesight test only",
+      "Making a Pilot Medical Declaration or holding a suitable medical certificate"
+    ],
+    "ans": 3,
+    "exp": "Most NPPL microlight pilots use a Pilot Medical Declaration based on DVLA standards. Check the current CAA guidance for your situation.",
+    "lesson": "law-01",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "law-q-63",
+    "subject": "law",
+    "q": "Can a microlight NPPL holder fly at night?",
+    "choices": [
+      "No, NPPL privileges are for flight by day only",
+      "Yes, with a night rating on the NPPL",
+      "Yes, inside controlled airspace only",
+      "Yes, in summer only"
+    ],
+    "ans": 0,
+    "exp": "The NPPL is a day-only licence. Plan to be on the ground with a margin before sunset.",
+    "lesson": "law-01",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "law-q-64",
+    "subject": "law",
+    "q": "A Danger Area Activity Information Service (DAAIS) tells you:",
+    "choices": [
+      "The best height to fly through the area",
+      "Whether a danger area is active, but it does not give a crossing clearance",
+      "The area is permanently inactive",
+      "How to get a clearance through any restricted area"
+    ],
+    "ans": 1,
+    "exp": "DAAIS gives activity status only. Even if an area is shown as inactive, take care and plan to avoid active areas.",
+    "lesson": "law-02",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "met-q-53",
+    "subject": "met",
+    "q": "You fly from warm air into much colder air without changing the altimeter setting. Your true altitude is:",
+    "choices": [
+      "Higher than indicated",
+      "The same as indicated",
+      "Lower than indicated",
+      "Higher only over the sea"
+    ],
+    "ans": 2,
+    "exp": "Cold air is denser, so pressure levels are closer together and the altimeter over-reads. Remember high to low, or hot to cold, look out below.",
+    "lesson": "met-01",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "met-q-54",
+    "subject": "met",
+    "q": "Advection fog forms when:",
+    "choices": [
+      "Cold air moves over warm sea",
+      "The sun heats the ground strongly",
+      "Air sinks in a high",
+      "Warm moist air moves over a colder surface"
+    ],
+    "ans": 3,
+    "exp": "Advection fog can form and persist even in stronger winds. It is common over cold sea and coasts in spring and early summer.",
+    "lesson": "met-03",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "met-q-55",
+    "subject": "met",
+    "q": "As a warm front approaches, the typical cloud sequence is:",
+    "choices": [
+      "Cirrus, then cirrostratus, altostratus and nimbostratus, with lowering cloud",
+      "Cumulonimbus first, then clear skies",
+      "Fog, then cumulus",
+      "Lenticular cloud only"
+    ],
+    "ans": 0,
+    "exp": "The cloud thickens and lowers ahead of a warm front, often with widespread rain and poor visibility.",
+    "lesson": "met-03",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "met-q-56",
+    "subject": "met",
+    "q": "In a TAF, TEMPO means:",
+    "choices": [
+      "A permanent change during the period",
+      "Temporary changes, each lasting under an hour and in total less than half the period",
+      "Temperature information",
+      "The forecast has been cancelled"
+    ],
+    "ans": 1,
+    "exp": "Plan for the TEMPO conditions as well as the main forecast, because they will happen for part of the period.",
+    "lesson": "met-04",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "met-q-57",
+    "subject": "met",
+    "q": "With your back to the wind in the northern hemisphere, low pressure is:",
+    "choices": [
+      "On your right",
+      "Directly behind you",
+      "On your left",
+      "Directly ahead of you"
+    ],
+    "ans": 2,
+    "exp": "This is Buys Ballot's law. It helps you picture the pressure pattern from the wind you feel.",
+    "lesson": "met-02",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "met-q-58",
+    "subject": "met",
+    "q": "Compared with the wind at 2,000 ft, the surface wind over land is usually:",
+    "choices": [
+      "Veered and stronger",
+      "Exactly the same",
+      "Backed and stronger",
+      "Backed and lighter, especially at night"
+    ],
+    "ans": 3,
+    "exp": "Surface friction slows the wind and turns it to an anti-clockwise direction. By day, mixing makes the difference smaller.",
+    "lesson": "met-02",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "met-q-59",
+    "subject": "met",
+    "q": "The air temperature is 18 °C and the dew point is 10 °C. Roughly where is the cumulus cloud base?",
+    "choices": [
+      "About 3,200 ft",
+      "About 800 ft",
+      "About 10,000 ft",
+      "About 1,800 ft"
+    ],
+    "ans": 0,
+    "exp": "A rule of thumb is a spread of (18 − 10) × 400 ft ≈ 3,200 ft above ground. Always check the forecast and actual reports.",
+    "lesson": "met-clouds",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "nav-q-59",
+    "subject": "nav",
+    "q": "On a 1:500,000 chart, 1 cm represents:",
+    "choices": [
+      "500 m",
+      "5 km",
+      "50 km",
+      "1 nm"
+    ],
+    "ans": 1,
+    "exp": "1 cm × 500,000 = 500,000 cm = 5 km. Many pilots use a scale rule in nautical miles instead.",
+    "lesson": "nav-05",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "nav-q-60",
+    "subject": "nav",
+    "q": "In summer the UK uses BST. UTC is:",
+    "choices": [
+      "One hour ahead of local time",
+      "The same as local time",
+      "One hour behind local time",
+      "Two hours behind local time"
+    ],
+    "ans": 2,
+    "exp": "Flight plans, METARs, TAFs and NOTAMs use UTC (Z). In summer, take one hour off BST to get UTC.",
+    "lesson": "nav-05",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "nav-q-61",
+    "subject": "nav",
+    "q": "A 33 nm leg at a groundspeed of 66 kt takes:",
+    "choices": [
+      "20 minutes",
+      "45 minutes",
+      "33 minutes",
+      "30 minutes"
+    ],
+    "ans": 3,
+    "exp": "Time = distance ÷ groundspeed = 0.5 h. Use the CRP or mental maths and add time for the climb and joining.",
+    "lesson": "nav-03",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "nav-q-62",
+    "subject": "nav",
+    "q": "The engine burns 18 litres an hour. How much fuel does a 1 h 20 min flight use, before any reserve?",
+    "choices": [
+      "24 litres",
+      "18 litres",
+      "20 litres",
+      "36 litres"
+    ],
+    "ans": 0,
+    "exp": "18 × 1.333 = 24 L. Add your reserve and an allowance for taxi and diversions.",
+    "lesson": "nav-03",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "nav-q-63",
+    "subject": "nav",
+    "q": "Isogonals on a chart are lines joining places with:",
+    "choices": [
+      "The same elevation",
+      "The same magnetic variation",
+      "The same air pressure",
+      "The same time zone"
+    ],
+    "ans": 1,
+    "exp": "Isogonals let you convert between true and magnetic directions. Variation changes slowly over the years.",
+    "lesson": "nav-01",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "nav-q-64",
+    "subject": "nav",
+    "q": "The aircraft's compass deviation card corrects for:",
+    "choices": [
+      "The difference between true and magnetic north",
+      "The wind",
+      "Magnetic effects from the aircraft itself",
+      "Errors in the airspeed indicator"
+    ],
+    "ans": 2,
+    "exp": "Deviation comes from the aircraft's own metal and electrics. Variation comes from the Earth's magnetic field.",
+    "lesson": "nav-01",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "nav-q-65",
+    "subject": "nav",
+    "q": "Spot heights and elevations on a UK VFR chart are given in:",
+    "choices": [
+      "Metres above ground",
+      "Feet above aerodrome level",
+      "Flight levels",
+      "Feet above mean sea level"
+    ],
+    "ans": 3,
+    "exp": "Use them with QNH to keep a safe height above the terrain and obstacles.",
+    "lesson": "nav-02",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "nav-q-66",
+    "subject": "nav",
+    "q": "You are uncertain of your position. A sound first step is to:",
+    "choices": [
+      "Keep flying a known heading, check the time and fuel, and look for a big feature",
+      "Turn several times to look around",
+      "Climb into cloud for a better view",
+      "Switch off the radio to concentrate"
+    ],
+    "ans": 0,
+    "exp": "Stay calm and keep the aircraft under control. Then use your heading, the time and big features to work out where you are, and ask for help early.",
+    "lesson": "nav-04",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "tech-q-51",
+    "subject": "tech",
+    "q": "An aerofoil stalls when:",
+    "choices": [
+      "The airspeed drops below a fixed figure",
+      "The critical angle of attack is exceeded, at any airspeed",
+      "The engine stops",
+      "The wing reaches a certain bank angle"
+    ],
+    "ans": 1,
+    "exp": "The stall is about angle of attack. Stall speed changes with weight, load factor and configuration.",
+    "lesson": "tech-01",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "tech-q-52",
+    "subject": "tech",
+    "q": "Loading the aircraft with the centre of gravity behind the aft limit will:",
+    "choices": [
+      "Make the aircraft more stable",
+      "Reduce the stall speed safely",
+      "Reduce pitch stability and make stall or spin recovery harder",
+      "Have no noticeable effect"
+    ],
+    "ans": 2,
+    "exp": "Always stay inside the weight and balance envelope in the flight manual. An aft CG can make the aircraft dangerously unstable.",
+    "lesson": "tech-03",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "tech-q-53",
+    "subject": "tech",
+    "q": "A two-stroke microlight engine such as a Rotax 582 is lubricated by:",
+    "choices": [
+      "A wet sump like a car engine",
+      "Grease points checked before flight",
+      "No lubrication",
+      "Oil mixed with the fuel or injected, not by a wet sump"
+    ],
+    "ans": 3,
+    "exp": "Use the correct oil and ratio or keep the oil-injection tank filled, as the engine manual says. Four-strokes such as the 912 have a separate oil system.",
+    "lesson": "tech-02",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "tech-q-54",
+    "subject": "tech",
+    "q": "Compared with a dry paved runway, short wet grass will usually:",
+    "choices": [
+      "Increase the landing distance significantly",
+      "Shorten the landing distance",
+      "Make no difference",
+      "Only affect take-off"
+    ],
+    "ans": 0,
+    "exp": "Wet grass reduces braking. Use CAA Safety Sense factors and the flight manual figures, and add a margin.",
+    "lesson": "tech-03",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "tech-q-55",
+    "subject": "tech",
+    "q": "If the aircraft weight increases, the stall speed:",
+    "choices": [
+      "Decreases",
+      "Increases",
+      "Stays the same",
+      "Only changes in turns"
+    ],
+    "ans": 1,
+    "exp": "A heavier aircraft needs a higher angle of attack for the same speed, so it reaches the critical angle at a higher speed.",
+    "lesson": "tech-03",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "hpl-q-46",
+    "subject": "hpl",
+    "q": "After a long, gentle turn, you roll level and feel as if you are banking the other way. This is:",
+    "choices": [
+      "Carbon monoxide poisoning",
+      "Hyperventilation",
+      "The leans, a balance (vestibular) illusion",
+      "Normal and a sign of good balance"
+    ],
+    "ans": 2,
+    "exp": "Trust the instruments and the horizon, not your body's sense of balance.",
+    "lesson": "hpl-02",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "hpl-q-47",
+    "subject": "hpl",
+    "q": "You smell exhaust fumes and get a headache in flight. You should:",
+    "choices": [
+      "Turn the cabin heat up",
+      "Ignore it if the engine is running well",
+      "Climb higher to clear it",
+      "Turn the heat off, get fresh air and land as soon as practicable"
+    ],
+    "ans": 3,
+    "exp": "Carbon monoxide can come from exhaust leaks into the heater. It is colourless and builds up slowly. A CO detector is cheap protection.",
+    "lesson": "hpl-03",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "hpl-q-48",
+    "subject": "hpl",
+    "q": "Threat and error management encourages pilots to:",
+    "choices": [
+      "Spot threats early, catch errors and manage any unwanted aircraft state",
+      "Ignore small mistakes",
+      "Blame others for errors",
+      "Avoid briefing before flight"
+    ],
+    "ans": 0,
+    "exp": "Brief the threats you expect, such as weather, terrain, airspace and fatigue, and agree how you will deal with them.",
+    "lesson": "hpl-04",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "radio-q-90",
+    "subject": "radio",
+    "q": "Under CAP 413, the standard word for 'yes' is:",
+    "choices": [
+      "AFFIRMATIVE",
+      "AFFIRM",
+      "YES-YES",
+      "CORRECT"
+    ],
+    "ans": 1,
+    "exp": "Use AFFIRM for yes and NEGATIVE for no.",
+    "lesson": "radio-07",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "radio-q-91",
+    "subject": "radio",
+    "q": "Under CAP 413, how should 118.105 MHz be spoken?",
+    "choices": [
+      "ONE EIGHT ONE ZERO",
+      "ONE ONE EIGHT ONE",
+      "ONE ONE EIGHT DECIMAL ONE ZERO FIVE",
+      "ONE EIGHTEEN POINT ONE"
+    ],
+    "ans": 2,
+    "exp": "With 8.33 kHz channel spacing, say all six digits.",
+    "lesson": "radio-01",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "law-q-65",
+    "subject": "law",
+    "q": "A white dumb-bell in the signals area means:",
+    "choices": [
+      "Gliding is in progress",
+      "The aerodrome is closed",
+      "Right-hand circuits are in use",
+      "Aircraft must take off, land and taxi on runways and taxiways only"
+    ],
+    "ans": 3,
+    "exp": "A dumb-bell with black stripes across each end adds that take-offs and landings must be on runways, but taxiing may use other areas.",
+    "lesson": "law-signs",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "law-q-66",
+    "subject": "law",
+    "q": "A steady green light to an aircraft in flight means:",
+    "choices": [
+      "Cleared to land",
+      "Return for landing and wait for a steady green",
+      "Do not land",
+      "Give way and keep circling"
+    ],
+    "ans": 0,
+    "exp": "Flashing green means return for landing. Steady green means cleared to land. Still check the runway is clear.",
+    "lesson": "law-signs",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "law-q-67",
+    "subject": "law",
+    "q": "Two aircraft are approaching the same aerodrome to land. Which normally has right of way?",
+    "choices": [
+      "The higher one",
+      "The lower one, but it must not cut in front of or overtake the other",
+      "The faster one",
+      "The one with the bigger engine"
+    ],
+    "ans": 1,
+    "exp": "Aircraft landing or on final approach have right of way. Between two landing aircraft, the lower one has priority but must not take advantage of it to cut in.",
+    "lesson": "law-03",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "met-q-60",
+    "subject": "met",
+    "q": "Smooth, lens-shaped (lenticular) clouds downwind of hills usually show:",
+    "choices": [
+      "Calm, stable air with no turbulence",
+      "An approaching warm front only",
+      "Mountain or lee waves, with possible strong up- and downdraughts and rotor",
+      "Fog forming"
+    ],
+    "ans": 2,
+    "exp": "Lee waves can give strong sink and severe rotor turbulence below the wave crests, near the lee slopes.",
+    "lesson": "met-clouds",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "met-q-61",
+    "subject": "met",
+    "q": "In meteorology, fog (FG) means visibility is:",
+    "choices": [
+      "Less than 5 km",
+      "Less than 10 km",
+      "Less than 100 m only",
+      "Less than 1,000 m"
+    ],
+    "ans": 3,
+    "exp": "Mist (BR) is visibility of 1,000 m or more with high humidity. Both can drop below VFR minima quickly.",
+    "lesson": "met-03",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "met-q-62",
+    "subject": "met",
+    "q": "Moist air blown up the windward slopes of hills is likely to give:",
+    "choices": [
+      "Hill fog or low cloud on the high ground",
+      "Clearer air on the hilltops",
+      "Only high cirrus",
+      "Dry, warm air on the windward side"
+    ],
+    "ans": 0,
+    "exp": "Orographic lift cools the air until it condenses. Hills can disappear into cloud while the valleys stay clear.",
+    "lesson": "met-02",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "nav-q-67",
+    "subject": "nav",
+    "q": "Using the 1-in-60 rule of thumb, the maximum drift with a 15 kt crosswind at a TAS of 60 kt is about:",
+    "choices": [
+      "4°",
+      "15°",
+      "30°",
+      "60°"
+    ],
+    "ans": 1,
+    "exp": "Maximum drift ≈ wind speed × 60 ÷ TAS = 15 × 60 ÷ 60 = 15°. This explains why slow microlights see large drift angles.",
+    "lesson": "nav-01",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "nav-q-68",
+    "subject": "nav",
+    "q": "You cover 12 nm between two fixes in 8 minutes. Your groundspeed is:",
+    "choices": [
+      "60 kt",
+      "96 kt",
+      "90 kt",
+      "72 kt"
+    ],
+    "ans": 2,
+    "exp": "12 nm ÷ 8 min = 1.5 nm a minute = 90 nm an hour. Use it to update your ETAs.",
+    "lesson": "nav-01",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "tech-q-56",
+    "subject": "tech",
+    "q": "A wing with washout has:",
+    "choices": [
+      "A bigger angle of incidence at the tips",
+      "Flaps on the tips",
+      "No twist at all",
+      "A smaller angle of incidence at the tips, so the roots stall first"
+    ],
+    "ans": 3,
+    "exp": "Washout helps keep aileron control near the stall and gives a gentler stall.",
+    "lesson": "tech-01",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "tech-q-57",
+    "subject": "tech",
+    "q": "In a dive with a fixed-pitch propeller and the throttle unchanged, engine rpm will:",
+    "choices": [
+      "Rise, and could exceed the limit",
+      "Fall",
+      "Stay exactly the same",
+      "Drop to idle"
+    ],
+    "ans": 0,
+    "exp": "Reduce power in a descent or dive to keep the rpm within limits.",
+    "lesson": "tech-02",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "tech-q-58",
+    "subject": "tech",
+    "q": "In a weight-shift microlight, to turn left the pilot moves the control bar:",
+    "choices": [
+      "To the left",
+      "To the right, shifting weight to the left",
+      "Forward",
+      "Back"
+    ],
+    "ans": 1,
+    "exp": "Moving the bar right moves the pilot's weight left and the wing banks left. 3-axis aircraft use stick and rudder instead.",
+    "lesson": "tech-01",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "tech-q-59",
+    "subject": "tech",
+    "q": "On a Rotax 912, the engine is cooled by:",
+    "choices": [
+      "Air only",
+      "Oil only",
+      "Liquid-cooled cylinder heads and air-cooled cylinders",
+      "Liquid only, with no air cooling"
+    ],
+    "ans": 2,
+    "exp": "Check the coolant level and look for leaks on the walk-round, as the engine manual says.",
+    "lesson": "tech-02",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "hpl-q-49",
+    "subject": "hpl",
+    "q": "You have a heavy cold and blocked ears. Flying could cause:",
+    "choices": [
+      "Better hearing",
+      "No effect in a microlight",
+      "Only a mild itch",
+      "Severe ear pain or damage, especially when descending"
+    ],
+    "ans": 3,
+    "exp": "Blocked Eustachian tubes cannot equalise the pressure. Do not fly with a heavy cold, and check any decongestant with your doctor or AME.",
+    "lesson": "hpl-01",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "hpl-q-50",
+    "subject": "hpl",
+    "q": "Long-term exposure to engine and wind noise can cause:",
+    "choices": [
+      "Permanent hearing loss, so use a good headset or ear protection",
+      "Better hearing over time",
+      "Only a short-term headache",
+      "No effect in open cockpits"
+    ],
+    "ans": 0,
+    "exp": "Noise damage builds up slowly and cannot be reversed. Protect your hearing on every flight.",
+    "lesson": "hpl-02",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "hpl-q-51",
+    "subject": "hpl",
+    "q": "Polarised sunglasses in the cockpit can:",
+    "choices": [
+      "Improve all screen readability",
+      "Hide reflections and make some displays or canopy panels hard to read",
+      "Eliminate the need for lookout",
+      "Cause hypoxia"
+    ],
+    "ans": 1,
+    "exp": "Many pilots choose non-polarised sunglasses with good optical quality.",
+    "lesson": "hpl-02",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "radio-q-92",
+    "subject": "radio",
+    "q": "Under CAP 413, QNH 1009 is spoken as:",
+    "choices": [
+      "TEN OH NINE",
+      "ONE THOUSAND AND NINE",
+      "ONE ZERO ZERO NINER",
+      "ONE ZERO ZERO NINE"
+    ],
+    "ans": 2,
+    "exp": "Say each digit and use NINER for 9.",
+    "lesson": "radio-01",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "radio-q-93",
+    "subject": "radio",
+    "q": "An altitude of 2,500 ft is spoken as:",
+    "choices": [
+      "TWO FIVE ZERO ZERO FEET",
+      "TWENTY-FIVE HUNDRED FEET",
+      "FLIGHT LEVEL TWO FIVE",
+      "TWO THOUSAND FIVE HUNDRED FEET"
+    ],
+    "ans": 3,
+    "exp": "Use whole thousands and hundreds for altitudes and heights.",
+    "lesson": "radio-01",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "radio-q-94",
+    "subject": "radio",
+    "q": "With a speechless code, one press of the transmit button means:",
+    "choices": [
+      "Yes",
+      "No",
+      "Say again",
+      "Request homing"
+    ],
+    "ans": 0,
+    "exp": "Under CAP 413, two presses mean no, three mean say again and four mean request homing. Check the current CAP 413 wording.",
+    "lesson": "radio-04",
+    "added": "2026-10-preview"
+  },
+  {
+    "id": "tech-q-60",
+    "subject": "tech",
+    "q": "In a level 60° banked turn, the load factor and stall speed are about:",
+    "choices": [
+      "1 g, with stall speed unchanged",
+      "2 g, with stall speed about 41% higher",
+      "3 g, with stall speed doubled",
+      "1.5 g, with stall speed 10% higher"
+    ],
+    "ans": 1,
+    "exp": "Load factor = 1/cos 60° = 2. Stall speed increases with the square root of the load factor (√2 ≈ 1.41).",
+    "lesson": "tech-03",
+    "added": "2026-10-preview"
   }
 ];
 if (typeof globalThis !== 'undefined') globalThis.QUESTIONS_DATA = QUESTIONS_DATA;

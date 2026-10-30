@@ -46,7 +46,7 @@ const ContentI18n = (() => {
     if (!over) return base;
     return Object.assign({}, base, {
       q: over.q != null ? over.q : base.q,
-      choices: over.choices != null ? over.choices : base.choices,
+      choices: (Array.isArray(over.choices) && Array.isArray(base.choices) && over.choices.length === base.choices.length) ? over.choices : base.choices,
       exp: over.exp != null ? over.exp : base.exp
     });
   }

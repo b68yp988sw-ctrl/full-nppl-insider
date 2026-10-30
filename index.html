@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
-  <meta name="theme-color" content="#0a1628" />
+  <meta name="theme-color" content="#05050b" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="NPPL Insider" />
@@ -13,14 +13,37 @@
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png" />
   <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* Opening splash: full logo on black, fades after ~1.5 s. pointer-events:none so it never blocks taps. */
+    #splash{position:fixed;inset:0;z-index:9999;background:#05050b;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:1;transition:opacity .5s ease}
+    #splash img{width:min(88vw,88vh,560px);height:auto;display:block}
+    #splash.splash-out{opacity:0}
+    html.no-splash #splash{display:none}
+    @media (prefers-reduced-motion: reduce){#splash{transition:none}}
+  </style>
+  <script>try{if(sessionStorage.getItem('nppl_splash_seen'))document.documentElement.classList.add('no-splash');}catch(e){}</script>
 </head>
 <body>
+  <div id="splash" aria-hidden="true"><img src="assets/icons/splash-logo.jpg" alt="" width="720" height="720" decoding="async" /></div>
+  <script>
+    (function () {
+      var el = document.getElementById('splash');
+      if (!el) return;
+      if (document.documentElement.classList.contains('no-splash')) { el.remove(); return; }
+      try { sessionStorage.setItem('nppl_splash_seen', '1'); } catch (e) {}
+      var done = false;
+      function hide() { if (done) return; done = true; el.classList.add('splash-out'); setTimeout(function () { el.remove(); }, 600); }
+      setTimeout(hide, 1500);
+      el.addEventListener('click', hide);
+    })();
+  </script>
   <div id="app">
     <!-- Disclaimer gate -->
     <div id="gate" class="gate hidden">
       <div class="gate-card">
-        <div class="gate-logo">✈</div>
+        <div class="gate-logo"><img src="assets/img/logo-small.jpg" alt="" width="72" height="72" /></div>
         <h1>FULL NPPL INSIDER</h1>
         <p class="gate-sub">NPPL study aid for student and experienced pilots</p>
         <div class="disclaimer-box">
@@ -40,7 +63,7 @@
     <!-- Language picker (after disclaimer gate) -->
     <div id="lang-gate" class="hidden">
       <div class="lang-card">
-        <div class="gate-logo">✈</div>
+        <div class="gate-logo"><img src="assets/img/logo-small.jpg" alt="" width="72" height="72" /></div>
         <h1 class="lang-title">Choose your language</h1>
         <p class="lang-sub">All text and Speak audio will use this language. You can change it later in Settings.</p>
         <div class="lang-list" id="lang-list" role="listbox" aria-label="Languages"></div>
@@ -53,7 +76,7 @@
     <div id="aircraft-gate" class="hidden">
       <div class="lang-card ac-picker-card">
         <button type="button" id="ac-back-lang" class="ac-gate-back" aria-label="Back to language">‹</button>
-        <div class="gate-logo">✈</div>
+        <div class="gate-logo"><img src="assets/img/logo-small.jpg" alt="" width="72" height="72" /></div>
         <h1 class="lang-title ac-picker-title">Pick which aircraft you’re flying</h1>
         <p class="lang-sub ac-picker-sub">Gear checks, diagrams, and fuel/weight defaults to this type. You can change it later in Settings. Study aid — confirm POH / instructor.</p>
         <div class="ac-picker-list" id="ac-picker-list" role="listbox" aria-label="Aircraft"></div>
@@ -63,13 +86,13 @@
 
     <!-- Header -->
     <header class="topbar">
-      <button type="button" class="icon-btn" id="btn-back" aria-label="Back" hidden>‹</button>
+      <button type="button" class="icon-btn back-btn" id="btn-back" aria-label="Back" hidden><span class="back-chev" aria-hidden="true">‹</span><span class="back-label">Back</span></button>
       <div class="topbar-title">
-        <span class="brand-mark">✈</span>
-        <span id="page-title">FULL NPPL INSIDER</span>
+        <img class="brand-logo" src="assets/img/logo-small.jpg" alt="" width="40" height="40" decoding="async" />
+        <h1 id="page-title">NPPL INSIDER</h1>
       </div>
-      <button type="button" class="icon-btn" id="btn-search" aria-label="Search" title="Search">🔍</button>
-      <button type="button" class="icon-btn" id="btn-audio-global" aria-label="Audio mode" title="Audio mode">🔊</button>
+      <button type="button" class="icon-btn" id="btn-search" aria-label="Search" title="Search"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
+      <button type="button" class="icon-btn" id="btn-audio-global" aria-label="Audio mode" title="Audio mode"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
     </header>
 
     <!-- Main content -->
@@ -78,19 +101,19 @@
     <!-- Bottom nav -->
     <nav class="bottom-nav" id="bottom-nav" aria-label="Main">
       <button type="button" data-route="home" class="nav-item active">
-        <span class="nav-ico">⌂</span><span>Home</span>
+        <span class="nav-ico" aria-hidden="true"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5.5 9.5V20h4.5v-6h4v6h4.5V9.5"/></svg></span><span>Home</span>
       </button>
-      <button type="button" data-route="theory" class="nav-item">
-        <span class="nav-ico">📘</span><span>Theory</span>
-      </button>
-      <button type="button" data-route="flashcards" class="nav-item">
-        <span class="nav-ico">🃏</span><span>Cards</span>
+      <button type="button" data-route="study" class="nav-item">
+        <span class="nav-ico" aria-hidden="true"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5V5.5"/><path d="M8.5 7.5h6"/></svg></span><span>Study</span>
       </button>
       <button type="button" data-route="exams" class="nav-item">
-        <span class="nav-ico">📝</span><span>Exams</span>
+        <span class="nav-ico" aria-hidden="true"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2.8h6V4"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg></span><span>Exams</span>
       </button>
-      <button type="button" data-route="computer" class="nav-item">
-        <span class="nav-ico">⚙</span><span>CRP-1</span>
+      <button type="button" data-route="skills" class="nav-item">
+        <span class="nav-ico" aria-hidden="true"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c.9 0 1.4.8 1.4 2v4.3l7.6 2.7v2l-7.6-1.6v5l2.4 1.8v1.6L12 19.4l-3.8 1.4v-1.6l2.4-1.8v-5L3 14v-2l7.6-2.7V4.5c0-1.2.5-2 1.4-2z"/></svg></span><span>Skills</span>
+      </button>
+      <button type="button" data-route="plan" class="nav-item">
+        <span class="nav-ico" aria-hidden="true"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg></span><span>Plan</span>
       </button>
     </nav>
   </div>

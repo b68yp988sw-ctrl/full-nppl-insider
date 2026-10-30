@@ -6,10 +6,13 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "theme_color": "#0a1628",
-  "background_color": "#0a1628",
+  "theme_color": "#05050b",
+  "background_color": "#05050b",
   "lang": "en-GB",
-  "categories": ["education", "navigation"],
+  "categories": [
+    "education",
+    "navigation"
+  ],
   "icons": [
     {
       "src": "assets/icons/icon-192.png",
@@ -24,7 +27,7 @@
       "purpose": "any"
     },
     {
-      "src": "assets/icons/icon-512.png",
+      "src": "assets/icons/icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

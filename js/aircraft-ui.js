@@ -53,100 +53,100 @@ const AircraftUI = (() => {
   function svgHighWing(active) {
     const on = (id) => hotspotClass(id, active);
     return `<svg class="ac-svg" viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="High-wing microlight parts diagram">
-  <rect width="360" height="220" fill="#081420" rx="8"/>
-  <text x="180" y="16" fill="#7dd3fc" font-size="11" text-anchor="middle" font-weight="700">High-wing microlight (schematic · tap a part)</text>
+  <rect width="360" height="220" fill="#05050b" rx="8"/>
+  <text x="180" y="16" fill="#93c5fd" font-size="11" text-anchor="middle" font-weight="700">High-wing microlight (schematic · tap a part)</text>
   <!-- wing -->
-  <rect class="${on('wing')}" data-ac-part="wing" x="40" y="78" width="240" height="18" rx="3" fill="#2896c8" opacity="0.9" style="cursor:pointer"/>
-  <rect class="${on('strut')}" data-ac-part="strut" x="95" y="96" width="6" height="42" fill="#8ba0bc" transform="rotate(18 98 96)" style="cursor:pointer"/>
-  <rect class="${on('strut')}" data-ac-part="strut" x="210" y="96" width="6" height="42" fill="#8ba0bc" transform="rotate(-18 213 96)" style="cursor:pointer"/>
-  <rect class="${on('aileron')}" data-ac-part="aileron" x="48" y="96" width="55" height="8" rx="1" fill="#7dd3fc" style="cursor:pointer"/>
-  <rect class="${on('aileron')}" data-ac-part="aileron" x="217" y="96" width="55" height="8" rx="1" fill="#7dd3fc" style="cursor:pointer"/>
-  <rect class="${on('flap')}" data-ac-part="flap" x="110" y="96" width="50" height="8" rx="1" fill="#4fc3f7" style="cursor:pointer"/>
-  <rect class="${on('flap')}" data-ac-part="flap" x="170" y="96" width="50" height="8" rx="1" fill="#4fc3f7" style="cursor:pointer"/>
+  <rect class="${on('wing')}" data-ac-part="wing" x="40" y="78" width="240" height="18" rx="3" fill="#3b82f6" opacity="0.9" style="cursor:pointer"/>
+  <rect class="${on('strut')}" data-ac-part="strut" x="95" y="96" width="6" height="42" fill="#a6acbb" transform="rotate(18 98 96)" style="cursor:pointer"/>
+  <rect class="${on('strut')}" data-ac-part="strut" x="210" y="96" width="6" height="42" fill="#a6acbb" transform="rotate(-18 213 96)" style="cursor:pointer"/>
+  <rect class="${on('aileron')}" data-ac-part="aileron" x="48" y="96" width="55" height="8" rx="1" fill="#93c5fd" style="cursor:pointer"/>
+  <rect class="${on('aileron')}" data-ac-part="aileron" x="217" y="96" width="55" height="8" rx="1" fill="#93c5fd" style="cursor:pointer"/>
+  <rect class="${on('flap')}" data-ac-part="flap" x="110" y="96" width="50" height="8" rx="1" fill="#60a5fa" style="cursor:pointer"/>
+  <rect class="${on('flap')}" data-ac-part="flap" x="170" y="96" width="50" height="8" rx="1" fill="#60a5fa" style="cursor:pointer"/>
   <!-- fuselage -->
-  <ellipse class="${on('fuselage')}" data-ac-part="fuselage" cx="180" cy="125" rx="22" ry="48" fill="#1a3050" stroke="#4fc3f7" stroke-width="2" style="cursor:pointer"/>
-  <path class="${on('windscreen')}" data-ac-part="windscreen" d="M168 95 Q180 82 192 95 L192 110 L168 110 Z" fill="#7dd3fc" opacity="0.55" style="cursor:pointer"/>
-  <rect class="${on('doors')}" data-ac-part="doors" x="168" y="112" width="24" height="28" rx="2" fill="#152a4a" stroke="#7dd3fc" stroke-width="1" style="cursor:pointer"/>
+  <ellipse class="${on('fuselage')}" data-ac-part="fuselage" cx="180" cy="125" rx="22" ry="48" fill="#22223e" stroke="#60a5fa" stroke-width="2" style="cursor:pointer"/>
+  <path class="${on('windscreen')}" data-ac-part="windscreen" d="M168 95 Q180 82 192 95 L192 110 L168 110 Z" fill="#93c5fd" opacity="0.55" style="cursor:pointer"/>
+  <rect class="${on('doors')}" data-ac-part="doors" x="168" y="112" width="24" height="28" rx="2" fill="#1e1e36" stroke="#93c5fd" stroke-width="1" style="cursor:pointer"/>
   <!-- nose / prop -->
   <circle class="${on('propeller')}" data-ac-part="propeller" cx="180" cy="52" r="16" fill="none" stroke="#f5c842" stroke-width="3" style="cursor:pointer"/>
   <line class="anim-spin" style="transform-origin:180px 52px;animation-duration:1.1s" x1="164" y1="52" x2="196" y2="52" stroke="#f5c842" stroke-width="2"/>
   <circle class="${on('spinner')}" data-ac-part="spinner" cx="180" cy="52" r="5" fill="#f5c842" style="cursor:pointer"/>
   <rect class="${on('engine')}" data-ac-part="engine" x="168" y="62" width="24" height="22" rx="3" fill="#fb923c" style="cursor:pointer"/>
   <!-- gear -->
-  <circle class="${on('nose-gear')}" data-ac-part="nose-gear" cx="180" cy="88" r="7" fill="#8ba0bc" style="cursor:pointer"/>
-  <circle class="${on('main-gear')}" data-ac-part="main-gear" cx="148" cy="148" r="8" fill="#8ba0bc" style="cursor:pointer"/>
-  <circle class="${on('main-gear')}" data-ac-part="main-gear" cx="212" cy="148" r="8" fill="#8ba0bc" style="cursor:pointer"/>
+  <circle class="${on('nose-gear')}" data-ac-part="nose-gear" cx="180" cy="88" r="7" fill="#a6acbb" style="cursor:pointer"/>
+  <circle class="${on('main-gear')}" data-ac-part="main-gear" cx="148" cy="148" r="8" fill="#a6acbb" style="cursor:pointer"/>
+  <circle class="${on('main-gear')}" data-ac-part="main-gear" cx="212" cy="148" r="8" fill="#a6acbb" style="cursor:pointer"/>
   <!-- pitot on wing -->
-  <rect class="${on('pitot')}" data-ac-part="pitot" x="55" y="72" width="14" height="3" rx="1" fill="#e8eef7" style="cursor:pointer"/>
+  <rect class="${on('pitot')}" data-ac-part="pitot" x="55" y="72" width="14" height="3" rx="1" fill="#f1f3f8" style="cursor:pointer"/>
   <!-- fuel -->
   <circle class="${on('fuel-filler')}" data-ac-part="fuel-filler" cx="180" cy="118" r="6" fill="#34d399" style="cursor:pointer"/>
   <!-- BRS hint on cabin roof -->
   <rect class="${on('brs')}" data-ac-part="brs" x="172" y="100" width="16" height="8" rx="2" fill="#f87171" opacity="0.85" style="cursor:pointer"/>
   <!-- tail -->
-  <rect class="${on('h-stab')}" data-ac-part="h-stab" x="160" y="175" width="40" height="8" rx="1" fill="#4fc3f7" style="cursor:pointer"/>
-  <rect class="${on('elevator')}" data-ac-part="elevator" x="155" y="183" width="50" height="7" rx="1" fill="#7dd3fc" style="cursor:pointer"/>
-  <rect class="${on('rudder')}" data-ac-part="rudder" x="176" y="165" width="8" height="28" rx="1" fill="#2896c8" style="cursor:pointer"/>
+  <rect class="${on('h-stab')}" data-ac-part="h-stab" x="160" y="175" width="40" height="8" rx="1" fill="#60a5fa" style="cursor:pointer"/>
+  <rect class="${on('elevator')}" data-ac-part="elevator" x="155" y="183" width="50" height="7" rx="1" fill="#93c5fd" style="cursor:pointer"/>
+  <rect class="${on('rudder')}" data-ac-part="rudder" x="176" y="165" width="8" height="28" rx="1" fill="#3b82f6" style="cursor:pointer"/>
   <rect class="${on('trim')}" data-ac-part="trim" x="198" y="184" width="10" height="5" rx="1" fill="#f5c842" style="cursor:pointer"/>
-  <text x="180" y="212" fill="#8ba0bc" font-size="9" text-anchor="middle">Teaching silhouette — not a typed drawing · confirm POH</text>
+  <text x="180" y="212" fill="#a6acbb" font-size="9" text-anchor="middle">Teaching silhouette — not a typed drawing · confirm POH</text>
 </svg>`;
   }
 
   function svgLowWing(active) {
     const on = (id) => hotspotClass(id, active);
     return `<svg class="ac-svg" viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Low-wing microlight parts diagram">
-  <rect width="360" height="220" fill="#081420" rx="8"/>
-  <text x="180" y="16" fill="#7dd3fc" font-size="11" text-anchor="middle" font-weight="700">Low-wing microlight (schematic · tap a part)</text>
-  <ellipse class="${on('fuselage')}" data-ac-part="fuselage" cx="180" cy="110" rx="20" ry="50" fill="#1a3050" stroke="#4fc3f7" stroke-width="2" style="cursor:pointer"/>
-  <path class="${on('windscreen')}" data-ac-part="windscreen" d="M168 78 Q180 65 192 78 L192 95 L168 95 Z" fill="#7dd3fc" opacity="0.55" style="cursor:pointer"/>
-  <rect class="${on('doors')}" data-ac-part="doors" x="168" y="96" width="24" height="30" rx="2" fill="#152a4a" stroke="#7dd3fc" style="cursor:pointer"/>
+  <rect width="360" height="220" fill="#05050b" rx="8"/>
+  <text x="180" y="16" fill="#93c5fd" font-size="11" text-anchor="middle" font-weight="700">Low-wing microlight (schematic · tap a part)</text>
+  <ellipse class="${on('fuselage')}" data-ac-part="fuselage" cx="180" cy="110" rx="20" ry="50" fill="#22223e" stroke="#60a5fa" stroke-width="2" style="cursor:pointer"/>
+  <path class="${on('windscreen')}" data-ac-part="windscreen" d="M168 78 Q180 65 192 78 L192 95 L168 95 Z" fill="#93c5fd" opacity="0.55" style="cursor:pointer"/>
+  <rect class="${on('doors')}" data-ac-part="doors" x="168" y="96" width="24" height="30" rx="2" fill="#1e1e36" stroke="#93c5fd" style="cursor:pointer"/>
   <circle class="${on('propeller')}" data-ac-part="propeller" cx="180" cy="42" r="16" fill="none" stroke="#f5c842" stroke-width="3" style="cursor:pointer"/>
   <line class="anim-spin" style="transform-origin:180px 42px;animation-duration:1.1s" x1="164" y1="42" x2="196" y2="42" stroke="#f5c842" stroke-width="2"/>
   <circle class="${on('spinner')}" data-ac-part="spinner" cx="180" cy="42" r="5" fill="#f5c842" style="cursor:pointer"/>
   <rect class="${on('engine')}" data-ac-part="engine" x="168" y="52" width="24" height="20" rx="3" fill="#fb923c" style="cursor:pointer"/>
   <!-- low wing -->
-  <rect class="${on('wing')}" data-ac-part="wing" x="40" y="128" width="240" height="16" rx="3" fill="#2896c8" opacity="0.9" style="cursor:pointer"/>
-  <rect class="${on('aileron')}" data-ac-part="aileron" x="48" y="144" width="55" height="7" rx="1" fill="#7dd3fc" style="cursor:pointer"/>
-  <rect class="${on('aileron')}" data-ac-part="aileron" x="217" y="144" width="55" height="7" rx="1" fill="#7dd3fc" style="cursor:pointer"/>
-  <rect class="${on('flap')}" data-ac-part="flap" x="110" y="144" width="50" height="7" rx="1" fill="#4fc3f7" style="cursor:pointer"/>
-  <rect class="${on('flap')}" data-ac-part="flap" x="170" y="144" width="50" height="7" rx="1" fill="#4fc3f7" style="cursor:pointer"/>
-  <rect class="${on('pitot')}" data-ac-part="pitot" x="55" y="122" width="14" height="3" fill="#e8eef7" style="cursor:pointer"/>
-  <circle class="${on('nose-gear')}" data-ac-part="nose-gear" cx="180" cy="78" r="6" fill="#8ba0bc" style="cursor:pointer"/>
-  <circle class="${on('main-gear')}" data-ac-part="main-gear" cx="150" cy="155" r="8" fill="#8ba0bc" style="cursor:pointer"/>
-  <circle class="${on('main-gear')}" data-ac-part="main-gear" cx="210" cy="155" r="8" fill="#8ba0bc" style="cursor:pointer"/>
+  <rect class="${on('wing')}" data-ac-part="wing" x="40" y="128" width="240" height="16" rx="3" fill="#3b82f6" opacity="0.9" style="cursor:pointer"/>
+  <rect class="${on('aileron')}" data-ac-part="aileron" x="48" y="144" width="55" height="7" rx="1" fill="#93c5fd" style="cursor:pointer"/>
+  <rect class="${on('aileron')}" data-ac-part="aileron" x="217" y="144" width="55" height="7" rx="1" fill="#93c5fd" style="cursor:pointer"/>
+  <rect class="${on('flap')}" data-ac-part="flap" x="110" y="144" width="50" height="7" rx="1" fill="#60a5fa" style="cursor:pointer"/>
+  <rect class="${on('flap')}" data-ac-part="flap" x="170" y="144" width="50" height="7" rx="1" fill="#60a5fa" style="cursor:pointer"/>
+  <rect class="${on('pitot')}" data-ac-part="pitot" x="55" y="122" width="14" height="3" fill="#f1f3f8" style="cursor:pointer"/>
+  <circle class="${on('nose-gear')}" data-ac-part="nose-gear" cx="180" cy="78" r="6" fill="#a6acbb" style="cursor:pointer"/>
+  <circle class="${on('main-gear')}" data-ac-part="main-gear" cx="150" cy="155" r="8" fill="#a6acbb" style="cursor:pointer"/>
+  <circle class="${on('main-gear')}" data-ac-part="main-gear" cx="210" cy="155" r="8" fill="#a6acbb" style="cursor:pointer"/>
   <circle class="${on('fuel-filler')}" data-ac-part="fuel-filler" cx="100" cy="132" r="5" fill="#34d399" style="cursor:pointer"/>
   <rect class="${on('brs')}" data-ac-part="brs" x="172" y="88" width="16" height="8" rx="2" fill="#f87171" opacity="0.85" style="cursor:pointer"/>
-  <rect class="${on('h-stab')}" data-ac-part="h-stab" x="160" y="170" width="40" height="8" rx="1" fill="#4fc3f7" style="cursor:pointer"/>
-  <rect class="${on('elevator')}" data-ac-part="elevator" x="155" y="178" width="50" height="7" rx="1" fill="#7dd3fc" style="cursor:pointer"/>
-  <rect class="${on('rudder')}" data-ac-part="rudder" x="176" y="160" width="8" height="28" rx="1" fill="#2896c8" style="cursor:pointer"/>
+  <rect class="${on('h-stab')}" data-ac-part="h-stab" x="160" y="170" width="40" height="8" rx="1" fill="#60a5fa" style="cursor:pointer"/>
+  <rect class="${on('elevator')}" data-ac-part="elevator" x="155" y="178" width="50" height="7" rx="1" fill="#93c5fd" style="cursor:pointer"/>
+  <rect class="${on('rudder')}" data-ac-part="rudder" x="176" y="160" width="8" height="28" rx="1" fill="#3b82f6" style="cursor:pointer"/>
   <rect class="${on('trim')}" data-ac-part="trim" x="198" y="179" width="10" height="5" rx="1" fill="#f5c842" style="cursor:pointer"/>
   <rect class="${on('strut')}" data-ac-part="strut" x="0" y="0" width="0" height="0" fill="none"/>
-  <text x="180" y="212" fill="#8ba0bc" font-size="9" text-anchor="middle">Teaching silhouette — not a typed drawing · confirm POH</text>
+  <text x="180" y="212" fill="#a6acbb" font-size="9" text-anchor="middle">Teaching silhouette — not a typed drawing · confirm POH</text>
 </svg>`;
   }
 
   function svgWeightshift(active) {
     const on = (id) => hotspotClass(id, active);
     return `<svg class="ac-svg" viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Weightshift flexwing parts diagram">
-  <rect width="360" height="220" fill="#081420" rx="8"/>
-  <text x="180" y="16" fill="#7dd3fc" font-size="11" text-anchor="middle" font-weight="700">Weightshift / flexwing (schematic · tap a part)</text>
+  <rect width="360" height="220" fill="#05050b" rx="8"/>
+  <text x="180" y="16" fill="#93c5fd" font-size="11" text-anchor="middle" font-weight="700">Weightshift / flexwing (schematic · tap a part)</text>
   <!-- wing triangle -->
-  <path class="${on('wing')}" data-ac-part="wing" d="M60 70 L180 40 L300 70 L180 95 Z" fill="#2896c8" opacity="0.85" stroke="#4fc3f7" style="cursor:pointer"/>
+  <path class="${on('wing')}" data-ac-part="wing" d="M60 70 L180 40 L300 70 L180 95 Z" fill="#3b82f6" opacity="0.85" stroke="#60a5fa" style="cursor:pointer"/>
   <line class="${on('hangpoint')}" data-ac-part="hangpoint" x1="180" y1="95" x2="180" y2="125" stroke="#f5c842" stroke-width="3" style="cursor:pointer"/>
   <!-- A-frame -->
-  <path class="${on('basebar')}" data-ac-part="basebar" d="M140 155 L180 110 L220 155 Z" fill="none" stroke="#7dd3fc" stroke-width="3" style="cursor:pointer"/>
+  <path class="${on('basebar')}" data-ac-part="basebar" d="M140 155 L180 110 L220 155 Z" fill="none" stroke="#93c5fd" stroke-width="3" style="cursor:pointer"/>
   <line class="${on('basebar')}" data-ac-part="basebar" x1="145" y1="150" x2="215" y2="150" stroke="#f5c842" stroke-width="4" style="cursor:pointer"/>
   <!-- trike -->
-  <ellipse class="${on('fuselage')}" data-ac-part="fuselage" cx="180" cy="145" rx="28" ry="18" fill="#1a3050" stroke="#4fc3f7" stroke-width="2" style="cursor:pointer"/>
-  <path class="${on('windscreen')}" data-ac-part="windscreen" d="M155 135 Q180 118 205 135" fill="none" stroke="#7dd3fc" stroke-width="3" style="cursor:pointer"/>
+  <ellipse class="${on('fuselage')}" data-ac-part="fuselage" cx="180" cy="145" rx="28" ry="18" fill="#22223e" stroke="#60a5fa" stroke-width="2" style="cursor:pointer"/>
+  <path class="${on('windscreen')}" data-ac-part="windscreen" d="M155 135 Q180 118 205 135" fill="none" stroke="#93c5fd" stroke-width="3" style="cursor:pointer"/>
   <rect class="${on('engine')}" data-ac-part="engine" x="168" y="155" width="24" height="20" rx="3" fill="#fb923c" style="cursor:pointer"/>
   <circle class="${on('propeller')}" data-ac-part="propeller" cx="180" cy="188" r="14" fill="none" stroke="#f5c842" stroke-width="3" style="cursor:pointer"/>
   <line class="anim-spin" style="transform-origin:180px 188px;animation-duration:1.1s" x1="166" y1="188" x2="194" y2="188" stroke="#f5c842" stroke-width="2"/>
-  <circle class="${on('nose-gear')}" data-ac-part="nose-gear" cx="180" cy="128" r="6" fill="#8ba0bc" style="cursor:pointer"/>
-  <circle class="${on('main-gear')}" data-ac-part="main-gear" cx="155" cy="168" r="8" fill="#8ba0bc" style="cursor:pointer"/>
-  <circle class="${on('main-gear')}" data-ac-part="main-gear" cx="205" cy="168" r="8" fill="#8ba0bc" style="cursor:pointer"/>
+  <circle class="${on('nose-gear')}" data-ac-part="nose-gear" cx="180" cy="128" r="6" fill="#a6acbb" style="cursor:pointer"/>
+  <circle class="${on('main-gear')}" data-ac-part="main-gear" cx="155" cy="168" r="8" fill="#a6acbb" style="cursor:pointer"/>
+  <circle class="${on('main-gear')}" data-ac-part="main-gear" cx="205" cy="168" r="8" fill="#a6acbb" style="cursor:pointer"/>
   <circle class="${on('fuel-filler')}" data-ac-part="fuel-filler" cx="205" cy="148" r="5" fill="#34d399" style="cursor:pointer"/>
   <rect class="${on('brs')}" data-ac-part="brs" x="172" y="100" width="16" height="8" rx="2" fill="#f87171" opacity="0.85" style="cursor:pointer"/>
-  <text x="180" y="212" fill="#8ba0bc" font-size="9" text-anchor="middle">Weight-shift controls · use school W&amp;B sheet for exact figures</text>
+  <text x="180" y="212" fill="#a6acbb" font-size="9" text-anchor="middle">Weight-shift controls · use school W&amp;B sheet for exact figures</text>
 </svg>`;
   }
 
@@ -159,7 +159,7 @@ const AircraftUI = (() => {
     return `
       <div class="card ac-part-card" id="ac-part-card">
         <div class="meta" style="color:var(--sky);font-weight:700">${esc(p.label)}</div>
-        <p style="color:#c9d6e8;font-size:0.95rem;margin:8px 0 12px">${esc(p.role)}</p>
+        <p style="color:#c9ced8;font-size:0.95rem;margin:8px 0 12px">${esc(p.role)}</p>
         <div class="speak-bar" style="margin:0">
           <button type="button" class="btn btn-primary" id="ac-speak-part">🔊 Speak</button>
           <button type="button" class="btn btn-secondary" id="btn-stop-speak">Stop</button>
@@ -370,7 +370,7 @@ const AircraftUI = (() => {
 
       <div class="card">
         <div class="meta" style="color:var(--sky);font-weight:700">${esc(ac.name)}${ac.badge ? ` · ${esc(ac.badge)}` : ''}</div>
-        <p style="color:#c9d6e8;font-size:0.88rem;margin-top:6px">${esc(profile.category)} · ${esc(profile.seating)}</p>
+        <p style="color:#c9ced8;font-size:0.88rem;margin-top:6px">${esc(profile.category)} · ${esc(profile.seating)}</p>
         <label class="ac-variant-label">Engine / power / approval variant
           <select id="ac-variant" class="ac-variant-select">${variantOptions}</select>
         </label>

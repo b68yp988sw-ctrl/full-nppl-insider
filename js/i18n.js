@@ -126,10 +126,10 @@ const I18n = (() => {
     // Bottom nav
     const navMap = {
       home: 'nav.home',
-      theory: 'nav.theory',
-      flashcards: 'nav.cards',
+      study: 'nav.study',
       exams: 'nav.exams',
-      computer: 'nav.crp1'
+      skills: 'nav.skills',
+      plan: 'nav.plan'
     };
     document.querySelectorAll('#bottom-nav .nav-item').forEach(btn => {
       const key = navMap[btn.dataset.route];
@@ -170,7 +170,11 @@ const I18n = (() => {
     }
     // Aria
     const btnBack = document.getElementById('btn-back');
-    if (btnBack) btnBack.setAttribute('aria-label', t('common.back'));
+    if (btnBack) {
+      btnBack.setAttribute('aria-label', t('common.back'));
+      const bl = btnBack.querySelector('.back-label');
+      if (bl) bl.textContent = t('common.back');
+    }
     const btnSearch = document.getElementById('btn-search');
     if (btnSearch) {
       btnSearch.setAttribute('aria-label', t('common.search'));

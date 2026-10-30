@@ -50,7 +50,23 @@
     };
   }
 
-  const ROOT_TABS = new Set(['home', 'theory', 'flashcards', 'exams', 'computer']);
+  const ROOT_TABS = new Set(['home', 'study', 'exams', 'skills', 'plan']);
+  /* Which bottom tab each route belongs to (preview layout). */
+  const TAB_FOR = {
+    home: 'home', log: 'home', settings: 'home',
+    study: 'study', theory: 'study', subject: 'study', lesson: 'study', flashcards: 'study', 'flash-play': 'study',
+    computer: 'study', 'crp-drills': 'study', 'frtol-drills': 'study', glossary: 'study', search: 'study',
+    'met-daily': 'study', 'law-currency': 'study', signs: 'study', chart: 'study', 'half-million': 'study',
+    exams: 'exams', 'exam-setup': 'exams', 'exam-play': 'exams', 'exam-result': 'exams',
+    weak: 'exams', 'weak-detail': 'exams', 'weak-retest': 'exams',
+    skills: 'skills', circuits: 'skills', landing: 'skills', emergencies: 'skills', emergency: 'skills',
+    c42: 'skills', microlights: 'skills', microlight: 'skills',
+    plan: 'plan', 'flight-prep': 'plan', trip: 'plan', airfields: 'plan'
+  };
+  /* Routes worth offering in "Continue where you left off". */
+  const RESUMABLE = new Set(['subject', 'lesson', 'flash-play', 'exam-setup', 'exam-play', 'exam-result', 'computer',
+    'crp-drills', 'frtol-drills', 'glossary', 'met-daily', 'law-currency', 'signs', 'chart', 'circuits', 'landing',
+    'emergencies', 'emergency', 'c42', 'microlight', 'microlights', 'flight-prep', 'trip', 'airfields', 'log', 'weak']);
   let navStack = [];
 
   function routeKey(r) {
@@ -63,6 +79,11 @@
   function go(name, params = {}, opts = {}) {
     AudioSpeak.stop();
     const next = { name, ...params };
+    // Bug fix: a timed exam kept ticking (and could jump to results) after leaving via the tab bar.
+    if (examState && route && route.name === 'exam-play' && name !== 'exam-play' && name !== 'exam-result') {
+      try { if (examState.timerId) clearInterval(examState.timerId); } catch (_) {}
+      if (!examState.finished) examState = null;
+    }
     const replace = !!opts.replace;
     const isBack = !!opts.back;
     if (!isBack) {
@@ -96,6 +117,9 @@
     if (n === 'trip' && route.id) return { name: 'trip' };
     if (n === 'airfields' && route.id) return { name: 'airfields' };
     if (n === 'crp-drills') return { name: 'computer' };
+    if (n === 'theory' || n === 'flashcards' || n === 'computer') return { name: 'study' };
+    if (n === 'weak-detail' || n === 'weak-retest') return { name: 'weak' };
+    if (TAB_FOR[n] && TAB_FOR[n] !== n) return { name: TAB_FOR[n] };
     if (n === 'settings' || n === 'search' || n === 'weak' || n === 'weak-detail' || n === 'weak-retest' || n === 'met-daily' || n === 'law-currency' || n === 'signs' || n === 'glossary' ||
         n === 'log' || n === 'circuits' || n === 'landing' || n === 'emergencies' ||
         n === 'c42' || n === 'microlights' || n === 'trip' || n === 'airfields' ||
@@ -161,8 +185,11 @@
   }
 
   function setNav(active) {
+    const tab = TAB_FOR[route && route.name] || TAB_FOR[active] || 'home';
     bottomNav.querySelectorAll('.nav-item').forEach(b => {
-      b.classList.toggle('active', b.dataset.route === active);
+      const on = b.dataset.route === tab;
+      b.classList.toggle('active', on);
+      if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
     });
   }
 
@@ -177,104 +204,370 @@
     </svg>`;
   }
 
-  /* ---------- HOME ---------- */
+  /* ---------- HOME (preview layout: big sections + continue card) ---------- */
+  function tr(key, fallback) {
+    const v = t(key);
+    return v === key ? fallback : v;
+  }
+
+  function navTile(o) {
+    // o: { go, id, icon, title, meta }
+    const attr = o.id ? `id="${o.id}"` : `data-go="${o.go}"`;
+    return `<button type="button" class="hub-row" ${attr}>
+      <span class="hub-ico" aria-hidden="true">${o.icon}</span>
+      <span class="hub-text"><span class="hub-title">${esc(o.title)}</span>${o.meta ? `<span class="hub-meta">${esc(o.meta)}</span>` : ''}</span>
+      <span class="hub-chev" aria-hidden="true">›</span>
+    </button>`;
+  }
+
+  function hubSection(label, items) {
+    return `<h2 class="hub-label">${esc(label)}</h2><div class="hub-list">${items.map(navTile).join('')}</div>`;
+  }
+
+  function lastActivity() {
+    const st = Store.load();
+    const a = st.lastActivity;
+    if (!a || !a.route || !a.route.name) return null;
+    return a;
+  }
+
+  function recordActivity() {
+    if (!RESUMABLE.has(route.name)) return;
+    const r = { name: route.name };
+    if (route.id) r.id = route.id;
+    // Resume a sitting at its setup screen (exam state is not persisted)
+    if (r.name === 'exam-play' || r.name === 'exam-result') {
+      if (!examState) return;
+      r.name = 'exam-setup';
+      r.id = examState.subject;
+    }
+    if (r.name === 'flash-play') {
+      if (!fcState) return;
+      r.id = fcState.subject;
+    }
+    let title = titleEl.textContent || '';
+    let kind = '';
+    if (r.name === 'lesson') {
+      const l = lessons().find(x => x.id === r.id);
+      if (l) kind = subjectName(l.subject);
+    } else if (r.name === 'exam-setup') {
+      title = tr('exams.title', 'Practice exams');
+      kind = r.id === 'mixed' ? 'Mixed mock' : subjectName(r.id);
+    } else if (r.name === 'flash-play') {
+      kind = tr('home.flashcards', 'Flashcards');
+    }
+    try {
+      Store.update(s => { s.lastActivity = { route: r, title, kind, at: Date.now() }; });
+    } catch (_) { /* ignore storage errors */ }
+  }
+
+  function resumeActivity() {
+    const a = lastActivity();
+    if (!a) { go('study'); return; }
+    const r = a.route;
+    if (r.name === 'flash-play' && r.id) { startFlash(r.id); return; }
+    const params = r.id ? { id: r.id } : {};
+    go(r.name, params);
+  }
+
+  function continueCard() {
+    const a = lastActivity();
+    if (!a) {
+      return `<button type="button" class="continue-card" id="home-continue">
+        <span class="continue-k">${esc(tr('home.start_here', 'Start here'))}</span>
+        <span class="continue-t">${esc(subjectName('law'))} — ${esc(tr('home.first_lesson', 'first lesson'))}</span>
+        <span class="continue-go">${esc(tr('common.continue', 'Continue'))} ›</span>
+      </button>`;
+    }
+    const when = (() => {
+      try { return new Date(a.at).toLocaleDateString(I18n && I18n.getLang ? (I18n.getLang() === 'en' ? 'en-GB' : I18n.getLang()) : 'en-GB', { day: 'numeric', month: 'short' }); } catch (_) { return ''; }
+    })();
+    return `<button type="button" class="continue-card" id="home-continue">
+      <span class="continue-k">${esc(tr('home.continue', 'Continue where you left off'))}</span>
+      <span class="continue-t">${esc(a.title || '')}</span>
+      <span class="continue-m">${esc([a.kind, when].filter(Boolean).join(' · '))}</span>
+      <span class="continue-go">${esc(tr('common.continue', 'Continue'))} ›</span>
+    </button>`;
+  }
+
+  /* ---------- HOME: layout D (carousel + grouped sections) ---------- */
+  const HICO = {
+    chev: '<path d="m9 6 6 6-6 6"/>',
+    play: '<path d="M8 5v14l11-7z" fill="currentColor"/>',
+    theory: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5V5.5"/><path d="M8.5 7.5h6"/>',
+    cards: '<rect x="3" y="7" width="13" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-3"/>',
+    calc: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8.5 11.5h.1M12 11.5h.1M15.5 11.5h.1M8.5 15h.1M12 15h.1M15.5 15h.1M8.5 18h.1M12 18h.1"/>',
+    radio: '<rect x="4" y="9" width="16" height="11" rx="2"/><path d="M8 9l9-5"/><circle cx="9" cy="14.5" r="2"/><path d="M14 13h3M14 16h3"/>',
+    check: '<path d="M10 6h10M10 12h10M10 18h10"/><path d="m3.5 6 1.5 1.5L7.5 5M3.5 12l1.5 1.5 2.5-2.5M3.5 18l1.5 1.5 2.5-2.5"/>',
+    circuit: '<rect x="3.5" y="7" width="17" height="10" rx="5"/><path d="m13 4.5 2.5 2.5-2.5 2.5"/>',
+    land: '<path d="M3 20h18"/><path d="M4 9.5 6 9l3 3 5.5-1.5L18 5l1.6.5-1.8 6.3L7.3 15 4 11.3z"/>',
+    alert: '<path d="M12 3 2.5 20h19z"/><path d="M12 10v4.5M12 17.5v.1"/>',
+    clip: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2.8h6V4"/><path d="M8.5 10h7M8.5 14h7M8.5 18h4"/>',
+    map: '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>',
+    runway: '<path d="M9 21 10.5 3h3L15 21z"/><path d="M12 6v2M12 11v2M12 16v2"/>',
+    log: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v18"/><path d="M12 8h4M12 12h4"/>',
+    target: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',
+    gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+    star: '<path d="M12 1 13.7 10.3 23 12 13.7 13.7 12 23 10.3 13.7 1 12 10.3 10.3z"/>'
+  };
+  function hsvg(name, cls) {
+    return `<svg class="i ${cls || ''}" viewBox="0 0 24 24" aria-hidden="true">${HICO[name] || ''}</svg>`;
+  }
+
+  /* Next lesson from real progress: the next unstudied lesson after the one last
+     opened (same subject first), else the first unstudied lesson in course order. */
+  function nextLessonInfo() {
+    const st = Store.load();
+    const done = st.lessonsDone || {};
+    const all = lessons();
+    const a = lastActivity();
+    let pick = null, resume = false;
+    if (a && a.route && a.route.name === 'lesson') {
+      const cur = all.find(l => l.id === a.route.id);
+      if (cur && !done[cur.id]) { pick = cur; resume = true; }
+      else if (cur) {
+        const same = all.filter(l => l.subject === cur.subject);
+        pick = same.slice(same.indexOf(cur) + 1).find(l => !done[l.id]) || null;
+      }
+    } else if (a && a.route && a.route.name === 'subject') {
+      pick = all.find(l => l.subject === a.route.id && !done[l.id]) || null;
+    }
+    if (!pick) pick = all.find(l => !done[l.id]) || null;
+    const subjLessons = pick ? all.filter(l => l.subject === pick.subject) : [];
+    return { lesson: pick, resume, index: pick ? subjLessons.indexOf(pick) + 1 : 0, of: subjLessons.length };
+  }
+
+  /* Today's exam: the subject with the most questions to revise (real weak-area data);
+     with no weak areas it rotates through the subjects by date. */
+  function todaysExam() {
+    const subs = subjects().filter(s => questions().some(q => q.subject === s.id));
+    const by = Store.weakBySubject ? Store.weakBySubject() : {};
+    let best = null, bestN = 0;
+    subs.forEach(s => { const n = (by[s.id] || []).length; if (n > bestN) { best = s; bestN = n; } });
+    if (best) return { id: best.id, weak: bestN, count: questions().filter(q => q.subject === best.id).length };
+    const d = new Date();
+    const day = Math.floor((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())) / 864e5);
+    const s = subs.length ? subs[day % subs.length] : null;
+    if (!s) return { id: 'mixed', weak: 0, count: questions().length };
+    return { id: s.id, weak: 0, count: questions().filter(q => q.subject === s.id).length };
+  }
+
+  function homeChip(o) {
+    const attr = o.id ? `id="${o.id}"` : `data-go="${o.go}"`;
+    return `<button type="button" class="hd-chip" ${attr}><span class="hd-ico">${hsvg(o.icon)}</span><span class="hd-chip-t">${esc(o.title)}</span></button>`;
+  }
+  function homeGroup(o) {
+    return `<section class="hd-grp" aria-labelledby="hd-h-${o.key}">
+      <div class="hd-gh">
+        <h2 id="hd-h-${o.key}"><span class="hd-gh-ico">${hsvg(o.icon)}</span>${esc(o.title)}</h2>
+        <button type="button" class="hd-all" data-go="${o.go}" aria-label="${esc(o.allLabel)}">${esc(tr('home.see_all', 'See all'))}${hsvg('chev')}</button>
+      </div>
+      <div class="hd-chips">${o.items.map(homeChip).join('')}</div>
+    </section>`;
+  }
+
   function viewHome() {
     setNav('home');
-    titleEl.textContent = t('home.title');
+    titleEl.textContent = 'NPPL INSIDER';
     btnBack.hidden = true;
+    const st = Store.load();
     const prog = Store.progressOverview(subjects(), lessons());
+    const isNew = !prog.doneLessons && !lastActivity() && !prog.known && !prog.exams;
+    const hello = isNew ? tr('home.welcome', 'Welcome') : tr('home.welcome_back', 'Welcome back');
+    const sub = isNew
+      ? tr('home.welcome_new_sub', '{total} theory lessons across {subjects} subjects').replace('{total}', prog.totalLessons).replace('{subjects}', subjects().length)
+      : tr('home.welcome_sub', '{pct}% through the NPPL theory · {done}/{total} lessons').replace('{pct}', prog.pct).replace('{done}', prog.doneLessons).replace('{total}', prog.totalLessons);
+
+    // Card 1: Continue / Start here
+    const nl = nextLessonInfo();
+    let c1;
+    if (!nl.lesson) {
+      c1 = `<button type="button" class="hd-card hd-c1" data-go="theory">
+        <span class="hd-k">${esc(tr('home.all_done', 'All lessons studied'))}</span>
+        <span class="hd-t">${esc(tr('home.all_done_t', 'Review any subject'))}</span>
+        <span class="hd-s">${esc(prog.doneLessons + '/' + prog.totalLessons)}</span>
+        <span class="hd-cta">${esc(tr('home.theory', 'Theory'))}${hsvg('chev')}</span></button>`;
+    } else {
+      const L = localizedLesson(nl.lesson);
+      const k = isNew ? tr('home.start_here', 'Start here') : tr('common.continue', 'Continue');
+      const cta = isNew ? tr('home.start', 'Start') : (nl.resume ? tr('home.resume', 'Resume') : tr('home.next_lesson', 'Next lesson'));
+      const meta = subjectName(nl.lesson.subject) + ' · ' + tr('home.lesson_n_of', 'Lesson {n} of {of}').replace('{n}', nl.index).replace('{of}', nl.of);
+      c1 = `<button type="button" class="hd-card hd-c1" data-lesson="${esc(nl.lesson.id)}">
+        <span class="hd-k">${esc(k)}</span>
+        <span class="hd-t">${esc(L.title)}</span>
+        <span class="hd-s">${esc(meta)}</span>
+        <span class="hd-cta">${esc(cta)}${hsvg('chev')}</span></button>`;
+    }
+    // Card 2: Today's exam
+    const te = todaysExam();
+    const teName = te.id === 'mixed' ? tr('exams.mixed', 'Mixed mock') : subjectName(te.id);
+    const teMeta = te.weak
+      ? tr('home.exam_weak', '{n} questions to revise in this subject').replace('{n}', te.weak)
+      : tr('home.exam_meta', 'Practice paper · {n} questions in the bank').replace('{n}', te.count);
+    const c2 = `<button type="button" class="hd-card hd-c2" data-exam="${esc(te.id)}">
+        <span class="hd-k">${esc(tr('home.todays_exam', "Today's exam"))}</span>
+        <span class="hd-t">${esc(teName)}</span>
+        <span class="hd-s">${esc(teMeta)}</span>
+        <span class="hd-cta">${esc(tr('home.start', 'Start'))}${hsvg('chev')}</span></button>`;
+    // Card 3: Circuit video
+    const c3 = `<button type="button" class="hd-card hd-c3" id="home-circuit-video">
+        <img src="assets/video/circuit-poster.jpg" alt="" loading="lazy" decoding="async" />
+        <span class="hd-ov">
+          <span class="hd-k">${esc(tr('home.circuit_video', 'Circuit video'))}</span>
+          <span class="hd-t">${esc(tr('home.circuit_video_t', 'A standard UK left-hand circuit'))}</span>
+          <span class="hd-s">${esc(tr('home.circuit_video_m', '4 min 13 s · narrated'))}</span>
+          <span class="hd-cta">${hsvg('play')}${esc(tr('home.watch', 'Watch'))}</span>
+        </span></button>`;
+
+    const acP = (typeof AircraftPref !== 'undefined') ? AircraftPref.resolve() : null;
+    const checks = acP ? (acP.id === 'c42' ? t('aircraft.checks_c42') : t('aircraft.checks')) : t('home.c42');
+    const weak = Store.weakList ? Store.weakList(50) : [];
+    const groups = [
+      { key: 'study', title: tr('nav.study', 'Study'), icon: 'theory', go: 'study', allLabel: tr('home.see_all', 'See all') + ' — ' + tr('nav.study', 'Study'), items: [
+        { go: 'theory', icon: 'theory', title: tr('home.theory', 'Theory') },
+        { go: 'flashcards', icon: 'cards', title: tr('home.flashcards', 'Flashcards') },
+        { go: 'crp-drills', icon: 'calc', title: tr('home.crp_drills', 'CRP drills') },
+        { go: 'frtol-drills', icon: 'radio', title: tr('home.frtol_drills', 'FRTOL drills') } ] },
+      { key: 'fly', title: tr('home.fly', 'Fly'), icon: 'circuit', go: 'skills', allLabel: tr('home.see_all', 'See all') + ' — ' + tr('home.sec_skills', 'Flying skills'), items: [
+        { go: 'c42', icon: 'check', title: checks },
+        { go: 'circuits', icon: 'circuit', title: tr('home.circuits', 'Circuits') },
+        { go: 'landing', icon: 'land', title: tr('home.landing', 'T/O & landing') },
+        { go: 'emergencies', icon: 'alert', title: tr('home.emergencies', 'Emergencies') } ] },
+      { key: 'plan', title: tr('nav.plan', 'Plan'), icon: 'map', go: 'plan', allLabel: tr('home.see_all', 'See all') + ' — ' + tr('home.sec_plan', 'Plan a flight'), items: [
+        { go: 'flight-prep', icon: 'clip', title: tr('home.flight_prep', 'Flight preparation') },
+        { go: 'trip', icon: 'map', title: tr('home.trip', 'Plan a trip') },
+        { go: 'airfields', icon: 'runway', title: tr('home.airfields', 'Airfields') },
+        { go: 'log', icon: 'log', title: tr('home.sec_log', 'My log') } ] }
+    ];
+    return `
+      <div class="gold-rule" aria-hidden="true"><svg viewBox="0 0 24 24">${HICO.star}</svg></div>
+      <div class="hd-wel"><h2>${esc(hello)}</h2><p>${esc(sub)}</p></div>
+      <div class="hd-car" id="home-carousel" role="region" aria-roledescription="carousel" aria-label="${esc(tr('home.highlights', 'Highlights'))}" tabindex="0">
+        ${c1}${c2}${c3}
+      </div>
+      <div class="hd-dots" id="home-dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+      ${weak.length ? `<button type="button" class="hd-row hd-row-warn" data-go="weak">
+          <span class="hd-ico">${hsvg('target')}</span>
+          <span class="hd-row-t"><b>${esc(tr('weak.title', 'Weak areas'))}</b><span>${esc(tr('home.weak_count', '{n} questions to revise').replace('{n}', weak.length))}</span></span>
+          ${hsvg('chev', 'hd-chev')}</button>` : ''}
+      ${groups.map(homeGroup).join('')}
+      <button type="button" class="hd-row" data-go="settings">
+        <span class="hd-ico">${hsvg('gear')}</span>
+        <span class="hd-row-t"><b>${esc(tr('common.settings', 'Settings'))}</b><span>${esc(tr('home.sec_settings_meta', 'Language, aircraft, backup'))}</span></span>
+        ${hsvg('chev', 'hd-chev')}</button>
+      <div class="disclaimer-inline">${esc(t('home.disclaimer'))}</div>
+    `;
+  }
+
+  function bindHomeCarousel() {
+    const car = document.getElementById('home-carousel');
+    const dots = document.getElementById('home-dots');
+    if (!car || !dots) return;
+    const cards = Array.from(car.children);
+    const ds = Array.from(dots.children);
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const max = car.scrollWidth - car.clientWidth;
+      let idx;
+      if (car.scrollLeft >= max - 4) idx = cards.length - 1;
+      else {
+        const step = cards.length > 1 ? (cards[1].offsetLeft - cards[0].offsetLeft) : car.clientWidth;
+        idx = Math.round(car.scrollLeft / Math.max(1, step));
+      }
+      idx = Math.max(0, Math.min(cards.length - 1, idx));
+      ds.forEach((d, i) => d.classList.toggle('on', i === idx));
+      car.dataset.index = String(idx);
+    };
+    car.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
+    car.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      const step = cards.length > 1 ? (cards[1].offsetLeft - cards[0].offsetLeft) : car.clientWidth;
+      car.scrollBy({ left: e.key === 'ArrowRight' ? step : -step, behavior: 'smooth' });
+      e.preventDefault();
+    });
+    update();
+    const vid = document.getElementById('home-circuit-video');
+    if (vid) vid.addEventListener('click', () => {
+      go('circuits');
+      setTimeout(() => {
+        const v = main.querySelector('.lesson-video');
+        if (v) v.closest('.video-card').scrollIntoView({ block: 'center' });
+      }, 60);
+    });
+  }
+
+  /* ---------- HUBS ---------- */
+  function viewStudy() {
+    setNav('study');
+    titleEl.textContent = tr('nav.study', 'Study');
+    btnBack.hidden = true;
+    const st = Store.load();
+    const known = Object.keys(st.flashKnown || {}).length;
+    return `
+      ${hubSection(tr('hub.learn', 'Learn'), [
+        { go: 'theory', icon: '📘', title: tr('home.theory', 'Theory'), meta: tr('hub.theory_meta', '{n} lessons in 6 subjects').replace('{n}', lessons().length) },
+        { go: 'flashcards', icon: '🃏', title: tr('home.flashcards', 'Flashcards'), meta: tr('hub.cards_meta', '{known} of {n} known').replace('{known}', known).replace('{n}', cards().length) }
+      ])}
+      ${hubSection(tr('hub.practise', 'Practise'), [
+        { go: 'computer', icon: '⚙', title: tr('home.computer', 'Flight computer'), meta: 'CRP-1' },
+        { go: 'crp-drills', icon: '🧮', title: tr('home.crp_drills', 'CRP drills'), meta: tr('hub.crp_meta', 'Time, fuel, wind') },
+        { go: 'frtol-drills', icon: '📡', title: tr('home.frtol_drills', 'FRTOL drills'), meta: tr('hub.frtol_meta', 'Radio calls & replies') },
+        { go: 'met-daily', icon: '🌤', title: tr('met.daily_title', 'Daily METAR'), meta: tr('hub.met_meta', 'Decode practice') },
+        { go: 'law-currency', icon: '⚖', title: tr('law.currency_title', 'Air Law currency'), meta: tr('hub.law_meta', 'VFR minima, ATZ') },
+        { go: 'signs', icon: '🚸', title: tr('signs.title', 'Signs & signals'), meta: tr('hub.signs_meta', 'Ground signals & markings') }
+      ])}
+      ${hubSection(tr('hub.lookup', 'Look up'), [
+        { go: 'chart', icon: '🧭', title: tr('home.chart', '1:500k Chart'), meta: tr('hub.chart_meta', 'Chart legend & quiz') },
+        { go: 'glossary', icon: '🔤', title: tr('home.glossary', 'A–Z Abbreviations'), meta: 'ATZ · MATZ · FREDA…' },
+        { go: 'search', icon: '🔍', title: tr('home.search', 'Search'), meta: tr('hub.search_meta', 'Search the whole app') }
+      ])}`;
+  }
+
+  function viewSkills() {
+    setNav('skills');
+    titleEl.textContent = tr('home.sec_skills', 'Flying skills');
+    btnBack.hidden = true;
     const acProf = (typeof AircraftPref !== 'undefined') ? AircraftPref.resolve() : null;
-    const acChip = acProf ? `
-        <div class="ac-selected-chip" data-ac-id="${esc(acProf.id)}" role="button" tabindex="0">
-          <div class="ac-thumb">${AircraftPref.thumbForProfile(acProf, 44)}</div>
-          <div class="ac-sel-text">
-            <span class="ac-sel-label">${esc(t('aircraft.flying'))}</span>
-            <span class="ac-sel-name">${esc(AircraftPref.typeName({ id: acProf.id, name: acProf.name }))}</span>
-            <span class="ac-sel-variant">${esc(acProf.variantLabel || '')}</span>
-          </div>
-        </div>` : '';
     const checksLabel = acProf
       ? (acProf.id === 'c42' ? t('aircraft.checks_c42') : t('aircraft.checks'))
       : t('home.c42');
     return `
-      <div class="hero">
-        <div class="hero-badge">${esc(t('home.badge'))}</div>
-        <h1>${esc(t('home.title'))}</h1>
-        <p>${esc(t('home.tagline'))}</p>
-        ${acChip}
-      </div>
-      <div class="progress-ring-wrap">
-        ${ringSVG(prog.pct)}
-        <div class="progress-stats">
-          <strong>${prog.pct}%</strong>
-          <span>${esc(t('home.progress_meta', { done: prog.doneLessons, total: prog.totalLessons, known: prog.known, exams: prog.exams }))}</span>
-        </div>
-      </div>
+      ${hubSection(tr('hub.on_ground', 'Before and after flight'), [
+        { go: 'c42', icon: '✅', title: checksLabel, meta: tr('hub.checks_meta', 'Walk-round, CHIFFTAPWE, FREDA') },
+        { id: 'home-microlights-btn', icon: '✈', title: tr('home.microlights', 'Microlights'), meta: tr('hub.ml_meta', 'Parts, specs, fuel & weight') }
+      ])}
+      ${hubSection(tr('hub.in_air', 'In the air'), [
+        { go: 'circuits', icon: '↺', title: tr('home.circuits', 'Circuits'), meta: tr('hub.circuits_meta', 'Joining, lookout, go-around') },
+        { go: 'landing', icon: '🛬', title: tr('home.landing', 'T/O & landing'), meta: tr('hub.landing_meta', 'Crosswind, speed, controls') },
+        { go: 'emergencies', icon: '🚨', title: tr('home.emergencies', 'Emergencies'), meta: tr('hub.emerg_meta', 'Forced landing, EFATO, fire') }
+      ])}
+      <div class="disclaimer-inline">${esc(tr('hub.skills_disc', 'Not a substitute for instructor dual, the POH or current UK regulations.'))}</div>`;
+  }
 
-      <div class="chip-row" style="margin:0 0 12px;flex-wrap:wrap">
-        <button type="button" class="chip active" data-go="theory">📘 Study</button>
-        <button type="button" class="chip" data-go="flight-prep">🛫 Fly / Prep</button>
-        <button type="button" class="chip" data-go="exams">📝 Continue exams</button>
-        <button type="button" class="chip" data-go="met-daily">🌤 Today's METAR</button>
-        <button type="button" class="chip" data-go="law-currency">⚖ Law currency</button>
-      </div>
-      <div class="quick-grid">
-        <button type="button" class="quick-tile" data-go="theory"><span class="qico">📘</span><span>${esc(t('home.theory'))}</span></button>
-        <button type="button" class="quick-tile" data-go="flashcards"><span class="qico">🃏</span><span>${esc(t('home.flashcards'))}</span></button>
-        <button type="button" class="quick-tile" data-go="exams"><span class="qico">📝</span><span>${esc(t('home.exams'))}</span></button>
-        <button type="button" class="quick-tile" data-go="computer"><span class="qico">⚙</span><span>${esc(t('home.computer'))}</span></button>
-        <button type="button" class="quick-tile" data-go="log"><span class="qico">📒</span><span>${esc(t('home.log'))}</span></button>
-        <button type="button" class="quick-tile" data-go="circuits"><span class="qico">↺</span><span>${esc(t('home.circuits'))}</span></button>
-        <button type="button" class="quick-tile" data-go="landing"><span class="qico">🛬</span><span>${esc(t('home.landing'))}</span></button>
-        <button type="button" class="quick-tile" data-go="emergencies"><span class="qico">🚨</span><span>${esc(t('home.emergencies'))}</span></button>
-        <button type="button" class="quick-tile" data-go="flight-prep"><span class="qico">📋</span><span>${esc(t('home.flight_prep'))}</span></button>
-        <button type="button" class="quick-tile" data-go="c42"><span class="qico">✅</span><span>${esc(checksLabel)}</span></button>
-        <button type="button" class="quick-tile" id="home-microlights-btn"><span class="qico">✈</span><span>${esc(t('home.microlights'))}</span></button>
-        <button type="button" class="quick-tile" data-go="trip"><span class="qico">🗺️</span><span>${esc(t('home.trip'))}</span></button>
-        <button type="button" class="quick-tile" data-go="glossary"><span class="qico">🔤</span><span>${esc(t('home.glossary'))}</span></button>
-        <button type="button" class="quick-tile" data-go="chart"><span class="qico">🧭</span><span>${esc(t('home.chart'))}</span></button>
-        <button type="button" class="quick-tile" data-go="airfields"><span class="qico">🛬</span><span>${esc(t('home.airfields') !== 'home.airfields' ? t('home.airfields') : 'Airfields')}</span></button>
-        <button type="button" class="quick-tile" data-go="crp-drills"><span class="qico">🧮</span><span>${esc(t('home.crp_drills') !== 'home.crp_drills' ? t('home.crp_drills') : 'CRP drills')}</span></button>
-        <button type="button" class="quick-tile" data-go="frtol-drills"><span class="qico">📡</span><span>${esc(t('home.frtol_drills') !== 'home.frtol_drills' ? t('home.frtol_drills') : 'FRTOL drills')}</span></button>
-        <button type="button" class="quick-tile" data-go="search"><span class="qico">🔍</span><span>${esc(t('home.search'))}</span></button>
-      </div>
-      <div class="section-label">${esc(t('common.subjects'))}</div>
-      ${subjects().map(s => {
-        const pct = Store.subjectLessonPct(s.id, lessons());
-        const name = t('subject.' + s.id);
-        const short = t('subject.' + s.id + '_short');
-        return `<div class="card card-tap subject-card" data-subject="${s.id}">
-          <div class="card-icon">${s.icon}</div>
-          <div class="info">
-            <h3>${esc(name)}</h3>
-            <div class="meta">${esc(short)}</div>
-            <div class="bar"><i style="width:${pct}%"></i></div>
-          </div>
-          <div class="chev">›</div>
-        </div>`;
-      }).join('')}
-      <div class="section-label">${esc(t('common.more'))}</div>
-      <div class="card card-tap" data-go="settings"><h3>${esc(t('home.settings'))}</h3><div class="meta">${esc(t('home.settings_meta'))}</div></div>
-      ${(() => {
-        const weak = Store.weakList ? Store.weakList(5) : [];
-        if (!weak.length) return '';
-        return `<div class="section-label">${esc(t('weak.title') !== 'weak.title' ? t('weak.title') : 'Revise weak areas')}</div>
-          <div class="card">
-            <p class="meta" style="margin-bottom:8px">From wrong practice-exam answers</p>
-            ${weak.map(w => `<div class="review-item card-tap" data-weak-id="${esc(w.id)}" style="margin-bottom:6px"><strong>${esc(w.q || w.id)}</strong>
-              <div class="meta">${esc(typeof I18n !== 'undefined' ? I18n.subjectName(w.subject) : w.subject)} · wrong ${w.wrong || 0} · tap to revise</div></div>`).join('')}
-            <button type="button" class="btn btn-secondary" data-go="weak" style="width:100%;margin-top:8px">Full revision list</button>
-          </div>`;
-      })()}
-      <div class="disclaimer-inline">${esc(t('home.disclaimer'))}</div>
-    `;
+  function viewPlan() {
+    setNav('plan');
+    titleEl.textContent = tr('home.sec_plan', 'Plan a flight');
+    btnBack.hidden = true;
+    return `
+      ${hubSection(tr('hub.before', 'Before you go'), [
+        { go: 'flight-prep', icon: '📋', title: tr('home.flight_prep', 'Flight preparation'), meta: tr('hub.fp_meta', 'Aircraft & destination brief') },
+        { go: 'trip', icon: '🗺️', title: tr('home.trip', 'Plan a trip'), meta: tr('hub.trip_meta', 'Weather, NOTAMs, PPR, fuel') },
+        { go: 'airfields', icon: '🛬', title: tr('home.airfields', 'Airfields'), meta: tr('hub.af_meta', 'Quick cards for UK airfields') }
+      ])}
+      ${hubSection(tr('hub.tools', 'Tools'), [
+        { go: 'chart', icon: '🧭', title: tr('home.chart', '1:500k Chart'), meta: tr('hub.chart_meta', 'Chart legend & quiz') },
+        { go: 'computer', icon: '⚙', title: tr('home.computer', 'Flight computer'), meta: 'CRP-1' },
+        { go: 'met-daily', icon: '🌤', title: tr('met.daily_title', 'Daily METAR'), meta: tr('hub.met_meta', 'Decode practice') }
+      ])}
+      <div class="disclaimer-inline">${esc(tr('hub.plan_disc', 'Always check the current AIP, NOTAMs and weather, and get PPR before you fly.'))}</div>`;
   }
 
   /* ---------- THEORY ---------- */
   function viewTheory() {
     setNav('theory');
     titleEl.textContent = t('theory.title');
-    btnBack.hidden = true;
+    btnBack.hidden = false;
     return `
       <p class="meta" style="margin-bottom:12px;color:var(--muted);font-size:0.85rem">${esc(t('theory.intro'))}</p>
       ${subjects().map(s => {
@@ -287,22 +580,6 @@
           <div class="chev">›</div>
         </div>`;
       }).join('')}
-      <div class="section-label">${esc(t('theory.skills'))}</div>
-      <div class="card card-tap" data-go="circuits"><div class="subject-card"><div class="card-icon">↺</div><div class="info"><h3>${esc(t('circuits.title'))}</h3><div class="meta">Join · closures · conflicts · hard/grass · go-around</div></div><div class="chev">›</div></div></div>
-      <div class="card card-tap" data-go="landing"><div class="subject-card"><div class="card-icon">🛬</div><div class="info"><h3>${esc(t('landing.title'))}</h3><div class="meta">Aileron · rudder · speed · crosswind</div></div><div class="chev">›</div></div></div>
-      <div class="card card-tap" data-go="emergencies"><div class="subject-card"><div class="card-icon">🚨</div><div class="info"><h3>${esc(t('emergencies.title'))}</h3><div class="meta">Forced landing · EFATO · fire · lost</div></div><div class="chev">›</div></div></div>
-      <div class="card card-tap" data-go="flight-prep"><div class="subject-card"><div class="card-icon">📋</div><div class="info"><h3>${esc(t('fp.title'))}</h3><div class="meta">Aircraft checks · destination PPR (Prior Permission Required) · freqs · docs</div></div><div class="chev">›</div></div></div>
-      <div class="card card-tap" data-go="c42"><div class="subject-card"><div class="card-icon">✅</div><div class="info"><h3>${esc(t('c42.title'))}</h3><div class="meta">C42 pre-flight · CHIFFTAPWE (Controls… Eventualities)</div></div><div class="chev">›</div></div></div>
-      <div class="card card-tap" id="theory-microlights-btn"><div class="subject-card"><div class="card-icon">✈</div><div class="info"><h3>${esc(t('microlights.title'))}</h3><div class="meta">C42 &amp; types · parts · fuel/weight calc</div></div><div class="chev">›</div></div></div>
-      <div class="card card-tap" data-go="trip"><div class="subject-card"><div class="card-icon">🗺️</div><div class="info"><h3>${esc(t('trip.title'))}</h3><div class="meta">Airfield planning checklist · PPR (Prior Permission Required) · weather · fuel</div></div><div class="chev">›</div></div></div>
-      <div class="card card-tap" data-go="glossary"><div class="subject-card"><div class="card-icon">🔤</div><div class="info"><h3>${esc(t('glossary.title'))}</h3><div class="meta">MATZ (Military ATZ) · ATZ (Aerodrome Traffic Zone) · FRTOL · FREDA · CHIFFTAPWE · IMSAFE</div></div><div class="chev">›</div></div></div>
-      <div class="card card-tap" data-go="chart"><div class="subject-card"><div class="card-icon">🧭</div><div class="info"><h3>${esc(t('chart.title'))}</h3><div class="meta">Half-Million legend · airspace · symbols · microlight meaning</div></div><div class="chev">›</div></div></div>
-      <div class="card card-tap" data-go="airfields"><div class="subject-card"><div class="card-icon">🛬</div><div class="info"><h3>Airfield cards</h3><div class="meta">Freqs · PPR · runway · Chilterns / Bucks seeds</div></div><div class="chev">›</div></div></div>
-      <div class="card card-tap" data-go="frtol-drills"><div class="subject-card"><div class="card-icon">📡</div><div class="info"><h3>FRTOL scenarios</h3><div class="meta">Listen-and-reply · join · MATZ · zone · Mayday</div></div><div class="chev">›</div></div></div>
-      <div class="card card-tap" data-go="met-daily"><div class="subject-card"><div class="card-icon">🌤</div><div class="info"><h3>Daily METAR</h3><div class="meta">Decode practice · streak · live nearby</div></div><div class="chev">›</div></div></div>
-      <div class="card card-tap" data-go="law-currency"><div class="subject-card"><div class="card-icon">⚖</div><div class="info"><h3>Air Law currency</h3><div class="meta">VFR minima · ATZ · AIC colours</div></div><div class="chev">›</div></div></div>
-      <div class="card card-tap" data-go="signs"><div class="subject-card"><div class="card-icon">🚸</div><div class="info"><h3>Signs & signals</h3><div class="meta">Taxiway · threshold · closed · ATC flag</div></div><div class="chev">›</div></div></div>
-      <div class="card card-tap" data-go="weak"><div class="subject-card"><div class="card-icon">🎯</div><div class="info"><h3>Weak areas</h3><div class="meta">Revise missed practice-exam questions</div></div><div class="chev">›</div></div></div>
       <div class="disclaimer-inline">${esc(t('theory.disclaimer'))}</div>`;
   }
 
@@ -375,7 +652,7 @@
   function viewFlashcards() {
     setNav('flashcards');
     titleEl.textContent = t('fc.title');
-    btnBack.hidden = true;
+    btnBack.hidden = false;
     const st = Store.load();
     return subjects().map(s => {
       const all = cards().filter(c => c.subject === s.id);
@@ -467,9 +744,26 @@
       </div>`;
   }
 
+  /* Bug fix: ~70% of answers in the bank are option B, so choices are now shuffled per sitting.
+     _perm maps display position -> original choice index (applied after localisation). */
+  function withPerm(q) {
+    const n = (q.choices || []).length;
+    return { ...q, _perm: shuffle([...Array(n).keys()]) };
+  }
+  function dq(q) {
+    const loc = localizedQuestion(q);
+    if (!q || !q._perm) return loc;
+    const choices = q._perm.map(i => loc.choices[i]);
+    return { ...loc, choices, ans: q._perm.indexOf(q.ans) };
+  }
+  function isRight(q, a) {
+    return a != null && (q._perm ? q._perm[a] === q.ans : a === q.ans);
+  }
+
   function startExam(sid, n, timed) {
     let bank = sid === 'mixed' ? questions().slice() : questions().filter(q => q.subject === sid);
-    bank = shuffle(bank).slice(0, n);
+    n = Math.max(1, Math.min(bank.length, n || 15));
+    bank = shuffle(bank).slice(0, n).map(withPerm);
     examState = {
       subject: sid,
       list: bank,
@@ -502,7 +796,7 @@
     setNav('exams');
     titleEl.textContent = t('exams.exam');
     btnBack.hidden = false;
-    const q = localizedQuestion(examState.list[examState.i]);
+    const q = dq(examState.list[examState.i]);
     const sel = examState.answers[q.id];
     return `
       <div class="timer-bar">
@@ -515,7 +809,7 @@
         <button type="button" class="choice ${sel === idx ? 'selected' : ''}" data-choice="${idx}">${esc(ch)}</button>
       `).join('')}
       <div class="btn-row">
-        <button type="button" class="btn btn-secondary" id="exam-prev" ${examState.i === 0 ? 'disabled' : ''}>${esc(t('common.back'))}</button>
+        <button type="button" class="btn btn-secondary" id="exam-prev" ${examState.i === 0 ? 'disabled' : ''}>${esc(t('common.prev'))}</button>
         ${examState.i < examState.list.length - 1
           ? `<button type="button" class="btn btn-primary" id="exam-next">${esc(t('common.next'))}</button>`
           : `<button type="button" class="btn btn-primary" id="exam-finish">${esc(t('common.finish'))}</button>`}
@@ -528,7 +822,7 @@
     let correct = 0;
     const review = examState.list.map(q => {
       const a = examState.answers[q.id];
-      const ok = a === q.ans;
+      const ok = isRight(q, a);
       if (ok) correct++;
       return { q, a, ok };
     });
@@ -567,7 +861,7 @@
       </div>
       <div class="section-label">Review</div>
       ${examState.review.map(r => {
-        const qq = localizedQuestion(r.q);
+        const qq = dq(r.q);
         return `
         <div class="review-item ${r.ok ? 'ok' : ''}">
           <strong>${esc(qq.q)}</strong>
@@ -590,7 +884,7 @@
 
   function similarQuestions(qid, subject, n) {
     const bank = questions().filter(q => q.subject === subject && q.id !== qid);
-    return shuffle(bank).slice(0, n);
+    return shuffle(bank).slice(0, n).map(withPerm);
   }
 
   function viewWeak() {
@@ -669,7 +963,7 @@
             <div class="exp">${esc(qq.exp)}</div></div>`;
         }).join('')}`;
     }
-    const q = localizedQuestion(weakRetest.list[weakRetest.i]);
+    const q = dq(weakRetest.list[weakRetest.i]);
     const sel = weakRetest.answers[q.id];
     return `
       <div class="timer-bar"><span>Retest ${weakRetest.i + 1} / ${weakRetest.list.length}</span><span>Untimed</span></div>
@@ -689,7 +983,7 @@
   function viewComputer() {
     setNav('computer');
     titleEl.textContent = t('computer.title');
-    btnBack.hidden = true;
+    btnBack.hidden = false;
     return `
       <div class="hero" style="padding-top:0">
         <div class="hero-badge">UK microlight nav</div>
@@ -698,7 +992,7 @@
       ${Diagrams.whizz()}
       <div class="card">
         <h3>What is it for?</h3>
-        <p style="color:#c9d6e8;font-size:0.9rem;margin-top:8px">The CRP-1 is the UK circular flight computer (slide rule). Microlight navigators use it for time/distance/speed, fuel, and a simplified wind triangle (heading & groundspeed). Same jobs as an E6B, UK packaging and teaching.</p>
+        <p style="color:#c9ced8;font-size:0.9rem;margin-top:8px">The CRP-1 is the UK circular flight computer (slide rule). Microlight navigators use it for time/distance/speed, fuel, and a simplified wind triangle (heading & groundspeed). Same jobs as an E6B, UK packaging and teaching.</p>
       </div>
       <div class="section-label">Step-by-step</div>
       <ol class="steps">
@@ -775,7 +1069,7 @@
       </div>
       <div class="card">
         <h3>${esc(t('settings.disclaimer_h'))}</h3>
-        <p style="font-size:0.88rem;color:#c9d6e8;margin-top:8px">${esc(t('settings.disclaimer'))}</p>
+        <p style="font-size:0.88rem;color:#c9ced8;margin-top:8px">${esc(t('settings.disclaimer'))}</p>
       </div>
       <div class="card backup-card">
         <h3>${esc(t('settings.backup_h'))}</h3>
@@ -806,6 +1100,9 @@
     let html = '';
     switch (route.name) {
       case 'home': html = viewHome(); break;
+      case 'study': html = viewStudy(); break;
+      case 'skills': html = viewSkills(); break;
+      case 'plan': html = viewPlan(); break;
       case 'theory': html = viewTheory(); break;
       case 'subject': html = viewSubject(route.id); break;
       case 'lesson': html = viewLesson(route.id); break;
@@ -847,6 +1144,9 @@
     main.innerHTML = html;
     bind();
     syncBackButton();
+    setNav();
+    document.body.dataset.route = route.name;
+    recordActivity();
     if (Store.load().audioMode && route.name === 'lesson') {
       // gentle hint only — user taps Speak
     }
@@ -854,6 +1154,12 @@
 
   function bind() {
     main.querySelectorAll('[data-go]').forEach(el => el.addEventListener('click', () => go(el.dataset.go)));
+    if (route.name === 'home') bindHomeCarousel();
+    const cont = document.getElementById('home-continue');
+    if (cont) cont.addEventListener('click', () => {
+      if (lastActivity()) resumeActivity();
+      else go('lesson', { id: (lessons().find(l => l.subject === 'law') || lessons()[0]).id });
+    });
     main.querySelectorAll('[data-subject]').forEach(el => el.addEventListener('click', () => go('subject', { id: el.dataset.subject })));
     main.querySelectorAll('[data-lesson]').forEach(el => el.addEventListener('click', () => go('lesson', { id: el.dataset.lesson })));
     main.querySelectorAll('[data-go-fc]').forEach(el => el.addEventListener('click', () => startFlash(el.dataset.goFc)));
@@ -918,7 +1224,7 @@
       startExam(es.dataset.sid, n, timed);
     });
     main.querySelectorAll('[data-choice]').forEach(btn => btn.addEventListener('click', () => {
-      const q = localizedQuestion(examState.list[examState.i]);
+      const q = examState.list[examState.i];
       examState.answers[q.id] = parseInt(btn.dataset.choice, 10);
       render();
     }));
@@ -1058,7 +1364,7 @@
       if (id) go('microlight', { id });
       else go('microlights');
     });
-    const acChipTap = main.querySelector('.hero .ac-selected-chip[data-ac-id]');
+    const acChipTap = main.querySelector('.ac-selected-chip[data-ac-id]');
     if (acChipTap) acChipTap.addEventListener('click', () => {
       const id = acChipTap.getAttribute('data-ac-id');
       if (id) go('microlight', { id });
@@ -1113,7 +1419,7 @@
         let correct = 0;
         weakRetest.review = weakRetest.list.map(q => {
           const a = weakRetest.answers[q.id];
-          const ok = a === q.ans;
+          const ok = isRight(q, a);
           if (ok) correct++;
           return { q, a, ok };
         });

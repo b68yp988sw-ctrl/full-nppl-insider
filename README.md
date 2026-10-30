@@ -80,3 +80,18 @@ Study aid only — confirm instructor / POH / AIP / Met Office / NATS. No Progre
 Live at **https://b68yp988sw-ctrl.github.io/full-nppl-insider/** — a pure static build (all progress in the browser's localStorage, PWA/offline supported).
 
 The in-app live METAR/TAF/NOTAM proxy (`/api/*` in `server.js`) is not part of the static build; on the hosted version the Plan-a-trip weather panel links to official sources (aviationweather.gov, Met Office, NATS) instead.
+
+## What's new (30 Oct 2026)
+
+- **New home screen:** swipeable cards (Continue / Start here, Today's exam, Circuit video), then Study / Fly / Plan groups with clear headings and *See all* links, Settings and the disclaimer.
+- **Logo theme app-wide** (near-black + blue→violet, silver text, gold accents) and bigger tap targets (≥48 px).
+- **Simpler navigation:** a 5-tab bottom bar (Home · Study · Exams · Skills · Plan), clear page titles and a labelled Back button, 48 px tap targets, 17 px base text and higher-contrast muted text. Every earlier screen is still reachable from a hub.
+- **New logo:** home-screen icons (180/192/512 + maskable 512), black theme, and a 1.5 s opening splash (once per session, tap to skip, never blocks the app).
+- **Narrated circuit video** (4 min 13 s) on Flying skills → Circuits. It loads only when you tap play and is not saved offline.
+- **Questions:** 352 → 402. The 50 new questions are original, and the answer order is now shuffled for each sitting.
+- **Airfields:** 10 → 29 quick cards for south England and South Wales. Each card names its source (UK AIP AIRAC 29 Oct 2026 or the airfield's website). Blanks mean "not verified". **Always check the current AIP/website and get PPR.**
+- **C42 check photos:** the school logo is blurred.
+- **Translations:** stale or half-English content was removed (it falls back to English), and the missing UI strings were added in all 7 languages. **All non-English text still needs a check by a native speaker.**
+- **Bug fixes:** the exam timer kept running after you left the exam; the exam answer key was biased; airfield seeds were missing for existing users; the service worker cache was scoped wrongly; translated choices could mismatch the answer key.
+- **Saved progress is kept:** same storage keys as before. Airfield cards move to a new key (`full-nppl-airfields-v3`); your custom cards, edits and deletions carry over.
+- Service worker cache: `nppl-live-v3-20261030` (old `nppl-insider-*` caches are removed on update). Close and reopen the app once to get the new version.

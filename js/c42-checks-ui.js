@@ -72,7 +72,7 @@ const C42UI = (() => {
     const otherBanner = otherAc ? `
       <div class="c42-other-banner card">
         <strong>${esc(typeof I18n !== 'undefined' ? I18n.t('aircraft.c42_specific') : 'C42-specific — confirm your POH')}</strong>
-        <p style="font-size:0.88rem;color:#c9d6e8;margin:8px 0 10px">${esc(typeof I18n !== 'undefined' ? I18n.t('aircraft.c42_other_note', { name: otherAc.name }) : ('You selected ' + otherAc.name + '. This tick-list is C42-specific — confirm your POH.'))}</p>
+        <p style="font-size:0.88rem;color:#c9ced8;margin:8px 0 10px">${esc(typeof I18n !== 'undefined' ? I18n.t('aircraft.c42_other_note', { name: otherAc.name }) : ('You selected ' + otherAc.name + '. This tick-list is C42-specific — confirm your POH.'))}</p>
         <button type="button" class="btn btn-secondary" id="c42-open-yours">${esc(typeof I18n !== 'undefined' ? I18n.t('aircraft.open_microlights') : 'Open Microlights for your type')}</button>
       </div>` : '';
     const titleLine = otherAc
@@ -108,7 +108,7 @@ const C42UI = (() => {
       <div class="card step-card c42-current">
         <div class="step-num">Step ${stepIndex + 1} of ${m.items.length}</div>
         <h3>${esc(item.label)}</h3>
-        <p style="color:#c9d6e8;font-size:0.95rem;margin:8px 0 12px">${esc(item.detail)}</p>
+        <p style="color:#c9ced8;font-size:0.95rem;margin:8px 0 12px">${esc(item.detail)}</p>
         <label class="check-row" style="margin:0">
           <input type="checkbox" id="c42-tick-current" ${ticks[item.id] ? 'checked' : ''}/>
           <span>Done</span>

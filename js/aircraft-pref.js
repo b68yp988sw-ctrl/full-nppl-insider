@@ -3,7 +3,7 @@ const AircraftPref = (() => {
   const STORAGE_KEY = 'nppl_aircraft';
 
   const ACCENTS = {
-    c42: { accent: '#4fc3f7', sky: '#4fc3f7', skyDim: '#2896c8' },
+    c42: { accent: '#60a5fa', sky: '#60a5fa', skyDim: '#3b82f6' },
     eurostar: { accent: '#a78bfa', sky: '#a78bfa', skyDim: '#7c5cbf' },
     foxbat: { accent: '#34d399', sky: '#34d399', skyDim: '#059669' },
     skyranger: { accent: '#fb923c', sky: '#fb923c', skyDim: '#c2410c' },
@@ -106,34 +106,34 @@ const AircraftPref = (() => {
     const layout = diagram || 'highwing';
     if (layout === 'weightshift') {
       return `<svg class="ac-thumb-svg" width="${w}" height="${w}" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <rect width="64" height="64" rx="10" fill="#081420"/>
-        <path d="M8 22 L32 10 L56 22 L32 30 Z" fill="#2896c8" opacity="0.9"/>
+        <rect width="64" height="64" rx="10" fill="#05050b"/>
+        <path d="M8 22 L32 10 L56 22 L32 30 Z" fill="#3b82f6" opacity="0.9"/>
         <line x1="32" y1="30" x2="32" y2="40" stroke="#f5c842" stroke-width="2"/>
-        <ellipse cx="32" cy="46" rx="10" ry="7" fill="#1a3050" stroke="#4fc3f7" stroke-width="1.5"/>
+        <ellipse cx="32" cy="46" rx="10" ry="7" fill="#22223e" stroke="#60a5fa" stroke-width="1.5"/>
         <circle cx="32" cy="56" r="5" fill="none" stroke="#f5c842" stroke-width="1.5"/>
-        <circle cx="24" cy="52" r="3" fill="#8ba0bc"/><circle cx="40" cy="52" r="3" fill="#8ba0bc"/>
+        <circle cx="24" cy="52" r="3" fill="#a6acbb"/><circle cx="40" cy="52" r="3" fill="#a6acbb"/>
       </svg>`;
     }
     if (layout === 'lowwing') {
       return `<svg class="ac-thumb-svg" width="${w}" height="${w}" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <rect width="64" height="64" rx="10" fill="#081420"/>
-        <ellipse cx="32" cy="28" rx="7" ry="16" fill="#1a3050" stroke="#4fc3f7" stroke-width="1.5"/>
+        <rect width="64" height="64" rx="10" fill="#05050b"/>
+        <ellipse cx="32" cy="28" rx="7" ry="16" fill="#22223e" stroke="#60a5fa" stroke-width="1.5"/>
         <circle cx="32" cy="10" r="5" fill="none" stroke="#f5c842" stroke-width="1.5"/>
         <rect x="28" y="14" width="8" height="6" rx="1" fill="#fb923c"/>
-        <rect x="8" y="38" width="48" height="6" rx="2" fill="#2896c8"/>
-        <circle cx="22" cy="48" r="3.5" fill="#8ba0bc"/><circle cx="42" cy="48" r="3.5" fill="#8ba0bc"/>
-        <rect x="29" y="48" width="6" height="10" rx="1" fill="#2896c8"/>
+        <rect x="8" y="38" width="48" height="6" rx="2" fill="#3b82f6"/>
+        <circle cx="22" cy="48" r="3.5" fill="#a6acbb"/><circle cx="42" cy="48" r="3.5" fill="#a6acbb"/>
+        <rect x="29" y="48" width="6" height="10" rx="1" fill="#3b82f6"/>
       </svg>`;
     }
     // highwing default
     return `<svg class="ac-thumb-svg" width="${w}" height="${w}" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect width="64" height="64" rx="10" fill="#081420"/>
-      <rect x="8" y="24" width="48" height="6" rx="2" fill="#2896c8"/>
-      <ellipse cx="32" cy="36" rx="7" ry="14" fill="#1a3050" stroke="#4fc3f7" stroke-width="1.5"/>
+      <rect width="64" height="64" rx="10" fill="#05050b"/>
+      <rect x="8" y="24" width="48" height="6" rx="2" fill="#3b82f6"/>
+      <ellipse cx="32" cy="36" rx="7" ry="14" fill="#22223e" stroke="#60a5fa" stroke-width="1.5"/>
       <circle cx="32" cy="12" r="5" fill="none" stroke="#f5c842" stroke-width="1.5"/>
       <rect x="28" y="16" width="8" height="6" rx="1" fill="#fb923c"/>
-      <circle cx="22" cy="48" r="3.5" fill="#8ba0bc"/><circle cx="42" cy="48" r="3.5" fill="#8ba0bc"/>
-      <rect x="29" y="48" width="6" height="10" rx="1" fill="#2896c8"/>
+      <circle cx="22" cy="48" r="3.5" fill="#a6acbb"/><circle cx="42" cy="48" r="3.5" fill="#a6acbb"/>
+      <rect x="29" y="48" width="6" height="10" rx="1" fill="#3b82f6"/>
     </svg>`;
   }
 
@@ -157,9 +157,8 @@ const AircraftPref = (() => {
     const id = aircraftId();
     const a = accentFor(id);
     root.style.setProperty('--ac-accent', a.accent);
-    root.style.setProperty('--sky', a.sky);
-    root.style.setProperty('--sky-dim', a.skyDim);
-    root.style.setProperty('--accent', a.accent);
+    /* Preview (layout D): the logo-matched blue/violet theme is app-wide, so the
+       aircraft colour is exposed only as --ac-accent and no longer repaints --sky/--accent. */
     if (id) root.setAttribute('data-aircraft', id);
     else root.removeAttribute('data-aircraft');
   }

@@ -1,6 +1,11 @@
 /* FULL NPPL INSIDER — service worker
    Cache-first for static shell/study assets; network-first for live weather/NOTAM APIs. */
-const CACHE_VERSION = 'nppl-insider-v10-20261021-ghpages';
+/* LIVE build. Live and preview share the same github.io origin, so this worker only
+   deletes its own caches: older live caches ('nppl-live-*') and the pre-2026-10-30 live
+   caches ('nppl-insider-*'). Preview caches ('nppl-preview-*') are left alone. */
+const CACHE_PREFIX = 'nppl-live-';
+const OLD_LIVE_PREFIXES = [CACHE_PREFIX, 'nppl-insider-'];
+const CACHE_VERSION = CACHE_PREFIX + 'v3-20261030';
 const SHELL = [
   './',
   './index.html',
@@ -9,6 +14,12 @@ const SHELL = [
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
   './assets/icons/apple-touch-icon.png',
+  './assets/icons/icon-maskable-512.png',
+  './assets/icons/favicon-32.png',
+  './assets/icons/splash-logo.jpg',
+  './assets/img/logo-small.jpg',
+  './assets/img/web.svg',
+  './assets/video/circuit-poster.jpg',
   './data/lessons.js',
   './data/flashcards.js',
   './data/questions.js',
@@ -50,18 +61,34 @@ const SHELL = [
   './js/pwa.js',
   './data/crp-drills.js',
   './data/frtol-drills.js',
-  './data/airfields.js'
+  './data/airfields.js',
+  './assets/c42-checks/sheet-1-preview.jpg',
+  './assets/c42-checks/sheet-2-preview.jpg'
 ];
 
 const LANG_FILES = ['cy', 'pl', 'fr', 'de', 'es', 'pt', 'ro'].map(
   (l) => `./data/i18n-content/${l}.js`
 );
 
+function fresh(urls) {
+  return urls.map((u) => new Request(u, { cache: 'reload' }));
+}
+
+/* Background refresh of a cached file: revalidate with the server instead of
+   trusting the HTTP cache (navigation requests can't be cloned with options). */
+function revalidate(req) {
+  return req.mode === 'navigate'
+    ? new Request(req.url, { cache: 'no-cache', credentials: 'same-origin' })
+    : new Request(req, { cache: 'no-cache' });
+}
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_VERSION).then((cache) =>
-      cache.addAll([...SHELL, ...LANG_FILES]).catch(() =>
-        cache.addAll(SHELL)
+      /* cache:'reload' bypasses the browser HTTP cache, so a new version never
+         stores stale copies of the previous version's files. */
+      cache.addAll(fresh([...SHELL, ...LANG_FILES])).catch(() =>
+        cache.addAll(fresh(SHELL))
       )
     ).then(() => self.skipWaiting())
   );
@@ -70,7 +97,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_VERSION).map((k) => caches.delete(k)))
+      Promise.all(keys.filter((k) => k !== CACHE_VERSION && OLD_LIVE_PREFIXES.some((p) => k.startsWith(p))).map((k) => caches.delete(k)))
     ).then(() => self.clients.claim())
   );
 });
@@ -98,6 +125,8 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
+  // Video: never cached (20 MB, Range requests / 206 responses). Straight to network.
+  if (/\.(mp4|webm|m4v)$/i.test(url.pathname)) return;
 
   // Live weather / NOTAM — network first, no stale operational data from cache as primary
   if (isApi(url)) {
@@ -121,8 +150,8 @@ self.addEventListener('fetch', (event) => {
   // Static / shell — cache first, then network; update cache in background when possible
   if (isStatic(url)) {
     event.respondWith(
-      caches.match(req).then((cached) => {
-        const net = fetch(req)
+      caches.open(CACHE_VERSION).then((c) => c.match(req)).then((cached) => {
+        const net = fetch(revalidate(req))
           .then((res) => {
             if (res && res.ok) {
               const copy = res.clone();
@@ -147,6 +176,6 @@ self.addEventListener('fetch', (event) => {
         }
         return res;
       })
-      .catch(() => caches.match(req).then((c) => c || caches.match('./index.html')))
+      .catch(() => caches.open(CACHE_VERSION).then((c) => c.match(req).then((r) => r || c.match('./index.html'))))
   );
 });

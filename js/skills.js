@@ -157,6 +157,14 @@ const SkillsUI = (() => {
         ${(typeof AircraftPref !== 'undefined' && AircraftPref.shortLabel()) ? `<p style="color:var(--muted);font-size:0.85rem;margin-top:6px">Generic circuit study · flying a <strong style="color:var(--sky)">${esc(AircraftPref.shortLabel())}</strong> — confirm local procedures / POH.</p>` : ''}
       </div>
       ${Diagrams.circuitFull()}
+      <div class="section-label">Narrated circuit video (4 min 13 s)</div>
+      <div class="card video-card">
+        <video class="lesson-video" controls playsinline preload="none" poster="assets/video/circuit-poster.jpg" aria-label="Narrated walkthrough of a standard UK left-hand circuit">
+          <source src="assets/video/circuit-full.mp4" type="video/mp4" />
+          Your browser cannot play this video.
+        </video>
+        <p class="yt-note">Take-off, climb-out, crosswind, downwind, base, final, landing and go-around. Loads only when you tap play (about 20 MB, needs a connection — not saved offline). Study aid only; follow your instructor and local procedures.</p>
+      </div>
       <div class="speak-bar">
         ${speakBtn('circuit-all', tt('common.speak_overview', 'Speak overview'))}
         <button type="button" class="btn btn-secondary" id="btn-stop-speak">Stop</button>
@@ -172,7 +180,7 @@ const SkillsUI = (() => {
       </ol>
       <div class="card">
         <h3>Rules overview</h3>
-        <ul style="margin:8px 0 0 1.1em;color:#c9d6e8;font-size:0.9rem">
+        <ul style="margin:8px 0 0 1.1em;color:#c9ced8;font-size:0.9rem">
           <li><strong>Height:</strong> typical training ~1000 ft AAL unless briefed / plate says otherwise.</li>
           <li><strong>Radio:</strong> downwind / final calls as required by airfield type (A/G, AFIS, ATC) — CAP 413 style; listen first.</li>
           <li><strong>Spacing:</strong> do not cut inside; extend downwind if needed; lookout constantly.</li>
@@ -209,13 +217,13 @@ const SkillsUI = (() => {
       ${s.actions.map((a, i) => `
         <div class="card step-card emerg-step">
           <div class="step-num">Action ${i + 1}</div>
-          <p style="color:#e8eef7;font-size:0.95rem;font-weight:500;margin:4px 0 10px;line-height:1.45">${esc(a)}</p>
+          <p style="color:#f1f3f8;font-size:0.95rem;font-weight:500;margin:4px 0 10px;line-height:1.45">${esc(a)}</p>
           ${speakBtn('circ-act-' + i, 'Speak')}
         </div>`).join('')}
       ${(s.notes || []).map(n => `
         <div class="card">
           <h3>${esc(n.title)}</h3>
-          <p style="color:#c9d6e8;font-size:0.88rem;margin:8px 0 0;line-height:1.45">${esc(n.body)}</p>
+          <p style="color:#c9ced8;font-size:0.88rem;margin:8px 0 0;line-height:1.45">${esc(n.body)}</p>
         </div>`).join('')}
       <p class="meta" style="margin-top:8px"><button type="button" class="btn btn-ghost" data-circ-tab="overview">← Back to overview</button></p>`;
   }
@@ -292,7 +300,7 @@ const SkillsUI = (() => {
   function ctrlCard(id, block) {
     return `<div class="card step-card">
       <h3>${esc(block.title)}</h3>
-      <ul style="margin:8px 0 10px 1.1em;color:#c9d6e8;font-size:0.9rem">
+      <ul style="margin:8px 0 10px 1.1em;color:#c9ced8;font-size:0.9rem">
         ${block.bullets.map(b => `<li>${esc(b)}</li>`).join('')}
       </ul>
       ${speakBtn('ctrl-' + id, 'Speak')}
@@ -310,7 +318,7 @@ const SkillsUI = (() => {
         <div class="card step-card">
           <div class="step-num">Step ${i + 1}</div>
           <h3>${esc(s.title)}</h3>
-          <p style="color:#c9d6e8;font-size:0.92rem;margin:6px 0 10px">${esc(s.body)}</p>
+          <p style="color:#c9ced8;font-size:0.92rem;margin:6px 0 10px">${esc(s.body)}</p>
           ${speakBtn('land-step-' + i, 'Speak step')}
         </div>`).join('')}`;
   }
@@ -321,7 +329,7 @@ const SkillsUI = (() => {
       ${L.corrections.map(c => `
         <div class="card step-card">
           <h3>${esc(c.title)}</h3>
-          <p style="color:#c9d6e8;font-size:0.92rem;margin:6px 0 10px">${esc(c.fix)}</p>
+          <p style="color:#c9ced8;font-size:0.92rem;margin:6px 0 10px">${esc(c.fix)}</p>
           ${speakBtn('corr-' + c.id, 'Speak')}
         </div>`).join('')}`;
   }
@@ -332,14 +340,14 @@ const SkillsUI = (() => {
       ${L.failures.map(f => `
         <div class="card step-card">
           <h3>${esc(f.title)}</h3>
-          <p style="color:#c9d6e8;font-size:0.92rem;margin:6px 0 10px">${esc(f.body)}</p>
+          <p style="color:#c9ced8;font-size:0.92rem;margin:6px 0 10px">${esc(f.body)}</p>
           ${speakBtn('fail-' + f.id, 'Speak')}
         </div>`).join('')}
       <div class="section-label">Take-off failures</div>
       ${L.takeoffFailures.map(f => `
         <div class="card step-card">
           <h3>${esc(f.title)}</h3>
-          <p style="color:#c9d6e8;font-size:0.92rem;margin:6px 0 10px">${esc(f.body)}</p>
+          <p style="color:#c9ced8;font-size:0.92rem;margin:6px 0 10px">${esc(f.body)}</p>
           ${speakBtn('tof-' + f.id, 'Speak')}
         </div>`).join('')}
       <div class="card card-tap" data-go="emergencies"><h3>Full Emergencies module →</h3><div class="meta">EFATO, forced landing, fire, lost…</div></div>`;
@@ -411,11 +419,11 @@ const SkillsUI = (() => {
         ${speakBtn('em-all', 'Speak all')}
         <button type="button" class="btn btn-secondary" id="btn-stop-speak">Stop</button>
       </div>
-      <p style="color:#c9d6e8;font-size:0.92rem;margin-bottom:12px">${esc(e.summary)}</p>
+      <p style="color:#c9ced8;font-size:0.92rem;margin-bottom:12px">${esc(e.summary)}</p>
       ${e.steps.map((s, i) => `
         <div class="card step-card emerg-step">
           <div class="step-num">${i + 1}</div>
-          <p style="color:#e8eef7;font-size:1.02rem;font-weight:600;margin:4px 0 10px">${esc(s)}</p>
+          <p style="color:#f1f3f8;font-size:1.02rem;font-weight:600;margin:4px 0 10px">${esc(s)}</p>
           ${speakBtn('em-step-' + i, 'Speak step')}
         </div>`).join('')}
       <div class="disclaimer-inline">${PRACTICAL_DISCLAIMER}</div>`;
