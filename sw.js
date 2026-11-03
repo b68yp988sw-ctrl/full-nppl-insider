@@ -5,7 +5,7 @@
    caches ('nppl-insider-*'). Preview caches ('nppl-preview-*') are left alone. */
 const CACHE_PREFIX = 'nppl-live-';
 const OLD_LIVE_PREFIXES = [CACHE_PREFIX, 'nppl-insider-'];
-const CACHE_VERSION = CACHE_PREFIX + 'v6-20261030-visuals';
+const CACHE_VERSION = CACHE_PREFIX + 'v7-20261103-airfields';
 const SHELL = [
   './',
   './index.html',
@@ -57,6 +57,9 @@ const SHELL = [
   './js/chart-ui.js',
   './js/flight-prep-ui.js',
   './js/app.js',
+  './js/airfield-hours.js',
+  './js/glossary.js',
+  './js/airfield-weather.js',
   './js/airfields-ui.js',
   './js/crp-drills-ui.js',
   './js/frtol-drills-ui.js',
@@ -67,7 +70,9 @@ const SHELL = [
   './js/pwa.js',
   './data/crp-drills.js',
   './data/frtol-drills.js',
-  './data/airfields.js'
+  './data/airfields.js',
+  './data/airfields-detail.js',
+  './data/airfields-geo.js'
 ];
 
 const LANG_FILES = ['cy', 'pl', 'fr', 'de', 'es', 'pt', 'ro'].map(

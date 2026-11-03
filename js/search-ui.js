@@ -229,8 +229,8 @@ const SearchUI = (() => {
         push({
           title: (a.icao ? a.icao + ' · ' : '') + (a.name || 'Airfield'),
           subtitle: 'Airfield card · ' + (a.area || ''),
-          hay: [a.icao, a.name, a.area, a.ppr, a.runway, a.notes, a.tags, a.freqs && a.freqs.afis].join(' ').toLowerCase(),
-          go: { name: 'airfields' }
+          hay: [a.icao, a.name, a.area, a.ppr, a.runway, a.notes, a.tags, a.freqs && a.freqs.afis, a.freqs && a.freqs.atis, a.freqs && a.freqs.other].join(' ').toLowerCase(),
+          go: { name: 'airfields', id: a.id }
         });
       });
     }

@@ -6,14 +6,14 @@ const AIRFIELDS_SEED = [
     "name": "Wycombe Air Park (Booker)",
     "area": "Bucks / Chilterns",
     "freqs": {
-      "afis": "Wycombe Radio 126.555",
+      "afis": "A/G: Wycombe Radio 126.555",
       "atis": "",
       "other": ""
     },
     "runway": "06/24 asphalt 730 m; 06G/24G grass 631 m",
-    "ppr": "PPR as published by the airfield",
+    "ppr": "Strictly PPR at all times — tel 01494-529261; all pilots must be briefed.",
     "notes": "Busy training aerodrome under the London TMA — know the base. Source: UK AIP AD 2 (AIRAC 29 Oct 2026). Check current AIP/website and get PPR before flying.",
-    "circuit": "Confirm circuit direction and heights from the current AIP/airfield website.",
+    "circuit": "Variable; 1000 ft QFE. Join: overfly runway in use at 1200 ft QFE on QDM, turn at midpoint, level 1000 ft QFE crosswind. Gliders fly the opposite circuit.",
     "tags": "booker wycombe bucks chilterns",
     "source": "UK AIP AD 2 (AIRAC 29 Oct 2026)"
   },
@@ -23,14 +23,14 @@ const AIRFIELDS_SEED = [
     "name": "Denham",
     "area": "Bucks / Chilterns fringe",
     "freqs": {
-      "afis": "Denham Radio 130.730",
+      "afis": "A/G: Denham Radio 130.730",
       "atis": "",
-      "other": ""
+      "other": "Northolt 126.450"
     },
     "runway": "06/24 asphalt 775 m; 12/30 grass 546 m",
-    "ppr": "PPR as published by the airfield",
+    "ppr": "PPR by phone 01895-832161, webform (egld.com) or tower@egld.com; read the pilot briefing.",
     "notes": "Close to London controlled airspace — strict height and route discipline. Source: UK AIP AD 2 (AIRAC 29 Oct 2026). Check current AIP/website and get PPR before flying.",
-    "circuit": "Confirm circuit direction and heights from the current AIP/airfield website.",
+    "circuit": "06 LH, 24 RH (circuits to the north); 12/30 variable. 1000 ft AMSL. No overhead join — join long base via VRPs (Maple Cross for 24, St Giles for 06).",
     "tags": "denham bucks london tma",
     "source": "UK AIP AD 2 (AIRAC 29 Oct 2026)"
   },
@@ -40,14 +40,14 @@ const AIRFIELDS_SEED = [
     "name": "Elstree",
     "area": "Herts",
     "freqs": {
-      "afis": "Elstree Information (AFIS) / Elstree Radio 122.405",
+      "afis": "AFIS: Elstree Information 122.405 (A/G Elstree Radio 122.405 when AFIS not operating)",
       "atis": "",
       "other": ""
     },
     "runway": "08/26 asphalt 651 m",
-    "ppr": "PPR as published by the airfield",
+    "ppr": "Mandatory PPR and pilot brief via londonelstree.com / 020-8953 7480. Non-radio not accepted.",
     "notes": "Busy circuit with the London TMA overhead. Source: UK AIP AD 2 (AIRAC 29 Oct 2026). Check current AIP/website and get PPR before flying.",
-    "circuit": "Confirm circuit direction and heights from the current AIP/airfield website.",
+    "circuit": "Variable; 1000 ft QFE. Standard overhead join.",
     "tags": "elstree herts",
     "source": "UK AIP AD 2 (AIRAC 29 Oct 2026)"
   },
@@ -57,14 +57,14 @@ const AIRFIELDS_SEED = [
     "name": "White Waltham",
     "area": "Berks / Thames Valley",
     "freqs": {
-      "afis": "Waltham Radio 122.605",
+      "afis": "A/G: Waltham Radio 122.605",
       "atis": "",
       "other": ""
     },
     "runway": "Grass: 03/21 1029 m; 07L/25R 1116 m; 07R/25L 785 m; 11/29 930 m",
-    "ppr": "PPR as published by the airfield",
+    "ppr": "Strictly PPR — tel 01628-823272 or wlac.co.uk/ppr-request/.",
     "notes": "Large grass aerodrome — can be soft after rain. Source: UK AIP AD 2 (AIRAC 29 Oct 2026). Check current AIP/website and get PPR before flying.",
-    "circuit": "Confirm circuit direction and heights from the current AIP/airfield website.",
+    "circuit": "Overhead join at 1200 ft QFE; circuit 800 ft QFE. Direction per runway not in AIP — check with airfield.",
     "tags": "white waltham grass berkshire",
     "source": "UK AIP AD 2 (AIRAC 29 Oct 2026)"
   },
@@ -74,15 +74,66 @@ const AIRFIELDS_SEED = [
     "name": "Fairoaks",
     "area": "Surrey",
     "freqs": {
-      "afis": "Fairoaks Radio 123.430",
+      "afis": "A/G: Fairoaks Radio 123.430",
       "atis": "",
-      "other": ""
+      "other": "Farnborough Radar 134.355"
     },
     "runway": "06/24 asphalt 810 m",
-    "ppr": "PPR as published by the airfield",
+    "ppr": "All circuit traffic PPR by phone 01276-857300; first-time visitors need a telephone briefing.",
     "notes": "Near London controlled airspace — plan altitudes carefully. Source: UK AIP AD 2 (AIRAC 29 Oct 2026). Check current AIP/website and get PPR before flying.",
-    "circuit": "Confirm circuit direction and heights from the current AIP/airfield website.",
+    "circuit": "Variable; 1100 ft AMSL. Enter ATZ at 1400 ft AMSL, descend north of the runway. Squawk 7010.",
     "tags": "fairoaks surrey",
+    "source": "UK AIP AD 2 (AIRAC 29 Oct 2026)"
+  },
+  {
+    "id": "egtk",
+    "icao": "EGTK",
+    "name": "Oxford (London Oxford Airport)",
+    "area": "Oxfordshire",
+    "freqs": {
+      "afis": "Oxford Tower 133.430 · Oxford Approach/Radar 125.090",
+      "atis": "Oxford ATIS 136.230",
+      "other": "Oxford Ground 121.955 (when notified) · Oxford Director 119.980 (when directed)"
+    },
+    "runway": "01/19 grooved asphalt 1526 x 30 m",
+    "ppr": "Pre-book with Oxford Ops 131.640 / 01865-290660.",
+    "notes": "ATC airport with ATIS. Listening squawk 4517 on 125.090. Source: UK AIP AD 2 (AIRAC 29 Oct 2026). Check the current AIP/NOTAMs and the airfield before flying.",
+    "circuit": "01 RH, 19 LH; 1200 ft QFE / 1500 ft QNH.",
+    "tags": "oxford kidlington tower radar atis",
+    "source": "UK AIP AD 2 (AIRAC 29 Oct 2026)"
+  },
+  {
+    "id": "egtc",
+    "icao": "EGTC",
+    "name": "Cranfield",
+    "area": "Beds",
+    "freqs": {
+      "afis": "Cranfield Tower 134.930 · Cranfield Approach 122.855",
+      "atis": "Cranfield Departure Information 121.880",
+      "other": ""
+    },
+    "runway": "03/21 asphalt 1799 x 45 m",
+    "ppr": "Strictly PPR — ATC 01234-750005 or atc@cranfield.ac.uk. Landing fees via Airport Accounts 01234-758151 / website.",
+    "notes": "Intensive IFR training within 20 NM. Non-radio not permitted. Source: UK AIP AD 2 (AIRAC 29 Oct 2026). Check the current AIP/NOTAMs and the airfield before flying.",
+    "circuit": "Both directions (no dead side); 1000 ft QFE by day.",
+    "tags": "cranfield tower approach atis beds",
+    "source": "UK AIP AD 2 (AIRAC 29 Oct 2026)"
+  },
+  {
+    "id": "eggw",
+    "icao": "EGGW",
+    "name": "London Luton",
+    "area": "Beds / Herts",
+    "freqs": {
+      "afis": "Luton Tower 132.555 · Luton Radar 129.550",
+      "atis": "Luton Arrival and Departure Information 120.580",
+      "other": "Luton Ground 121.755 · Luton Delivery 121.885 · Luton Director 128.750"
+    },
+    "runway": "07/25 grooved asphalt 2162 x 45 m",
+    "ppr": "ACL slot and prior handling required for all flights; VFR file a flight plan.",
+    "notes": "Major airport in Class D CTR — example of a full ATC airfield, not a normal NPPL destination. Listening squawk 0013 on 129.550. Source: UK AIP AD 2 (AIRAC 29 Oct 2026). Check the current AIP/NOTAMs and the airfield before flying.",
+    "circuit": "As directed by ATC; light props 1000 ft QFE.",
+    "tags": "luton tower radar ground atis class d",
     "source": "UK AIP AD 2 (AIRAC 29 Oct 2026)"
   },
   {
@@ -494,11 +545,18 @@ const AIRFIELDS_SEED = [
 const AIRFIELDS_META = {
   "disclaimer": "Study aid only — frequencies, PPR, runways and notes change. Check current AIP/website and get PPR before every flight, and check NOTAMs. Cards marked UK AIP were checked against the UK AIP AD 2 pages (AIRAC 29 Oct 2026); others come from the airfield website. Blank fields mean not verified. Not affiliated with any flying school.",
   "storageKey": "full-nppl-airfields-v3",
-  "seedVersion": 2,
+  "seedVersion": 3,
   "legacyKeys": [
     "full-nppl-airfields-v2",
     "full-nppl-airfields-v1"
   ],
-  "pprNote": "Check current AIP/website and get PPR before flying."
+  "pprNote": "Check current AIP/website and get PPR before flying.",
+  "prevSeedSig": {
+    "egtb": "89qq3i",
+    "egld": "vsse65",
+    "egtr": "tqa6n8",
+    "eglm": "ddndvv",
+    "egtf": "w6twhl"
+  }
 };
 if (typeof globalThis !== "undefined") { globalThis.AIRFIELDS_SEED = AIRFIELDS_SEED; globalThis.AIRFIELDS_META = AIRFIELDS_META; }
