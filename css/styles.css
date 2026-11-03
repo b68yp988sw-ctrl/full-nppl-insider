@@ -2114,3 +2114,4 @@ button, input, select, textarea { font-family: inherit; }
 .af-rtable th, .af-details .af-table th { white-space: normal; }
 .af-tile .af-nw { white-space: normal; }
 .af-table .af-svc { white-space: normal; }
+.af-chip { white-space: normal; max-width: 100%; }
