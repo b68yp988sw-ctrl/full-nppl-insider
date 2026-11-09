@@ -86,8 +86,7 @@ body { overflow-x: hidden; }
   height: var(--top-h);
   display: flex; align-items: center; gap: 8px;
   padding: 0 12px;
-  background: rgba(6,6,12, 0.92);
-  backdrop-filter: blur(12px);
+  background: #06060c;
   border-bottom: 1px solid var(--border);
 }
 .topbar-title {

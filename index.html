@@ -54,15 +54,14 @@
     /* Tall screens: 9:16 art. Fill the width always; grow to cover the height unless that would crop the wordmark (cap 118vw). */
     #splash img{display:block;flex:none;max-width:none;object-fit:cover;
       width:max(100vw,min(56.25vh,118vw));width:max(100vw,min(56.25dvh,118vw));height:auto;aspect-ratio:9/16;
-      transform:scale(1.035);transition:transform 1.6s ease-out}
+      }
     /* Wide screens: 16:9 art. Fill the height; grow to cover the width unless that would crop the gold star (cap 104dvh). */
     @media (min-aspect-ratio: 1/1){
       #splash img{aspect-ratio:16/9;height:max(100vh,min(56.25vw,104vh));height:max(100dvh,min(56.25vw,104dvh));width:auto;
         margin-left:calc(var(--sa-l) - var(--sa-r))}
     }
-    #splash.splash-in img{transform:scale(1)}
     #splash.splash-out{opacity:0;visibility:hidden;pointer-events:none}
-    @media (prefers-reduced-motion: reduce){#splash{transition:none}#splash img{transform:none;transition:none}}
+    @media (prefers-reduced-motion: reduce){#splash{transition:none}}
   </style>
 </head>
 <body>
