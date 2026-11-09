@@ -5,7 +5,7 @@
    caches ('nppl-insider-*'). Preview caches ('nppl-preview-*') are left alone. */
 const CACHE_PREFIX = 'nppl-live-';
 const OLD_LIVE_PREFIXES = [CACHE_PREFIX, 'nppl-insider-'];
-const CACHE_VERSION = CACHE_PREFIX + 'v9-20261109-batch1';
+const CACHE_VERSION = CACHE_PREFIX + 'v10-20261109-clocksharp';
 const SHELL = [
   './',
   './index.html',

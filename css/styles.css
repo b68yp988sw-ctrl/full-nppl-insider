@@ -2130,28 +2130,30 @@ button, input, select, textarea { font-family: inherit; }
 .app-clock {
   position: sticky; top: var(--top-h); z-index: 35;
   display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
-  gap: 1px; padding: 4px 12px 5px;
-  background: rgba(5,5,11,.94); border-bottom: 1px solid #1c1c2e;
-  backdrop-filter: blur(10px); min-height: 36px;
+  gap: 2px; padding: 5px 12px 6px;
+  background: #05050b; border-bottom: 1px solid #1c1c2e;
+  min-height: 40px;
   pointer-events: none;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 .app-clock-uk {
-  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em; color: #e8eaef;
-  font-variant-numeric: tabular-nums; line-height: 1.2; text-align: right;
+  font-size: 0.82rem; font-weight: 700; letter-spacing: 0.01em; color: #ffffff;
+  font-variant-numeric: tabular-nums; line-height: 1.25; text-align: right;
 }
 .app-clock-utc {
-  font-size: 0.62rem; font-weight: 500; color: #9aa1b2;
-  font-variant-numeric: tabular-nums; line-height: 1.2; text-align: right;
+  font-size: 0.72rem; font-weight: 600; color: #c3c8d4;
+  font-variant-numeric: tabular-nums; line-height: 1.25; text-align: right;
 }
 @media (max-width: 390px) {
-  .app-clock { padding: 3px 10px 4px; }
-  .app-clock-uk { font-size: 0.66rem; }
-  .app-clock-utc { font-size: 0.56rem; }
+  .app-clock { padding: 4px 10px 5px; }
+  .app-clock-uk { font-size: 0.8rem; }
+  .app-clock-utc { font-size: 0.7rem; }
 }
 body[data-route] .main { padding-top: 8px; }
 
 .af-jump {
-  position: sticky; top: calc(var(--top-h) + 36px); z-index: 34;
+  position: sticky; top: calc(var(--top-h) + 40px); z-index: 34;
   display: flex; gap: 6px; overflow-x: auto; overflow-y: hidden;
   margin: 0 -16px 14px; padding: 8px 16px;
   background: rgba(5,5,11,.92); border-bottom: 1px solid rgba(201,206,216,0.12);
