@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="Typical C42 wing sections: the outboard aileron is moved fully up and down (it travels further up than down), then the inboard flap is lowered through each notch; hinges, fasteners and safety pins are checked with no excess play">
+<title>Aileron and flap — full and free movement, fasteners, no excess play (typical)</title>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c0c16"/><stop offset="1" stop-color="#07070c"/></linearGradient>
+  <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4e7ee"/><stop offset=".5" stop-color="#a9afbd"/><stop offset="1" stop-color="#6b7086"/></linearGradient>
+  <linearGradient id="metalh" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b7086"/><stop offset=".45" stop-color="#d9dde5"/><stop offset="1" stop-color="#7d8296"/></linearGradient>
+  <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2d3d"/><stop offset="1" stop-color="#171822"/></linearGradient>
+  <linearGradient id="fab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262a3c"/><stop offset="1" stop-color="#1a1c2a"/></linearGradient>
+  <radialGradient id="glass" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#93c5fd" stop-opacity=".28"/><stop offset="1" stop-color="#8b5cf6" stop-opacity=".12"/></radialGradient>
+  
+</defs>
+<style>
+  text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .ail{transform-origin:76px 69px;animation:ail 4s ease-in-out infinite}
+  .flap{transform-origin:184px 69px;animation:flap 4s ease-in-out infinite}
+  .pa{animation:pa 4s linear infinite}.pb{animation:pb 4s linear infinite}
+  @keyframes ail{0%,3%{transform:rotate(0)}13%,17%{transform:rotate(-20deg)}27%{transform:rotate(0)}37%,41%{transform:rotate(14deg)}50%,100%{transform:rotate(0)}}
+  @keyframes flap{0%,52%{transform:rotate(0)}60%,68%{transform:rotate(14deg)}76%,86%{transform:rotate(34deg)}96%,100%{transform:rotate(0)}}
+  @keyframes pa{0%,46%{opacity:1}52%,100%{opacity:.25}}
+  @keyframes pb{0%,46%{opacity:.25}52%,98%{opacity:1}100%{opacity:.25}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+<rect width="240" height="160" rx="12" fill="url(#bg)"/>
+
+<text x="120" y="13" text-anchor="middle" font-size="6.2" font-weight="700" letter-spacing=".6" fill="#8d93a4">SECTION VIEW · LEADING EDGE ←</text>
+<rect x="8" y="22" width="108" height="92" rx="8" fill="#0b0b14" stroke="#2a2a46"/>
+<rect x="124" y="22" width="108" height="92" rx="8" fill="#0b0b14" stroke="#2a2a46"/>
+<text x="16" y="34" font-size="6.6" font-weight="800" fill="#c9ced8">AILERON <tspan font-weight="600" fill="#8d93a4">outboard</tspan></text>
+<text x="132" y="34" font-size="6.6" font-weight="800" fill="#c9ced8">FLAP <tspan font-weight="600" fill="#8d93a4">inboard</tspan></text>
+<!-- aileron -->
+<g transform="translate(52 68) scale(1.4) translate(-62 -68)">
+<g transform="rotate(-20 76 69)"><path d="M77 66 L102 69 L77 72Z" fill="none" stroke="#8d93a4" stroke-dasharray="2 1.6" stroke-width=".8"/></g><g transform="rotate(14 76 69)"><path d="M77 66 L102 69 L77 72Z" fill="none" stroke="#8d93a4" stroke-dasharray="2 1.6" stroke-width=".8"/></g>
+<g class="ail"><path d="M76 65.7 L102 68.4 L102 69.6 L76 72.3Z" fill="url(#metal)" stroke="#3d3d6b" stroke-width=".6"/><circle cx="76" cy="69" r="3.3" fill="url(#metal)" stroke="#3d3d6b" stroke-width=".6"/></g>
+<path d="M36 63 Q56.0 59 76 65.6 L76 72.4 Q56.0 76 36 75Z" fill="url(#fab)" stroke="#3d3d6b"/><path d="M36 63 l-2 3 2 3 -2 3 2 3" fill="none" stroke="#3d3d6b"/>
+<text x="94" y="56" text-anchor="middle" font-size="5.8" font-weight="800" fill="#8d93a4">UP</text>
+<text x="94" y="84" text-anchor="middle" font-size="5.8" font-weight="800" fill="#8d93a4">DOWN</text>
+<circle class="pin" cx="76" cy="69" r="2.2" fill="#d4af37"/>
+</g>
+<g class="pa"><g><rect x="37.4" y="96" width="49.1" height="17" rx="5" fill="#0f2418" stroke="#22c55e"/><text x="62.0" y="107.5" text-anchor="middle" font-size="7" font-weight="700" fill="#86efac">Full &amp; free</text></g></g>
+<!-- flap -->
+<g transform="translate(168 68) scale(1.4) translate(-178 -68)">
+<g transform="rotate(14 184 69)"><path d="M185 66 L210 69 L185 72Z" fill="none" stroke="#8d93a4" stroke-dasharray="2 1.6" stroke-width=".8"/></g><g transform="rotate(34 184 69)"><path d="M185 66 L210 69 L185 72Z" fill="none" stroke="#8d93a4" stroke-dasharray="2 1.6" stroke-width=".8"/></g>
+<g class="flap"><path d="M184 65.7 L210 68.4 L210 69.6 L184 72.3Z" fill="url(#metal)" stroke="#3d3d6b" stroke-width=".6"/><circle cx="184" cy="69" r="3.3" fill="url(#metal)" stroke="#3d3d6b" stroke-width=".6"/></g>
+<path d="M152 63 Q168.0 59 184 65.6 L184 72.4 Q168.0 76 152 75Z" fill="url(#fab)" stroke="#3d3d6b"/><path d="M152 63 l-2 3 2 3 -2 3 2 3" fill="none" stroke="#3d3d6b"/>
+<text x="213" y="79" text-anchor="middle" font-size="6" font-weight="800" fill="#8d93a4">I</text>
+<text x="203" y="94" text-anchor="middle" font-size="6" font-weight="800" fill="#8d93a4">II</text>
+<circle class="pin" cx="184" cy="69" r="2.2" fill="#d4af37"/>
+</g>
+<g class="pb"><g><rect x="128.9" y="96" width="50.2" height="17" rx="5" fill="#0f2418" stroke="#22c55e"/><text x="154.0" y="107.5" text-anchor="middle" font-size="7" font-weight="700" fill="#86efac">Each notch</text></g></g>
+<!-- bottom -->
+<circle cx="18" cy="128.5" r="2.2" fill="#d4af37"/>
+<text x="24" y="131" font-size="6.8" font-weight="700" fill="#e8c96a">Hinges &amp; fasteners / safety pins in · no excess play</text>
+
+<text x="232" y="152" text-anchor="end" font-size="6" fill="#8d93a4">TYPICAL separate aileron &amp; flap · C42</text>
+</svg>

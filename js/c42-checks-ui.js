@@ -45,6 +45,15 @@ const C42UI = (() => {
   const VIZ = {
     'ext-elec': { src: 'assets/img/c42/ext-elec.svg', cap: 'Typical key-type master: turn ON, check strobe, nav & landing lights. Panels vary.' },
     'ext-prop': { src: 'assets/img/c42/ext-prop.svg', cap: 'Typical 3-blade prop: run along the leading edge for nicks; check the spinner is secure.' },
+    'ext-oil': { src: 'assets/img/c42/ext-oil.svg', cap: 'Typical Rotax 912: mags OFF, cap off, turn the prop by hand until the tank gurgles, then read the dipstick. Aim for the upper half between MIN and MAX; never below MIN.' },
+    'ext-nose': { src: 'assets/img/c42/ext-nose.svg', cap: 'Typical nose gear: leg, fork and spat secure. Tyre creep marks should line up; check for cuts, flats and worn tread.' },
+    'ext-doors': { src: 'assets/img/c42/ext-doors.svg', cap: 'Typical gull-wing door: hinges sound and latch fully closed. Main gear legs, dampers, spats and tyres secure.' },
+    'ext-wings': { src: 'assets/img/c42/ext-wings.svg', cap: 'Typical left wing: run along the leading edge to the tip looking for dents or rips. The pitot cover is off and the tube is clear.' },
+    'ext-ail': { src: 'assets/img/c42/ext-ail.svg', cap: 'Typical: ailerons move fully and freely (more up than down). Flaps through each notch. Hinges and fasteners secure, no excess play.' },
+    'ext-bag': { src: 'assets/img/c42/ext-bag.svg', cap: 'Typical left-side baggage cover: read the fuel through the translucent tank, look for leaks, stow loose items, then refit and secure the cover.' },
+    'ext-fuse': { src: 'assets/img/c42/ext-fuse.svg', cap: 'Typical: drain under the right seat is dry with its clip on. Check the pod and boom, especially underneath, for cracks or damage.' },
+    'ext-hs': { src: 'assets/img/c42/ext-hs.svg', cap: 'Typical strut-braced tailplane: look underneath for damage. Elevator moves full up and down; hinges and fasteners secure.' },
+    'ext-elev': { src: 'assets/img/c42/ext-elev.svg', cap: 'Typical tail: elevator undamaged with full travel, trim tab and its linkage secure, rudder hinges and cables secure.' },
     'ext-fuel': { src: 'assets/img/c42/ext-fuel.svg', cap: 'Typical samples: good vs water vs debris. Water is heavier and sinks below the fuel.' },
     'dep-p':    { src: 'assets/img/c42/dep-power.svg', cap: 'Typical Rotax 912 tach: brakes on, into wind, set 3500 rpm. Confirm with your POH / instructor.' }
   };

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="Typical C42 left wing from above: a magnifier runs along the leading edge to the tip and finds a dent to report; then the pitot tube under the left wing has its cover removed, is pulled fully forward and is checked clear of insects and water">
+<title>Wings — leading edges and tips, then the pitot tube (typical)</title>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c0c16"/><stop offset="1" stop-color="#07070c"/></linearGradient>
+  <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4e7ee"/><stop offset=".5" stop-color="#a9afbd"/><stop offset="1" stop-color="#6b7086"/></linearGradient>
+  <linearGradient id="metalh" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b7086"/><stop offset=".45" stop-color="#d9dde5"/><stop offset="1" stop-color="#7d8296"/></linearGradient>
+  <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2d3d"/><stop offset="1" stop-color="#171822"/></linearGradient>
+  <linearGradient id="fab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262a3c"/><stop offset="1" stop-color="#1a1c2a"/></linearGradient>
+  <radialGradient id="glass" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#93c5fd" stop-opacity=".28"/><stop offset="1" stop-color="#8b5cf6" stop-opacity=".12"/></radialGradient>
+  <clipPath id="fwd"><rect x="150" y="0" width="60" height="45.5"/></clipPath>
+</defs>
+<style>
+  text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .lens{animation:lens 4s linear infinite}
+  .dent{transform-origin:84px 46px;animation:dent 4s ease-out infinite}
+  .dl{animation:dl 4s linear infinite}
+  .le{animation:le 4s linear infinite}
+  .cover{transform-box:fill-box;transform-origin:center;animation:cover 4s ease-in infinite}
+  .tube{animation:tube 4s ease-in-out infinite}
+  .tubev{animation:tubev 4s ease-in-out infinite}
+  .pz{animation:pz 4s linear infinite}
+  .pok{animation:pok 4s linear infinite}
+  @keyframes lens{0%{transform:translate(206px,47px);opacity:0}4%{opacity:1}44%{transform:translate(24px,47px);opacity:1}49%,100%{transform:translate(24px,47px);opacity:0}}
+  @keyframes dent{0%,25%{opacity:0;transform:scale(.4)}28%{opacity:1;transform:scale(1.25)}32%{transform:scale(1)}100%{opacity:1;transform:scale(1)}}
+  @keyframes dl{0%,27%{opacity:0}31%,100%{opacity:1}}
+  @keyframes le{0%,2%{opacity:.25}6%,46%{opacity:1}52%,100%{opacity:.25}}
+  @keyframes pz{0%,46%{opacity:.8}52%,97%{opacity:1}100%{opacity:.8}}
+  @keyframes cover{0%,50%{transform:translate(0,0);opacity:1}57%{transform:translate(0,-9px);opacity:1}64%{transform:translate(-9px,-4px) rotate(-30deg);opacity:0}100%{opacity:0}}
+  @keyframes tube{0%,64%{transform:translateX(16px)}74%,100%{transform:translateX(0)}}
+  @keyframes tubev{0%,64%{transform:translateY(12px)}74%,100%{transform:translateY(0)}}
+  @keyframes pok{0%,74%{opacity:0}78%,97%{opacity:1}100%{opacity:0}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}.lens,.cover{display:none}}
+</style>
+<rect width="240" height="160" rx="12" fill="url(#bg)"/>
+
+<text x="120" y="12" text-anchor="middle" font-size="6.2" font-weight="700" letter-spacing=".6" fill="#8d93a4">LEFT WING FROM ABOVE · NOSE ↑</text>
+<!-- fuselage stub at the root (right) -->
+<rect x="218" y="30" width="22" height="66" fill="#11111c" stroke="#2a2a46"/>
+<!-- wing planform: leading edge top, trailing edge bottom -->
+<path d="M14 49 Q12 46 16 45 L218 45 L218 92 L16 92 Q12 92 12 88Z" fill="url(#fab)" stroke="#3d3d6b"/>
+<g stroke="#2a2a46" stroke-width=".8"><path d="M40 46 V91 M66 46 V91 M92 46 V91 M118 46 V91 M144 46 V91 M170 46 V91 M196 46 V91"/></g>
+<path d="M16 80 H218" stroke="#3d3d6b" stroke-dasharray="3 2"/>
+<path d="M118 80 V92" stroke="#3d3d6b"/>
+<text x="66" y="89" text-anchor="middle" font-size="5.4" font-weight="700" fill="#5b6077">AILERON</text>
+<text x="168" y="89" text-anchor="middle" font-size="5.4" font-weight="700" fill="#5b6077">FLAP</text>
+<!-- leading edge highlight -->
+<g class="le"><path d="M16 45 H218" stroke="#c9ced8" stroke-width="1.3" stroke-opacity=".8"/>
+  <text x="133" y="40" text-anchor="middle" font-size="6" font-weight="700" letter-spacing=".5" fill="#a6acbb">LEADING EDGE &amp; TIP</text></g>
+<!-- dent -->
+<path d="M80 45 Q84 49.5 88 45Z" fill="#07070c"/>
+<g class="dent"><circle cx="84" cy="46" r="7" fill="none" stroke="#f87171" stroke-width="1.8"/></g>
+<g class="dl"><path d="M84 39 V33" stroke="#f87171" stroke-width="1.1"/><g><rect x="10.0" y="16" width="80.7" height="17" rx="5" fill="#2a1416" stroke="#f87171"/><text x="50.4" y="27.5" text-anchor="middle" font-size="7" font-weight="700" fill="#fecaca">DENT / RIP: report</text></g></g>
+<!-- pitot tube under the wing, pointing forward -->
+<g>
+  <rect x="180.5" y="45" width="5" height="12" fill="none" stroke="#7d8296" stroke-dasharray="2 1.5"/>
+  <g clip-path="url(#fwd)"><g class="tubev"><rect x="178.8" y="22" width="8.4" height="26" rx="1.6" fill="url(#metalh)" stroke="#3d3d6b" stroke-width=".6"/>
+    <g class="cover"><rect x="177.9" y="21.2" width="10.2" height="6.6" rx="2" fill="#dc2626"/><path d="M178.6 27.4 H187.4" stroke="#7f1d1d" stroke-width=".7"/><path d="M178.4 23.6 Q171 24 168 31" fill="none" stroke="#dc2626" stroke-width="1.8" stroke-linecap="round"/></g></g></g>
+  <text x="196" y="30" font-size="6.2" font-weight="700" fill="#93c5fd">PITOT</text>
+</g>
+<!-- pitot zoom -->
+<g class="pz">
+  <rect x="10" y="99" width="222" height="46" rx="7" fill="#10101c" stroke="#4b4f78"/>
+  <text x="18" y="110" font-size="6.6" font-weight="700" letter-spacing=".5" fill="#dfe3ec">PITOT · SIDE VIEW</text>
+  <path d="M150 104 H226" stroke="#3d3d6b" stroke-width="2"/>
+  <path d="M186 104 V116" stroke="#7d8296" stroke-width="3"/>
+  <rect x="134" y="114" width="62" height="7" rx="2" fill="url(#metal)"/>
+  <g class="tube"><rect x="104" y="115" width="36" height="5" rx="1.5" fill="url(#metal)"/></g>
+  <g class="tube"><circle cx="104.5" cy="117.5" r="2.6" fill="#07070c" stroke="#c9ced8" stroke-width=".8"/></g>
+  <text x="18" y="121.5" font-size="7" font-weight="700" fill="#f5d77a">← pull fully forward</text>
+</g>
+<g class="pok"><g><rect x="16.0" y="125.5" width="155.2" height="17" rx="5" fill="#0f2418" stroke="#22c55e"/><text x="93.6" y="137.0" text-anchor="middle" font-size="6.8" font-weight="700" fill="#86efac">Cover off · fully out · clear of bugs/water</text></g></g>
+<g class="lens"><g class="lensin">
+  <path d="M9 9 L22 22" stroke="#d4af37" stroke-width="4.5" stroke-linecap="round"/>
+  <circle r="12" fill="url(#glass)" stroke="#c9ced8" stroke-width="2.4"/>
+  <path d="M-7 -4.5 A8 8 0 0 1 -2 -8.5" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".8"/>
+</g></g>
+
+<text x="232" y="152" text-anchor="end" font-size="6" fill="#8d93a4">TYPICAL fabric wing, pitot under left wing · C42</text>
+</svg>

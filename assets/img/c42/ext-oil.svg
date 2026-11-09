@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="Typical Rotax 912 oil check: magnetos off, cap off, turn the prop by hand in the normal direction until the oil tank gurgles, then read the dipstick, upper half between MIN and MAX, never below MIN">
+<title>Oil level — burp the Rotax, then read the dipstick (typical)</title>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c0c16"/><stop offset="1" stop-color="#07070c"/></linearGradient>
+  <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4e7ee"/><stop offset=".5" stop-color="#a9afbd"/><stop offset="1" stop-color="#6b7086"/></linearGradient>
+  <linearGradient id="metalh" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b7086"/><stop offset=".45" stop-color="#d9dde5"/><stop offset="1" stop-color="#7d8296"/></linearGradient>
+  <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2d3d"/><stop offset="1" stop-color="#171822"/></linearGradient>
+  <linearGradient id="fab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262a3c"/><stop offset="1" stop-color="#1a1c2a"/></linearGradient>
+  <radialGradient id="glass" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#93c5fd" stop-opacity=".28"/><stop offset="1" stop-color="#8b5cf6" stop-opacity=".12"/></radialGradient>
+  
+</defs>
+<style>
+  text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .rmo{display:none}
+  @media (prefers-reduced-motion:reduce){.rmo{display:inline}}
+  .prop{transform-origin:40px 52px;animation:prop 4s linear infinite}
+  .pa{animation:pa 4s linear infinite}
+  .pb{animation:pb 4s linear infinite}
+  .cap{transform:translateY(-9px);animation:cap 4s ease-in-out infinite}
+  .bub{animation:bub 4s linear infinite}
+  .b2{animation-delay:-.35s}.b3{animation-delay:-.7s}
+  .zoom{animation:zoom 4s linear infinite}
+  .gl{animation:gl 4s linear infinite}
+  @keyframes prop{0%{transform:rotate(0)}44%{transform:rotate(-360deg)}50%,100%{transform:rotate(-360deg)}}
+  @keyframes pa{0%,2%{opacity:0}6%,46%{opacity:1}50%,100%{opacity:0}}
+  @keyframes pb{0%,50%{opacity:0}54%,97%{opacity:1}100%{opacity:0}}
+  @keyframes cap{0%,4%{transform:translateY(0)}10%,94%{transform:translateY(-9px)}99%,100%{transform:translateY(0)}}
+  @keyframes bub{0%,22%{opacity:0;transform:translateY(0)}26%{opacity:1}36%{opacity:0;transform:translateY(-12px)}100%{opacity:0;transform:translateY(-12px)}}
+  @keyframes gl{0%,20%{opacity:0}24%,46%{opacity:1}50%,100%{opacity:0}}
+  @keyframes zoom{0%,50%{opacity:.18}55%,97%{opacity:1}100%{opacity:.18}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}.pa,.pbt,.bub,.gl{display:none}}
+</style>
+<rect width="240" height="160" rx="12" fill="url(#bg)"/>
+
+<!-- prop (front view, normal rotation = anticlockwise from the front) -->
+<g opacity=".95">
+  <g class="prop">
+    <ellipse cx="40" cy="41" rx="3" ry="11" fill="#2c2f40" stroke="#3d3d6b"/>
+    <ellipse cx="40" cy="41" rx="3" ry="11" fill="#2c2f40" stroke="#3d3d6b" transform="rotate(120 40 52)"/>
+    <ellipse cx="40" cy="41" rx="3" ry="11" fill="#2c2f40" stroke="#3d3d6b" transform="rotate(240 40 52)"/>
+  </g>
+  <circle cx="40" cy="52" r="5.5" fill="url(#metal)"/>
+</g>
+<g class="pa">
+  <path d="M57.3 42 A20 20 0 0 0 46.8 33.2" fill="none" stroke="#e8c96a" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M50 29.5 L46 33.3 L51 36" fill="none" stroke="#e8c96a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="62" y="45" font-size="6.2" font-weight="700" fill="#e8c96a">by hand</text>
+</g>
+<!-- oil tank -->
+<rect x="20" y="96" width="44" height="46" rx="9" fill="url(#metalh)" stroke="#3d3d6b"/>
+<path d="M24 108 H60 M24 132 H60" stroke="#6b7086" stroke-width=".8" opacity=".7"/>
+<rect x="36" y="90" width="12" height="7" fill="#7d8296" stroke="#3d3d6b"/>
+<g class="cap"><rect x="34" y="84" width="16" height="7" rx="2" fill="#2c2f40" stroke="#a6acbb"/><rect x="40.5" y="91" width="3" height="5" fill="#a6acbb"/></g>
+<text x="42" y="122" text-anchor="middle" font-size="6" font-weight="700" fill="#2c2f40">OIL TANK</text>
+<g fill="none" stroke="#93c5fd" stroke-width="1.1">
+  <circle class="bub" cx="40" cy="82" r="2"/><circle class="bub b2" cx="45" cy="80" r="1.6"/><circle class="bub b3" cx="42" cy="78" r="1.3"/>
+</g>
+<g class="gl"><text x="62" y="80" font-size="7" font-weight="800" fill="#93c5fd" font-style="italic">gurgle…</text></g>
+<!-- dipstick zoom -->
+<g class="zoom">
+  <rect x="104" y="36" width="128" height="104" rx="8" fill="#0b0b14" stroke="#2a2a46"/>
+  <text x="226" y="48" text-anchor="end" font-size="6.2" font-weight="700" letter-spacing=".6" fill="#8d93a4">DIPSTICK</text>
+  <rect x="148.5" y="44" width="3" height="50" fill="#a6acbb"/>
+  <rect x="142" y="40" width="16" height="6" rx="2" fill="#2c2f40" stroke="#a6acbb"/>
+  <rect x="145" y="92" width="10" height="40" rx="2" fill="#c9ced8"/>
+  <rect class="lvl" x="145" y="104" width="10" height="28" rx="1" fill="#d4af37" fill-opacity=".85"/>
+  <path d="M141 98 H159 M141 124 H159" stroke="#0b0b14" stroke-width="1.4"/>
+  <path d="M141 98 H159 M141 124 H159" stroke="#f1f5f9" stroke-width=".7"/>
+  <text x="138" y="100.5" text-anchor="end" font-size="6.4" font-weight="800" fill="#c9ced8">MAX</text>
+  <text x="138" y="126.5" text-anchor="end" font-size="6.4" font-weight="800" fill="#c9ced8">MIN</text>
+  <path d="M163 98.5 h4 v12.5 h-4" fill="none" stroke="#22c55e" stroke-width="1.3"/>
+</g>
+<g class="pb">
+  <g><rect x="173.0" y="96" width="65.1" height="17" rx="5" fill="#0f2418" stroke="#22c55e"/><text x="205.6" y="107.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="#86efac">OK: upper half</text></g>
+  <g><rect x="166.0" y="116" width="69.0" height="17" rx="5" fill="#2a1416" stroke="#f87171"/><text x="200.5" y="127.5" text-anchor="middle" font-size="7" font-weight="700" fill="#fecaca">Never below MIN</text></g>
+</g>
+<g class="pa"><g><rect x="28.0" y="10" width="183.9" height="17" rx="5" fill="#231d0b" stroke="#d4af37"/><text x="120.0" y="21.5" text-anchor="middle" font-size="7" font-weight="700" fill="#e8c96a">1 · Mags OFF · cap off · turn prop until it gurgles</text></g></g>
+<g class="pb pbt"><g><rect x="38.5" y="10" width="162.9" height="17" rx="5" fill="#0e1a2e" stroke="#60a5fa"/><text x="120.0" y="21.5" text-anchor="middle" font-size="7" font-weight="700" fill="#bfdbfe">2 · Read the dipstick: between MIN and MAX</text></g></g>
+<g class="rmo"><g><rect x="33.0" y="3" width="174.1" height="17" rx="5" fill="#231d0b" stroke="#d4af37"/><text x="120.0" y="14.5" text-anchor="middle" font-size="6.6" font-weight="700" fill="#e8c96a">1 · Mags OFF · cap off · turn prop until it gurgles</text></g><g><rect x="130.5" y="19.5" width="101.5" height="17" rx="5" fill="#0e1a2e" stroke="#60a5fa"/><text x="181.3" y="31.0" text-anchor="middle" font-size="6.6" font-weight="700" fill="#bfdbfe">2 · Read dipstick: MIN–MAX</text></g></g>
+
+<text x="232" y="152" text-anchor="end" font-size="6" fill="#8d93a4">TYPICAL Rotax 912 oil tank · C42</text>
+</svg>

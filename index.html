@@ -15,6 +15,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png" />
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/lesson-content.css" />
   <link rel="preload" as="image" href="assets/img/splash-portrait.jpg" media="(max-aspect-ratio: 1/1)" />
   <link rel="preload" as="image" href="assets/img/splash-landscape.jpg" media="(min-aspect-ratio: 1/1)" />
   <!-- iOS home-screen launch images: same artwork as the in-app splash, so the native launch blends into it -->
@@ -41,7 +42,7 @@
   <link rel="apple-touch-startup-image" href="assets/splash/launch-750x1334.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
   <link rel="apple-touch-startup-image" href="assets/splash/launch-1334x750.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
   <style>
-    /* Opening splash: full-bleed logo artwork on every app open (~1.2 s), then fades to the sign-in screen.
+    /* Opening splash (preview v4): full-bleed logo artwork on every app open (~1.2 s), then fades to the sign-in screen.
        Tap to skip. Respects prefers-reduced-motion. Never blocks the app (hard 2.5 s fallback).
        Art: the original logo, untouched in the centre, with the web extended to a tall (9:16) and a wide (16:9) frame. */
     html,body{background:#05050b}
@@ -103,7 +104,7 @@
         <h1>FULL NPPL INSIDER</h1>
         <p class="gate-sub">NPPL study aid for student and experienced pilots</p>
         <div class="disclaimer-box">
-          <strong>Study aid only.</strong> Not affiliated with the CAA or QuizAero.
+          <strong>Study aid only.</strong> Not affiliated with the CAA.
           Always check the current official syllabus and your instructor.
           Confirm uncertain regulatory detail with your instructor / current AIP.
         </div>
@@ -227,6 +228,7 @@
   <script src="js/frtol-drills-ui.js"></script>
   <script src="js/daily-packs-ui.js"></script>
   <script src="js/pwa.js"></script>
+  <script src="js/lesson-widgets.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

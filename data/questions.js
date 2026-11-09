@@ -1,4 +1,4 @@
-/* ORIGINAL exam questions — UK NPPL / FRTOL study aid — NOT from QuizAero, Pooleys, or commercial banks.
+/* ORIGINAL exam questions — UK NPPL / FRTOL study aid — NOT from Pooleys or commercial question banks.
    Explanations are study aids — confirm with instructor / current AIP / CAP. */
 const QUESTIONS_DATA = [
   {

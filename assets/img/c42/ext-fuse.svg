@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="Typical C42 fuselage from the left, high wing on top of the cabin with its strut: a magnifier runs along the underside of the glass-fibre pod and tail boom and finds a crack to report; then the fuel drain under the right seat is checked dry with its clip on, a drip means a leak">
+<title>Fuselage — drains dry, pod and underside free of damage (typical)</title>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c0c16"/><stop offset="1" stop-color="#07070c"/></linearGradient>
+  <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4e7ee"/><stop offset=".5" stop-color="#a9afbd"/><stop offset="1" stop-color="#6b7086"/></linearGradient>
+  <linearGradient id="metalh" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b7086"/><stop offset=".45" stop-color="#d9dde5"/><stop offset="1" stop-color="#7d8296"/></linearGradient>
+  <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2d3d"/><stop offset="1" stop-color="#171822"/></linearGradient>
+  <linearGradient id="fab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262a3c"/><stop offset="1" stop-color="#1a1c2a"/></linearGradient>
+  <radialGradient id="glass" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#93c5fd" stop-opacity=".28"/><stop offset="1" stop-color="#8b5cf6" stop-opacity=".12"/></radialGradient>
+  
+</defs>
+<style>
+  text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .lens{animation:lens 4s linear infinite}
+  .crack{animation:crack 4s linear infinite}
+  .ins{animation:ins 4s linear infinite}
+  .drop{opacity:0;animation:drop 4s ease-in infinite}
+  .leak{opacity:0;animation:leak 4s linear infinite}
+  .dry{animation:dry 4s linear infinite}
+  @keyframes lens{0%{transform:translate(24px,100px);opacity:0}4%{opacity:1}46%{transform:translate(196px,82px);opacity:1}50%,100%{transform:translate(196px,82px);opacity:0}}
+  @keyframes crack{0%,18%{opacity:.15}22%,100%{opacity:1}}
+  @keyframes ins{0%,48%{opacity:.18}52%,97%{opacity:1}100%{opacity:.18}}
+  @keyframes drop{0%,52%{opacity:0;transform:translateY(0) scale(.3)}58%{opacity:1;transform:translateY(0) scale(1)}66%{opacity:1;transform:translateY(5px) scale(1)}70%,100%{opacity:0;transform:translateY(6px)}}
+  @keyframes leak{0%,54%{opacity:0}58%,70%{opacity:1}74%,100%{opacity:0}}
+  @keyframes dry{0%,72%{opacity:0}78%,97%{opacity:1}100%{opacity:0}}
+  .drop{transform-box:fill-box;transform-origin:center top}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}.lens{display:none}}
+</style>
+<rect width="240" height="160" rx="12" fill="url(#bg)"/>
+
+<!-- whole fuselage, left side, nose left -->
+<path d="M8 92 Q6 74 22 67 L40 58 L114 58 L126 66 L212 70 V77 L126 82 Q110 106 92 110 L28 110 Q8 106 8 92Z" fill="url(#skin)" stroke="#3d3d6b"/>
+<path d="M22 67 L40 58 L76 58 L76 84 L13 84 Q14 72 22 67Z" fill="url(#glass)" stroke="#3d3d6b" stroke-width=".7"/>
+<!-- high wing on top of the cabin (root section) and V-strut to the lower fuselage; strut drawn first so its ends tuck into the wing -->
+<path d="M54 55.5 L84 103 L96 55" fill="none" stroke="#a6acbb" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M36 55.5 Q36 50.5 46 50 L110 52.6 L120 55.2 L110 57.6 L44 58.6 Q36 58.4 36 55.5Z" fill="url(#fab)" stroke="#a6acbb" stroke-width=".8"/>
+<text x="66" y="56.4" text-anchor="middle" font-size="4.6" font-weight="700" letter-spacing=".5" fill="#8d93a4">HIGH WING</text>
+<circle cx="84" cy="103" r="1.6" fill="#a6acbb"/>
+<text x="58" y="98" text-anchor="middle" font-size="5.6" font-weight="700" letter-spacing=".5" fill="#5b6077">GRP POD</text>
+<text x="168" y="76.5" text-anchor="middle" font-size="5.4" font-weight="700" letter-spacing=".5" fill="#5b6077">TAIL BOOM</text>
+<path d="M200 70 L210 38 L226 38 L228 70Z" fill="url(#fab)" stroke="#3d3d6b"/>
+<path d="M194 74 H234" stroke="#3d3d6b" stroke-width="2.4"/>
+<!-- gear stubs -->
+<path d="M28 108 V118" stroke="#7d8296" stroke-width="2.4"/><circle cx="28" cy="122" r="5" fill="#1d1e27" stroke="#3d3d6b"/>
+<path d="M88 110 L100 122" stroke="#7d8296" stroke-width="2.4"/><circle cx="102" cy="124" r="5.5" fill="#1d1e27" stroke="#3d3d6b"/>
+<!-- fuel drain under the right seat -->
+<path d="M70 110 V114" stroke="#c9ced8" stroke-width="2"/><rect x="68.5" y="113" width="3" height="2" fill="#dc2626"/>
+<!-- crack -->
+<g class="crack"><path d="M48 110 l3 -4 2 3 3 -5 2 3" fill="none" stroke="#f87171" stroke-width="1.3"/>
+  <circle cx="53" cy="108" r="7" fill="none" stroke="#f87171" stroke-width="1.4"/>
+  <path d="M46 114 L34 128" stroke="#f87171" stroke-width="1"/><g><rect x="8.0" y="128" width="140.9" height="17" rx="5" fill="#2a1416" stroke="#f87171"/><text x="78.5" y="139.5" text-anchor="middle" font-size="7" font-weight="700" fill="#fecaca">Cracks, holes, missing screws: report</text></g></g>
+<!-- drain inset -->
+<g class="ins">
+  <path d="M71 112 L96 50" stroke="#3d3d6b" stroke-dasharray="2 2"/>
+  <rect x="90" y="4" width="106" height="46" rx="7" fill="#0b0b14" stroke="#2a2a46"/>
+  <text x="97" y="14" font-size="6" font-weight="700" letter-spacing=".5" fill="#8d93a4">FUEL DRAIN · under R seat</text>
+  <rect x="104" y="21" width="40" height="5" fill="#2a2d3d"/>
+  <rect x="118" y="26" width="12" height="9" rx="1.5" fill="url(#metalh)"/>
+  <rect x="121.5" y="35" width="5" height="8" fill="#c9ced8"/>
+  <path d="M119 35 H129 V38.2 Q129 39.4 127.8 39.4 H120.2 Q119 39.4 119 38.2Z" fill="#dc2626" stroke="#7f1d1d" stroke-width=".4"/>
+  <path d="M116 37.2 H119" stroke="#fca5a5" stroke-width=".6"/>
+  <text x="115" y="39" text-anchor="end" font-size="5.2" font-weight="700" fill="#fca5a5">clip</text>
+</g>
+<path class="drop" d="M124 44 Q121 48 124 50 Q127 48 124 44Z" fill="#60a5fa"/>
+<g class="leak"><g><rect x="142.0" y="30" width="48.0" height="17" rx="5" fill="#2a1416" stroke="#f87171"/><text x="166.0" y="41.5" text-anchor="middle" font-size="6.8" font-weight="700" fill="#fecaca">Drip = leak</text></g></g>
+<g class="dry"><g><rect x="139.8" y="30" width="52.4" height="17" rx="5" fill="#0f2418" stroke="#22c55e"/><text x="166.0" y="41.5" text-anchor="middle" font-size="6.8" font-weight="700" fill="#86efac">Dry · clip on</text></g></g>
+<g class="lens"><g class="lensin">
+  <path d="M9 9 L22 22" stroke="#d4af37" stroke-width="4.5" stroke-linecap="round"/>
+  <circle r="12" fill="url(#glass)" stroke="#c9ced8" stroke-width="2.4"/>
+  <path d="M-7 -4.5 A8 8 0 0 1 -2 -8.5" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".8"/>
+</g></g>
+
+<text x="232" y="152" text-anchor="end" font-size="6" fill="#8d93a4">TYPICAL GRP pod &amp; aluminium boom · C42</text>
+</svg>

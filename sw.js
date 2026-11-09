@@ -5,7 +5,7 @@
    caches ('nppl-insider-*'). Preview caches ('nppl-preview-*') are left alone. */
 const CACHE_PREFIX = 'nppl-live-';
 const OLD_LIVE_PREFIXES = [CACHE_PREFIX, 'nppl-insider-'];
-const CACHE_VERSION = CACHE_PREFIX + 'v7b-20261103-chipwrap';
+const CACHE_VERSION = CACHE_PREFIX + 'v8-20261109-sync';
 const SHELL = [
   './',
   './index.html',
@@ -72,7 +72,21 @@ const SHELL = [
   './data/frtol-drills.js',
   './data/airfields.js',
   './data/airfields-detail.js',
-  './data/airfields-geo.js'
+  './data/airfields-geo.js',
+  './css/lesson-content.css',
+  './assets/img/c42/ext-oil.svg',
+  './assets/img/c42/ext-nose.svg',
+  './assets/img/c42/ext-doors.svg',
+  './assets/img/c42/ext-wings.svg',
+  './assets/img/c42/ext-ail.svg',
+  './assets/img/c42/ext-bag.svg',
+  './assets/img/c42/ext-fuse.svg',
+  './assets/img/c42/ext-hs.svg',
+  './assets/img/c42/ext-elev.svg',
+  './assets/video/c42-circuit-poster.jpg',
+  './js/lesson-widgets.js',
+  './js/vfrchart-data.js',
+  './img/chart-relief.jpg'
 ];
 
 const LANG_FILES = ['cy', 'pl', 'fr', 'de', 'es', 'pt', 'ro'].map(

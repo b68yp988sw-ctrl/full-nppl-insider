@@ -150,6 +150,18 @@ const SkillsUI = (() => {
   }
 
   function circuitsOverview(C) {
+    // Own C42 circuit lesson replaces the first third-party circuit embed when C42 is picked; other types keep the YouTube list.
+    const isC42 = typeof AircraftPref !== 'undefined' && AircraftPref.isC42 && AircraftPref.isC42();
+    const ytCircuits = isC42 ? (VIDEOS_DATA.circuits || []).filter(v => v.id !== 'O8yn4lizLUI') : VIDEOS_DATA.circuits;
+    const c42Video = isC42 ? `
+      <div class="section-label">C42 circuit lesson — narrated animation (7 min 9 s)</div>
+      <div class="card video-card" id="c42-circuit-card">
+        <video class="lesson-video" data-ac-video="c42" controls playsinline preload="none" poster="assets/video/c42-circuit-poster.jpg" aria-label="Narrated animated lesson: the circuit in an Ikarus C42">
+          <source src="assets/video/c42-circuit.mp4" type="video/mp4" />
+          Your browser cannot play this video.
+        </video>
+        <p class="yt-note">Legs, left- and right-hand circuits, overhead join, C42 take-off, circuit and approach speeds (80 hp and 100 hp) and flap, downwind call and checks, aiming point, crosswind technique, round-out, touch-and-go and go-around. Figures from the C42 handbook. Loads only when you tap play (about 44 MB, needs a connection — not saved offline). Study aid only; follow your instructor, POH and local procedures.</p>
+      </div>` : '';
     return `
       <div class="hero" style="padding-top:0">
         <div class="hero-badge">UK aerodrome</div>
@@ -197,7 +209,8 @@ const SkillsUI = (() => {
             <div class="chev">›</div>
           </div>
         </div>`).join('')}
-      ${YTEmbed.section(VIDEOS_DATA.circuits, 'Video / How to — circuits')}`;
+      ${c42Video}
+      ${YTEmbed.section(ytCircuits, isC42 ? 'More videos — circuits (third-party)' : 'Video / How to — circuits')}`;
   }
 
   function circuitsSection(C, id) {

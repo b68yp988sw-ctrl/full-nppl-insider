@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="Typical C42 baggage compartment on the left side behind the cabin: the cover is removed, the fuel level is read through the translucent tank, the tank and floor are checked for leaks or wet stains, a loose item is removed, then the cover is refitted and secured">
+<title>Baggage compartment — fuel quantity, leaks, loose items, cover secure (typical)</title>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c0c16"/><stop offset="1" stop-color="#07070c"/></linearGradient>
+  <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4e7ee"/><stop offset=".5" stop-color="#a9afbd"/><stop offset="1" stop-color="#6b7086"/></linearGradient>
+  <linearGradient id="metalh" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b7086"/><stop offset=".45" stop-color="#d9dde5"/><stop offset="1" stop-color="#7d8296"/></linearGradient>
+  <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2d3d"/><stop offset="1" stop-color="#171822"/></linearGradient>
+  <linearGradient id="fab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262a3c"/><stop offset="1" stop-color="#1a1c2a"/></linearGradient>
+  <radialGradient id="glass" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#93c5fd" stop-opacity=".28"/><stop offset="1" stop-color="#8b5cf6" stop-opacity=".12"/></radialGradient>
+  
+</defs>
+<style>
+  text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .panel{opacity:0;animation:panel 4s ease-in-out infinite}
+  .fas{animation:fas 4s linear infinite}
+  .p1{animation:p1 4s linear infinite}.p2{animation:p2 4s linear infinite}.p3{animation:p3 4s linear infinite}.p4{animation:p4 4s linear infinite}
+  .lens{animation:lens 4s ease-in-out infinite}
+  .loose{transform-box:fill-box;transform-origin:center;animation:loose 4s ease-in-out infinite}
+  @keyframes panel{0%,10%{opacity:1;transform:translate(0,0)}20%{opacity:0;transform:translate(26px,8px)}76%{opacity:0;transform:translate(26px,8px)}86%,100%{opacity:1;transform:translate(0,0)}}
+  @keyframes fas{0%,86%{fill:#d4af37}90%,100%{fill:#22c55e}}
+  @keyframes p1{0%,22%{opacity:0}28%,74%{opacity:1}78%,100%{opacity:0}}
+  @keyframes p2{0%,40%{opacity:0}46%,74%{opacity:1}78%,100%{opacity:0}}
+  @keyframes p3{0%,56%{opacity:0}62%,69%{opacity:1}73%,100%{opacity:0}}
+  @keyframes p4{0%,86%{opacity:0}90%,98%{opacity:1}100%{opacity:0}}
+  @keyframes lens{0%,30%{transform:translate(90px,94px);opacity:0}34%{opacity:1}48%{transform:translate(104px,94px);opacity:1}52%,100%{transform:translate(104px,94px);opacity:0}}
+  @keyframes loose{0%,56%{transform:rotate(0);opacity:1}60%{transform:rotate(-10deg)}64%{transform:rotate(8deg)}68%{transform:rotate(0);opacity:1}73%{transform:translate(0,-6px);opacity:0}99%{transform:translate(0,-6px);opacity:0}100%{transform:rotate(0);opacity:0}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}.lens,.p4{display:none}}
+</style>
+<rect width="240" height="160" rx="12" fill="url(#bg)"/>
+
+<!-- fuselage, left side, nose left -->
+<path d="M0 40 L60 40 Q120 42 200 62 L240 64 L240 80 L200 80 Q120 112 60 114 L0 114Z" fill="url(#skin)" stroke="#3d3d6b"/>
+<path d="M56 40 V114" stroke="#3d3d6b"/>
+<text x="28" y="80" text-anchor="middle" font-size="6" font-weight="700" letter-spacing=".5" fill="#5b6077">CABIN</text>
+<!-- opening + inside -->
+<rect x="74" y="52" width="86" height="50" rx="5" fill="#08080e" stroke="#2a2a46"/>
+<!-- translucent fuel tank -->
+<rect x="80" y="57" width="34" height="40" rx="6" fill="#e9e3d0" fill-opacity=".16" stroke="#c9ced8" stroke-opacity=".6"/>
+<rect x="81" y="71" width="32" height="25" rx="5" fill="#60a5fa" fill-opacity=".45"/>
+<path d="M81 71 H113" stroke="#93c5fd" stroke-width="1.2"/>
+<g stroke="#c9ced8" stroke-width=".7" opacity=".7"><path d="M80 67 h4 M80 77 h4 M80 87 h4"/></g>
+<!-- bellcrank / cables hint -->
+<path d="M120 58 L156 66 M120 96 L156 86" stroke="#3d3d6b" stroke-width="1"/>
+<!-- loose item -->
+<rect class="loose" x="128" y="83" width="16" height="12" rx="2" fill="#4a4f63" stroke="#8d93a4" stroke-width=".7"/>
+<!-- removable panel -->
+<g class="panel"><rect x="74" y="52" width="86" height="50" rx="5" fill="#242838" stroke="#a6acbb"/>
+  <text x="117" y="80" text-anchor="middle" font-size="6" font-weight="700" letter-spacing=".5" fill="#8d93a4">BAGGAGE COVER</text>
+  <g class="fas" fill="#d4af37"><circle cx="78" cy="56" r="1.8"/><circle cx="156" cy="56" r="1.8"/><circle cx="78" cy="98" r="1.8"/><circle cx="156" cy="98" r="1.8"/></g></g>
+<!-- labels -->
+<g class="p1"><path d="M60 27 L88 64" stroke="#60a5fa" stroke-width="1"/><g><rect x="8.0" y="10" width="108.5" height="17" rx="5" fill="#0e1a2e" stroke="#60a5fa"/><text x="62.2" y="21.5" text-anchor="middle" font-size="7" font-weight="700" fill="#bfdbfe">Fuel qty: read through tank</text></g></g>
+<g class="p2"><path d="M60 122 L92 98" stroke="#22c55e" stroke-width="1"/><g><rect x="8.0" y="122" width="84.9" height="17" rx="5" fill="#0f2418" stroke="#22c55e"/><text x="50.5" y="133.5" text-anchor="middle" font-size="7" font-weight="700" fill="#86efac">No leaks / wet stains</text></g></g>
+<g class="p3"><circle cx="136" cy="89" r="12" fill="none" stroke="#f87171" stroke-width="1.4" stroke-dasharray="4 3"/><path d="M170 122 L143 99" stroke="#f87171" stroke-width="1"/><g><rect x="123.5" y="122" width="108.5" height="17" rx="5" fill="#2a1416" stroke="#f87171"/><text x="177.8" y="133.5" text-anchor="middle" font-size="7" font-weight="700" fill="#fecaca">Loose items: stow or remove</text></g></g>
+<g class="p4"><path d="M196 27 L158 54" stroke="#d4af37" stroke-width="1"/><g><rect x="135.9" y="10" width="96.1" height="17" rx="5" fill="#231d0b" stroke="#d4af37"/><text x="183.9" y="21.5" text-anchor="middle" font-size="7" font-weight="700" fill="#e8c96a">Cover refitted &amp; secure</text></g></g>
+<g class="lens"><g class="lensin">
+  <path d="M9 9 L22 22" stroke="#d4af37" stroke-width="4.5" stroke-linecap="round"/>
+  <circle r="12" fill="url(#glass)" stroke="#c9ced8" stroke-width="2.4"/>
+  <path d="M-7 -4.5 A8 8 0 0 1 -2 -8.5" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".8"/>
+</g></g>
+
+<text x="232" y="152" text-anchor="end" font-size="6" fill="#8d93a4">TYPICAL left-side baggage cover · C42</text>
+</svg>

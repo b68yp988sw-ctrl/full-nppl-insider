@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-label="Typical C42 tail seen from above: the one-piece elevator is checked for damage and full up and down travel with its hinge fasteners secure, the trim tab on the elevator trailing edge and its push rod from the electric trim servo are checked secure with no play, and the rudder, which sits above the elevator, is swung to check its hinges and cables">
+<title>Elevator, trim tab and rudder — damage, full movement, fasteners (typical)</title>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c0c16"/><stop offset="1" stop-color="#07070c"/></linearGradient>
+  <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4e7ee"/><stop offset=".5" stop-color="#a9afbd"/><stop offset="1" stop-color="#6b7086"/></linearGradient>
+  <linearGradient id="metalh" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b7086"/><stop offset=".45" stop-color="#d9dde5"/><stop offset="1" stop-color="#7d8296"/></linearGradient>
+  <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2d3d"/><stop offset="1" stop-color="#171822"/></linearGradient>
+  <linearGradient id="fab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262a3c"/><stop offset="1" stop-color="#1a1c2a"/></linearGradient>
+  <radialGradient id="glass" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#93c5fd" stop-opacity=".28"/><stop offset="1" stop-color="#8b5cf6" stop-opacity=".12"/></radialGradient>
+  
+</defs>
+<style>
+  text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .rud{transform-origin:120px 50px;animation:rud 4s ease-in-out infinite}
+  .tab{transform-box:fill-box;transform-origin:center top;animation:tab 4s linear infinite}
+  .el{transform-origin:82px 124px;animation:el 4s ease-in-out infinite}
+  .hg{animation:hg 4s linear infinite}
+  .q1{animation:q1 4s linear infinite}.q2{animation:q2 4s linear infinite}.q3{animation:q3 4s linear infinite}
+  @keyframes rud{0%,60%{transform:rotate(0)}68%,72%{transform:rotate(-18deg)}82%,86%{transform:rotate(18deg)}94%,100%{transform:rotate(0)}}
+  @keyframes tab{0%,34%{transform:scaleY(1)}37%{transform:scaleY(.6)}40%{transform:scaleY(1)}43%{transform:scaleY(.6)}46%,100%{transform:scaleY(1)}}
+  @keyframes el{0%,4%{transform:rotate(0)}12%,16%{transform:rotate(-26deg)}24%,28%{transform:rotate(18deg)}34%,100%{transform:rotate(0)}}
+  @keyframes hg{0%,6%{fill:#d4af37}10%,100%{fill:#22c55e}}
+  @keyframes q1{0%{opacity:.3}4%,96%{opacity:1}100%{opacity:.3}}
+  @keyframes q2{0%,32%{opacity:.25}36%,96%{opacity:1}100%{opacity:.25}}
+  @keyframes q3{0%,60%{opacity:.25}64%,96%{opacity:1}100%{opacity:.25}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+<rect width="240" height="160" rx="12" fill="url(#bg)"/>
+
+<text x="120" y="11" text-anchor="middle" font-size="6.2" font-weight="700" letter-spacing=".8" fill="#8d93a4">TAIL FROM ABOVE · NOSE ↑</text>
+<!-- boom + cables forward -->
+<rect x="116" y="14" width="8" height="34" fill="url(#metal)" opacity=".7"/>
+<path d="M113 16 V54 M127 16 V54" stroke="#8d93a4" stroke-width=".6" stroke-dasharray="2 1.5"/>
+<!-- stabiliser -->
+<path d="M30 30 Q30 24 40 22 L200 22 Q210 24 210 30 L212 50 L28 50Z" fill="url(#fab)" stroke="#3d3d6b"/>
+<text x="64" y="40" text-anchor="middle" font-size="5" font-weight="700" letter-spacing=".4" fill="#5b6077">STABILISER</text>
+<!-- elevator one-piece -->
+<path d="M28 50 L212 50 L210 66 L30 66Z" fill="#2c3048" stroke="#4b4f78"/>
+<text x="64" y="61" text-anchor="middle" font-size="5" font-weight="700" letter-spacing=".4" fill="#6b7090">ELEVATOR</text>
+<!-- trim tab, inboard trailing edge -->
+<rect class="tab" x="134" y="66" width="22" height="7" fill="#d4af37" fill-opacity=".35" stroke="#d4af37" stroke-width=".8"/>
+<!-- electric trim servo near the stabiliser trailing edge, short push rod to the tab horn -->
+<rect x="146" y="40" width="10" height="7" rx="1.2" fill="#4a4f63" stroke="#a6acbb" stroke-width=".6"/>
+<path d="M151 47 V67.5" stroke="#d4af37" stroke-width="1.1"/>
+<path d="M149 67.5 H153 L151 70.5Z" fill="#d4af37"/>
+<text x="158" y="45.5" font-size="4.4" font-weight="700" fill="#8d93a4">SERVO</text>
+<g class="hg" fill="#d4af37"><circle cx="44" cy="50" r="1.5"/><circle cx="70" cy="50" r="1.5"/><circle cx="96" cy="50" r="1.5"/><circle cx="144" cy="50" r="1.5"/><circle cx="170" cy="50" r="1.5"/><circle cx="196" cy="50" r="1.5"/></g>
+<!-- fin + rudder from above: fin is a thin aerofoil section on the centreline, rudder hinged at its trailing edge -->
+<path d="M120 17 Q124.2 24 124 38 L123.2 50 L116.8 50 L116 38 Q115.8 24 120 17Z" fill="url(#metalh)" stroke="#e3e6ee" stroke-width=".7"/>
+<text x="112" y="32" text-anchor="end" font-size="5" font-weight="700" letter-spacing=".4" fill="#c9ced8">FIN</text>
+<path d="M112.5 30.5 H116.3" stroke="#c9ced8" stroke-width=".6"/>
+<g class="rud">
+  <path d="M117 51.6 L123 51.6 L121 85 L119 85Z" fill="#000" fill-opacity=".5" transform="translate(2 2)"/>
+  <path d="M116.9 50 L123.1 50 Q123 66 121.1 84 L118.9 84 Q117 66 116.9 50Z" fill="#f2f4f8" stroke="#60a5fa" stroke-width=".9"/>
+  <path d="M120 53 V81" stroke="#9aa3b8" stroke-width=".5"/>
+</g>
+<path d="M114.5 50 H125.5" stroke="#60a5fa" stroke-width=".8" stroke-dasharray="1.4 1"/>
+<circle cx="120" cy="50" r="1.6" fill="#60a5fa" stroke="#0b0b14" stroke-width=".5"/>
+<path d="M104 78 H114" stroke="#c9ced8" stroke-width=".6"/>
+<text x="102" y="77" text-anchor="end" font-size="5.6" font-weight="700" letter-spacing=".4" fill="#e3e6ee">RUDDER</text>
+<text x="102" y="83" text-anchor="end" font-size="4.4" font-weight="700" letter-spacing=".3" fill="#93c5fd">hinged at fin ●</text>
+<!-- inset: elevator side view -->
+<g><rect x="10" y="98" width="110" height="46" rx="7" fill="#0b0b14" stroke="#2a2a46"/>
+ <text x="18" y="140" font-size="5.4" font-weight="700" letter-spacing=".5" fill="#8d93a4">SIDE VIEW</text>
+ <path d="M22 124 Q26 119 38 119 L82 122 L82 126 L38 129 Q26 129 22 124Z" fill="url(#fab)" stroke="#3d3d6b"/>
+ <path d="M82 124 L110 124" stroke="#4b4f78" stroke-width="1" stroke-dasharray="2 2" transform="rotate(-26 82 124)"/>
+ <path d="M82 124 L110 124" stroke="#4b4f78" stroke-width="1" stroke-dasharray="2 2" transform="rotate(18 82 124)"/>
+ <g class="el"><path d="M82 121.4 L110 123.5 L110 124.5 L82 126.6Z" fill="#cfd3dc" stroke="#8d93a4" stroke-width=".6"/><circle cx="82" cy="124" r="2.6" fill="#cfd3dc" stroke="#8d93a4" stroke-width=".6"/></g>
+ <text x="114" y="107" text-anchor="end" font-size="5.2" font-weight="700" fill="#e8c96a">full UP</text>
+ <text x="114" y="140" text-anchor="end" font-size="5.2" font-weight="700" fill="#e8c96a">full DOWN</text>
+ <circle cx="82" cy="124" r="1.6" fill="#d4af37"/>
+</g>
+<g class="q1"><g><rect x="151.4" y="78" width="80.6" height="17" rx="5" fill="#0f2418" stroke="#22c55e"/><text x="191.7" y="89.5" text-anchor="middle" font-size="6.2" font-weight="700" fill="#86efac">No damage · full travel</text></g></g>
+<g class="q2"><path d="M140 73 V107.5 H143" fill="none" stroke="#d4af37" stroke-width="1"/><g><rect x="143.0" y="99" width="89.0" height="17" rx="5" fill="#231d0b" stroke="#d4af37"/><text x="187.5" y="110.5" text-anchor="middle" font-size="6.2" font-weight="700" fill="#e8c96a">Trim tab &amp; linkage secure</text></g></g>
+<g class="q3"><path d="M122.4 45 H134.5 V128.5 H150.4" fill="none" stroke="#60a5fa" stroke-width="1"/><g><rect x="150.4" y="120" width="81.6" height="17" rx="5" fill="#0e1a2e" stroke="#60a5fa"/><text x="191.2" y="131.5" text-anchor="middle" font-size="6.2" font-weight="700" fill="#bfdbfe">Rudder hinges &amp; cables</text></g></g>
+
+<text x="232" y="152" text-anchor="end" font-size="6" fill="#8d93a4">TYPICAL one-piece elevator with trim tab · C42</text>
+</svg>

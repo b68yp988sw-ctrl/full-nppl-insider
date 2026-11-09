@@ -34,6 +34,7 @@
   let route = { name: 'home' };
   let examState = null;
   let fcState = null;
+  let subjectDoneFlash = null;
   let logEditId = null;
   let landingTab = 'controls';
 
@@ -591,6 +592,15 @@
 
     const ls = lessons().filter(l => l.subject === sid);
     const st = Store.load();
+    let doneBanner = '';
+    if (subjectDoneFlash === sid) {
+      const nDone = ls.filter(l => st.lessonsDone[l.id]).length;
+      const msg = nDone === ls.length
+        ? tr('theory.subject_done', 'All topics in this subject are studied ✓')
+        : t('theory.subject_end', { done: nDone, n: ls.length });
+      doneBanner = `<div class="subject-done-banner${nDone === ls.length ? '' : ' partial'}" role="status">${esc(msg === 'theory.subject_end' ? `End of this subject — ${nDone} of ${ls.length} topics studied` : msg)}</div>`;
+    }
+    subjectDoneFlash = null;
     const navChart = sid === 'nav' ? `
       <div class="card card-tap" data-go="chart">
         <div class="subject-card">
@@ -608,12 +618,15 @@
         <button type="button" class="chip" data-go-ex="${sid}">Practice exam</button>
         ${sid === 'nav' ? '<button type="button" class="chip" data-go="chart">1:500k Chart</button>' : ''}${sid === 'radio' ? '<button type="button" class="chip" data-go="frtol-drills">FRTOL drills</button>' : ''}
       </div>
+      ${doneBanner}
       ${navChart}
       ${ls.map(l => { const ll = localizedLesson(l); return `
-        <div class="card card-tap" data-lesson="${ll.id}">
+        <div class="card card-tap${st.lessonsDone[ll.id] ? ' is-studied' : ''}" data-lesson="${ll.id}">
           <div class="meta">${esc(ll.chapter)}</div>
           <h3>${esc(ll.title)}</h3>
-          <div class="meta">${st.lessonsDone[ll.id] ? esc(t('theory.studied')) : esc(t('theory.not_done'))}</div>
+          ${st.lessonsDone[ll.id]
+            ? `<div class="lesson-done-row"><span class="meta lesson-done-tag">${esc(t('theory.studied'))}</span><button type="button" class="btn-unmark" data-unmark="${ll.id}" aria-label="${esc(tr('theory.unmark', 'Unmark'))}: ${esc(ll.title)}">${esc(tr('theory.unmark', 'Unmark'))}</button></div>`
+            : `<div class="meta">${esc(t('theory.not_done'))}</div>`}
         </div>`; }).join('')}`;
   }
 
@@ -644,7 +657,9 @@
         <div class="confirm">${esc(t('theory.confirm'))}</div>
       </article>
       <div class="btn-row">
-        <button type="button" class="btn btn-success" id="btn-mark-done">${esc(t('theory.mark_done'))}</button>
+        ${(Store.load().lessonsDone || {})[l.id]
+          ? `<button type="button" class="btn btn-secondary btn-studied" id="btn-mark-done" data-done="1" aria-pressed="true">${esc(tr('theory.studied_unmark', '✓ Studied — tap to unmark'))}</button>`
+          : `<button type="button" class="btn btn-success" id="btn-mark-done" data-done="0" aria-pressed="false">${esc(tr('theory.mark_next', t('theory.mark_done') + ' →'))}</button>`}
       </div>`;
   }
 
@@ -714,7 +729,7 @@
     btnBack.hidden = true;
     const hist = Store.load().examHistory.slice(-5).reverse();
     return `
-      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:12px">Original UK NPPL / FRTOL-style questions. Not QuizAero. Timed or untimed. Study pass bar ~75%.</p>
+      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:12px">Original UK NPPL / FRTOL-style questions. Timed or untimed. Study pass bar ~75%.</p>
       <div class="card card-tap" data-exam="mixed"><h3>Mixed mock</h3><div class="meta">Questions from all subjects</div></div>
       ${subjects().map(s => {
         const n = questions().filter(q => q.subject === s.id).length;
@@ -1170,7 +1185,10 @@
     if (speak) {
       const l = lessons().find(x => x.id === route.id);
       speak.addEventListener('click', () => {
-        const text = strip(document.getElementById('lesson-content').innerText) + ' ' + (l.speakExtra || '');
+        const node = document.getElementById('lesson-content').cloneNode(true);
+        node.querySelectorAll('svg, .no-speak, .vc-wrap, [data-widget]').forEach(n => n.remove());
+        node.querySelectorAll('li, p, h2, h3, h4, tr, div').forEach(n => n.append(' '));
+        const text = strip(node.textContent) + ' ' + (l.speakExtra || '');
         AudioSpeak.speak(text);
       });
     }
@@ -1179,10 +1197,34 @@
 
     const mark = document.getElementById('btn-mark-done');
     if (mark) mark.addEventListener('click', () => {
-      Store.update(s => { s.lessonsDone[route.id] = true; });
-      mark.textContent = t('theory.studied');
-      mark.disabled = true;
+      const lid = route.id;
+      if (mark.dataset.done === '1') {
+        // Unmark: remove the tick, stay on this topic.
+        Store.update(s => { delete s.lessonsDone[lid]; });
+        render();
+        return;
+      }
+      Store.update(s => { s.lessonsDone[lid] = true; });
+      // Go straight to the next topic in learning order (same subject, course order).
+      const cur = lessons().find(x => x.id === lid);
+      const same = cur ? lessons().filter(x => x.subject === cur.subject) : [];
+      const nxt = cur ? same[same.indexOf(cur) + 1] : null;
+      if (nxt) { go('lesson', { id: nxt.id }, { replace: true }); return; }
+      // Last topic: back to the topic list with a done message.
+      if (cur) {
+        const top = navStack[navStack.length - 1];
+        if (top && top.name === 'subject' && top.id === cur.subject) navStack.pop();
+        subjectDoneFlash = cur.subject;
+        go('subject', { id: cur.subject }, { replace: true });
+      }
     });
+    main.querySelectorAll('[data-unmark]').forEach(el => el.addEventListener('click', ev => {
+      ev.stopPropagation();
+      ev.preventDefault();
+      const lid = el.dataset.unmark;
+      Store.update(s => { delete s.lessonsDone[lid]; });
+      render();
+    }));
 
     // flashcards
     const fc = document.getElementById('flashcard');

@@ -1,8 +1,29 @@
-# FULL NPPL INSIDER
+# FULL NPPL INSIDER — PREVIEW BUILD
+
+> **Preview only.** This repo (`full-nppl-insider-preview`) is a test copy for review. The live app is
+> https://b68yp988sw-ctrl.github.io/full-nppl-insider/ and is not changed by anything here.
+> The preview is `noindex`, shows a PREVIEW badge, and uses its own service-worker cache (`nppl-preview-*`).
+
+## What changed in this preview (29 Oct 2026)
+
+- **Simpler layout:** home has 6 big labelled sections (Study · Practice exams · Flying skills · Plan a flight · My log · Settings), a "Continue where you left off" card, a 5-tab bottom bar (Home · Study · Exams · Skills · Plan), clear page titles and a labelled Back button, 48 px tap targets, 17 px base text and higher-contrast muted text. Every earlier screen is still reachable from a hub.
+- **New logo:** home-screen icons (180/192/512 + maskable 512), black theme.
+- **Full-screen opening splash (30 Oct):** on every app open the logo fills the whole screen (tall art for phones, wide art for landscape/desktop; the original logo is untouched in the centre and the web is extended to the edges), shows for about 1.2 s, fades, then goes straight to the sign-in screen (tap Continue). Tap to skip; reduced-motion users get no zoom/fade; a 2.5 s fallback means it can never get stuck. iOS home-screen launch images and the manifest colours match it, so there is no white flash. Returning users see the sign-in screen with the disclaimer already ticked.
+- **Narrated circuit video** (4 min 13 s) on Flying skills → Circuits. It loads only when you tap play and is not saved offline.
+- **Questions:** 352 → 402. The 50 new questions are original (`added: "2026-10-preview"`), and the answer order is now shuffled for each sitting.
+- **Airfields:** 10 → 29 quick cards for south England and South Wales. Each card names its source (UK AIP AIRAC 29 Oct 2026 or the airfield's website). Blanks mean "not verified". **Always check the current AIP/website and get PPR.**
+- **C42 checks:** the app's own checklist design (no photos or school branding); Useful Frequencies omitted.
+- **C42 visual aids (30 Oct):** original animated illustrations ("typical" set-up) for Electrical System, Propeller, Fuel (good vs water vs debris sample) and Power Check. The current step shows the visual full width; other rows with art have a tap-to-expand thumbnail. Reduced-motion users get a still. Rows without art are unchanged.
+- **More C42 external-check visuals (30 Oct):** added animated "typical" illustrations for the rest of External checks: Oil Level, Nosewheel, Doors & Undercarriage, Wings, Aileron & Flap, Baggage Compartment, Fuselage, Horizontal Stabiliser and Elevator. They are wired the same way and have reduced-motion stills. After a QC pass (hinges, clipping, layering, fasteners, high wing on the fuselage view), the SW cache is `v6-20261030-extvisuals-qc`.
+- **Translations:** stale or half-English content was removed (it falls back to English), and the missing UI strings were added in all 7 languages. **All non-English text still needs a check by a native speaker.**
+- **Bug fixes:** the exam timer kept running after you left the exam; the exam answer key was biased; airfield seeds were missing for existing users; the service worker cache was scoped wrongly; translated choices could mismatch the answer key.
+
+---
+
 
 Mobile-first **UK NPPL Microlight** study aid for Christopher (C42 student-pilot context).
 
-> **Study aid for NPPL. Not affiliated with the CAA or QuizAero. Always check current official syllabus and your instructor.**
+> **Study aid for NPPL. Not affiliated with the CAA. Always check current official syllabus and your instructor.**
 
 ## Subjects (first-class)
 
@@ -19,14 +40,12 @@ Mobile-first **UK NPPL Microlight** study aid for Christopher (C42 student-pilot
 - Flashcards per subject (shuffle, known/unknown, progress)
 - Practice exams (timed/untimed, auto-mark, review with explanations) — **original** question bank
 - Flight computer guide + interactive calculator + **Video / How to use** (animated walkthrough + curated YouTube embeds)
-- **Opening splash** — full-screen logo on every open (~1.2 s, tap to skip, reduced-motion aware, never blocks), then the sign-in/disclaimer screen (pre-ticked for returning users); matching iOS launch images
 - **Pilot Log** (localStorage) — hours & landings summary
 - **Circuits** — animated UK LH circuit + joining · lookout · runway closures · final conflicts · climbs underneath · go-around priorities · hard vs grass taxi/vacate + videos
 - **Take-off & Landing** — aileron / rudder / speed / crosswind corrections with Speak + videos
 - **Emergencies** — step checklists with Speak (forced landing, EFATO, fire, CO, electrics, fuel, radio, lost)
 - **Flight preparation** — hub before you fly: aircraft pre-flight overview (links into C42 Checks / CHIFFTAPWE) + destination aerodrome brief (PPR, hours, freqs, runway, weather/NOTAMs, fuel, alternate, docs) with ticks + localStorage
 - **C42 Checks** — C42 pre-flight digital checklist (External → Internal → Start → CHIFFTAPWE (Controls… Eventualities) → FREDA → FARTTHH → Shutdown) as tappable sections with tick-off rows, mnemonic letters, Speak and per-section reset
-- **C42 visual aids** — original animated illustrations ("typical" set-up) for Electrical System (master key), Propeller, Fuel (good vs water vs debris sample) and Power Check; current step shows the visual full width, other rows a tap-to-expand thumbnail; still image for reduced-motion
 - **Plan a trip** — airfield planning checklist (destination, weather, NOTAMs, PPR, radio, fuel, alternates, docs, final brief) with multi-draft localStorage, progress %, Speak, suggested freqs
 - **Abbreviations A–Z** — ~130 UK NPPL / microlight / FRTOL terms & mnemonics (MATZ, ATZ, FREDA, CHIFFTAPWE…) with live filter
 - **Microlights** — UK NPPL types (C42 + others): labelled SVG parts, specs by **engine/power/MTOW (Maximum Take-Off Weight) variant**, live fuel↔weight calculator with AUW (All-Up Weight) / SG (Specific Gravity 0.72)
@@ -83,17 +102,9 @@ Live at **https://b68yp988sw-ctrl.github.io/full-nppl-insider/** — a pure stat
 
 The in-app live METAR/TAF/NOTAM proxy (`/api/*` in `server.js`) is not part of the static build; on the hosted version the Plan-a-trip weather panel links to official sources (aviationweather.gov, Met Office, NATS) instead.
 
-## What's new (30 Oct 2026)
+## Preview: home layout D + logo theme (30 Oct 2026)
 
-- **New home screen:** swipeable cards (Continue / Start here, Today's exam, Circuit video), then Study / Fly / Plan groups with clear headings and *See all* links, Settings and the disclaimer.
-- **Logo theme app-wide** (near-black + blue→violet, silver text, gold accents) and bigger tap targets (≥48 px).
-- **Simpler navigation:** a 5-tab bottom bar (Home · Study · Exams · Skills · Plan), clear page titles and a labelled Back button, 48 px tap targets, 17 px base text and higher-contrast muted text. Every earlier screen is still reachable from a hub.
-- **New logo:** home-screen icons (180/192/512 + maskable 512), black theme, and a 1.5 s opening splash (once per session, tap to skip, never blocks the app).
-- **Narrated circuit video** (4 min 13 s) on Flying skills → Circuits. It loads only when you tap play and is not saved offline.
-- **Questions:** 352 → 402. The 50 new questions are original, and the answer order is now shuffled for each sitting.
-- **Airfields:** 10 → 29 quick cards for south England and South Wales. Each card names its source (UK AIP AIRAC 29 Oct 2026 or the airfield's website). Blanks mean "not verified". **Always check the current AIP/website and get PPR.**
-- **C42 checks:** the app's own checklist design (no photos or school branding); Useful Frequencies omitted.
-- **Translations:** stale or half-English content was removed (it falls back to English), and the missing UI strings were added in all 7 languages. **All non-English text still needs a check by a native speaker.**
-- **Bug fixes:** the exam timer kept running after you left the exam; the exam answer key was biased; airfield seeds were missing for existing users; the service worker cache was scoped wrongly; translated choices could mismatch the answer key.
-- **Saved progress is kept:** same storage keys as before. Airfield cards move to a new key (`full-nppl-airfields-v3`); your custom cards, edits and deletions carry over.
-- Service worker cache: `nppl-live-v3-20261030` (old `nppl-insider-*` caches are removed on update). Close and reopen the app once to get the new version.
+- Home screen redesigned to mockup **D – carousel + grouped sections**: swipeable cards (Continue / Start here, Today's exam, Circuit video) with gold dots, then Study / Fly / Plan groups with clear headings and *See all* links, Settings and the disclaimer.
+- Whole app re-themed to match the logo (near-black + blue→violet, silver text, gold accents, web pattern backdrop). Bigger tap targets (filter chips and YouTube links ≥48 px).
+- New home labels are translated into cy, pl, fr, de, es, pt, ro — **these translations still need checking by native speakers**.
+- Service worker cache bumped to `nppl-preview-v3-20261030-layoutD`.
