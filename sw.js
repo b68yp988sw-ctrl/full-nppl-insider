@@ -5,7 +5,7 @@
    caches ('nppl-insider-*'). Preview caches ('nppl-preview-*') are left alone. */
 const CACHE_PREFIX = 'nppl-live-';
 const OLD_LIVE_PREFIXES = [CACHE_PREFIX, 'nppl-insider-'];
-const CACHE_VERSION = CACHE_PREFIX + 'v8-20261109-sync';
+const CACHE_VERSION = CACHE_PREFIX + 'v9-20261109-batch1';
 const SHELL = [
   './',
   './index.html',
@@ -67,6 +67,7 @@ const SHELL = [
   './data/signs-signals.js',
   './data/law-currency.js',
   './data/met-daily.js',
+  './js/app-clock.js',
   './js/pwa.js',
   './data/crp-drills.js',
   './data/frtol-drills.js',

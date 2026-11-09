@@ -19,7 +19,7 @@
     VMC: 'visual meteorological conditions', SEP: 'single-engine piston', MTOW: 'maximum take-off weight', NOTAM: 'notice to airmen', NOTAMs: 'notices to airmen', UAS: 'unmanned aircraft (drones)',
     ICAO: 'International Civil Aviation Organization', GA: 'general aviation', PPL: 'private pilot licence', ACL: 'Airport Coordination Limited',
     TORA: 'take-off run available', TODA: 'take-off distance available', ASDA: 'accelerate-stop distance available', LDA: 'landing distance available',
-    METAR: 'aviation routine weather report', TAF: 'terminal aerodrome forecast', CAVOK: 'ceiling and visibility OK',
+    METAR: 'aviation routine weather report', TAF: 'terminal aerodrome forecast', CAVOK: 'ceiling and visibility OK', CNL: 'cancelled', NIL: 'nil / none',
     NE: 'north-east', NW: 'north-west', SE: 'south-east', SW: 'south-west', VAT: 'value added tax'
   };
   // Units after a number: first use "full word (unit)", then the full word.

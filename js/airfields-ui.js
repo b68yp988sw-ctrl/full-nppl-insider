@@ -349,7 +349,12 @@ const AirfieldsUI = (() => {
     speak: '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>',
     edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>',
     trip: '<path d="M2 16l20-8-6 12-3-5z"/>',
-    doc: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/>'
+    doc: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/>',
+    cam: '<path d="M3 8h4l2-2h6l2 2h4v11H3z"/><circle cx="12" cy="13.5" r="3.5"/>',
+    phone: '<path d="M7 3h3l1.5 4-2 1.5a12 12 0 0 0 5 5L16 12l4 1.5V17a2 2 0 0 1-2 2A14 14 0 0 1 5 7a2 2 0 0 1 2-2z"/>',
+    mail: '<path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/>',
+    link: '<path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/>',
+    photo: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m14 15 2.5-3 3.5 5H6l3-4z"/>'
   };
   function nb(t) { return esc(t).replace(/(\d)-(\d)/g, '$1\u2011$2'); }
   function ic(n, cls) { return `<svg class="af-ic ${cls || ''}" viewBox="0 0 24 24" aria-hidden="true">${IC[n] || ''}</svg>`; }
@@ -529,6 +534,263 @@ const AirfieldsUI = (() => {
       ${raw}`;
   }
 
+
+  /* Licensed airfield photos (Wikimedia Commons only) and public webcam pages.
+     Never invent contacts. Photos are lazy-loaded and not service-worker cached. */
+  const AF_MEDIA = {
+    EGTB: {
+      photo: {
+        src: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Wycombe_Air_Park%2C_Booker_-_geograph.org.uk_-_119861.jpg",
+        page: "https://commons.wikimedia.org/wiki/File:Wycombe_Air_Park%2C_Booker_-_geograph.org.uk_-_119861.jpg",
+        credit: "David Ellis",
+        licence: "CC BY-SA 2.0",
+        licenceUrl: "https://creativecommons.org/licenses/by-sa/2.0/",
+        caption: "Wycombe Air Park, Booker"
+      },
+      webcam: null
+    },
+    EGLD: {
+      photo: {
+        src: "https://upload.wikimedia.org/wikipedia/commons/1/12/Denham_Aerodrome_-_geograph.org.uk_-_3562420.jpg",
+        page: "https://commons.wikimedia.org/wiki/File:Denham_Aerodrome_-_geograph.org.uk_-_3562420.jpg",
+        credit: "Robin Webster",
+        licence: "CC BY-SA 2.0",
+        licenceUrl: "https://creativecommons.org/licenses/by-sa/2.0/",
+        caption: "Denham Aerodrome"
+      },
+      webcam: null
+    },
+    EGTR: {
+      photo: {
+        src: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Elstree_aerodrome_-_geograph.org.uk_-_2236188.jpg/960px-Elstree_aerodrome_-_geograph.org.uk_-_2236188.jpg",
+        page: "https://commons.wikimedia.org/wiki/File:Elstree_aerodrome_-_geograph.org.uk_-_2236188.jpg",
+        credit: "David Howard",
+        licence: "CC BY-SA 2.0",
+        licenceUrl: "https://creativecommons.org/licenses/by-sa/2.0/",
+        caption: "Elstree aerodrome"
+      },
+      webcam: null
+    },
+    EGLM: {
+      photo: {
+        src: "https://upload.wikimedia.org/wikipedia/commons/1/1a/White_Waltham_aerodrome%2C_aerial_-_geograph.org.uk_-_3515987.jpg",
+        page: "https://commons.wikimedia.org/wiki/File:White_Waltham_aerodrome%2C_aerial_-_geograph.org.uk_-_3515987.jpg",
+        credit: "Chris",
+        licence: "CC BY-SA 2.0",
+        licenceUrl: "https://creativecommons.org/licenses/by-sa/2.0/",
+        caption: "White Waltham aerodrome, aerial"
+      },
+      webcam: null
+    },
+    EGTK: {
+      photo: {
+        src: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/London_Oxford_Airport_-_geograph.org.uk_-_3345911.jpg/960px-London_Oxford_Airport_-_geograph.org.uk_-_3345911.jpg",
+        page: "https://commons.wikimedia.org/wiki/File:London_Oxford_Airport_-_geograph.org.uk_-_3345911.jpg",
+        credit: "Des Blenkinsopp",
+        licence: "CC BY-SA 2.0",
+        licenceUrl: "https://creativecommons.org/licenses/by-sa/2.0/",
+        caption: "London Oxford Airport"
+      },
+      webcam: null
+    },
+    EGTF: {
+      photo: {
+        src: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Fairoaks_Airport_-_geograph.org.uk_-_8357436.jpg/960px-Fairoaks_Airport_-_geograph.org.uk_-_8357436.jpg",
+        page: "https://commons.wikimedia.org/wiki/File:Fairoaks_Airport_-_geograph.org.uk_-_8357436.jpg",
+        credit: "Jonathan Billinger",
+        licence: "CC BY-SA 2.0",
+        licenceUrl: "https://creativecommons.org/licenses/by-sa/2.0/",
+        caption: "Fairoaks Airport"
+      },
+      webcam: null
+    },
+    EGTC: {
+      photo: {
+        src: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Cranfield_Airport_by_Thomas_Nugent.jpg/960px-Cranfield_Airport_by_Thomas_Nugent.jpg",
+        page: "https://commons.wikimedia.org/wiki/File:Cranfield_Airport_by_Thomas_Nugent.jpg",
+        credit: "Thomas Nugent",
+        licence: "CC BY-SA 2.0",
+        licenceUrl: "https://creativecommons.org/licenses/by-sa/2.0/",
+        caption: "Cranfield Airport by Thomas Nugent"
+      },
+      webcam: null
+    },
+    EGGW: {
+      photo: {
+        src: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Touchdown_-_London_Luton_Airport_-_geograph.org.uk_-_4203742.jpg/960px-Touchdown_-_London_Luton_Airport_-_geograph.org.uk_-_4203742.jpg",
+        page: "https://commons.wikimedia.org/wiki/File:Touchdown_-_London_Luton_Airport_-_geograph.org.uk_-_4203742.jpg",
+        credit: "Richard Humphrey",
+        licence: "CC BY-SA 2.0",
+        licenceUrl: "https://creativecommons.org/licenses/by-sa/2.0/",
+        caption: "Touchdown - London Luton Airport"
+      },
+      webcam: null
+    },
+  };
+
+  function openBadge(d) {
+    if (typeof AirfieldHours === 'undefined' || !d.hours) return '';
+    const S = AirfieldHours.status(d.hours, d.lat, d.lon);
+    if (S.open === true) return '<span class="af-open on">Open now</span>';
+    if (S.open === false) return '<span class="af-open off">Closed now</span>';
+    return '';
+  }
+
+  function mediaBlock(icao, d) {
+    const m = AF_MEDIA[icao] || {};
+    const ph = m.photo;
+    let photoHtml;
+    if (ph && ph.src) {
+      photoHtml = `<figure class="af-photo">
+        <img src="${esc(ph.src)}" alt="${esc(ph.caption || d.name)}" loading="lazy" decoding="async" data-no-sw-cache="1" />
+        <figcaption class="af-photo-cap">
+          <span>${esc(ph.caption || d.name)}</span>
+          <span class="af-photo-credit">Photo: <a href="${esc(ph.page)}" target="_blank" rel="noopener">${esc(ph.credit)}</a>
+          · <a href="${esc(ph.licenceUrl)}" target="_blank" rel="noopener">${esc(ph.licence)}</a>
+          · <a href="${esc(ph.page)}" target="_blank" rel="noopener">Wikimedia Commons</a></span>
+        </figcaption>
+      </figure>`;
+    } else {
+      photoHtml = `<p class="af-media-none meta">No licensed photo available yet.</p>`;
+    }
+    let camHtml;
+    if (m.webcam && m.webcam.url) {
+      camHtml = `<a class="btn btn-secondary af-cam-btn" href="${esc(m.webcam.url)}" target="_blank" rel="noopener">${ic('cam')}Watch live webcam <span class="meta">(needs signal)</span></a>
+        <p class="meta af-small">Opens the official public webcam page. Feeds are not embedded here.</p>`;
+    } else {
+      camHtml = `<p class="af-media-none meta">No public webcam.</p>`;
+    }
+    return photoHtml + camHtml;
+  }
+
+  function extractEmails(text) {
+    const out = [], re = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
+    let m; while ((m = re.exec(String(text || '')))) if (!out.includes(m[0])) out.push(m[0]);
+    return out;
+  }
+  function extractPhones(text) {
+    const out = [], re = /(?:\+44[\s-]?(?:\(?0\)?)?|0)(?:\d[\s-]?){9,10}\d/g;
+    let m; while ((m = re.exec(String(text || '')))) {
+      const n = m[0].replace(/\s+/g, ' ').trim();
+      if (!out.includes(n)) out.push(n);
+    }
+    return out;
+  }
+  function telHref(n) {
+    let d = String(n).replace(/[^\d+]/g, '');
+    if (d.startsWith('0')) d = '+44' + d.slice(1);
+    return 'tel:' + d;
+  }
+
+  function pprGuide(d, icao) {
+    const ppr = d.ppr || {};
+    const needed = pprNeeded(d);
+    const how = String(ppr.how || '');
+    const phones = extractPhones([how, d.phone].filter(Boolean).join(' · '));
+    const emails = extractEmails([how, d.phone, ppr.link].filter(Boolean).join(' '));
+    const link = ppr.link && !/^check with/i.test(ppr.link) ? ppr.link : '';
+    const web = d.website && !/^check with/i.test(d.website) ? d.website : '';
+    const ahead = 'Check with airfield'; // how far ahead is rarely published in AIP AD 2
+    const pprHours = 'Check with airfield — usually during aerodrome hours (see Opening hours above).';
+
+    const btns = [];
+    phones.forEach(n => btns.push(`<a class="btn btn-secondary af-ppr-btn" href="${esc(telHref(n))}">${ic('phone')}Call ${esc(n)}</a>`));
+    emails.forEach(e => btns.push(`<a class="btn btn-secondary af-ppr-btn" href="mailto:${esc(e)}?subject=${encodeURIComponent('PPR request — ' + (d.name || icao))}">${ic('mail')}Email ${esc(e)}</a>`));
+    if (link) btns.push(`<a class="btn btn-primary af-ppr-btn" href="${esc(link)}" target="_blank" rel="noopener">${ic('link')}Online PPR / booking</a>`);
+    else if (web) btns.push(`<a class="btn btn-secondary af-ppr-btn" href="${esc(web)}" target="_blank" rel="noopener">${ic('link')}Airfield website</a>`);
+
+    const usual = [
+      'Pilot name and phone number',
+      'Aircraft registration (e.g. G-ABCD)',
+      'Aircraft type (e.g. Ikarus C42)',
+      'People on board',
+      'Departure airfield',
+      'Estimated time of arrival (ETA) / estimated time of departure (ETD), UK time',
+      'Purpose of flight (training, visit, fuel, etc.)',
+      'Whether you have read the airfield briefing'
+    ];
+
+    const name = d.name || icao;
+    const script = `Hello, I'd like prior permission required (PPR) to land at ${name} please.
+My name is [your name], phone [your number].
+Aircraft registration: [G-____]
+Type: [e.g. Ikarus C42]
+People on board: [__]
+Coming from: [departure airfield]
+Estimated time of arrival (ETA): [hh:mm] UK time
+Purpose: [training / visit / …]
+I have / have not read the pilot briefing.
+Please tell me the runway in use, any noise or circuit notes, and my PPR reference.`;
+
+    const emailBody = `Subject: PPR request — ${name}
+
+Hello,
+
+Please may I request prior permission required (PPR) to land at ${name}.
+
+Pilot name: [your name]
+Phone: [your number]
+Aircraft registration: [G-____]
+Aircraft type: [e.g. Ikarus C42]
+People on board: [__]
+Departure airfield: [____]
+Estimated time of arrival (ETA): [weekday date hh:mm] UK time
+Estimated time of departure (ETD): [weekday date hh:mm] UK time (if known)
+Purpose: [training / visit / fuel / …]
+I confirm I have / have not read the current pilot briefing.
+
+Thank you.
+[your name]`;
+
+    return `
+      <div class="af-ppr-guide">
+        <div class="af-ppr-status ${needed ? 'need' : 'free'}">
+          <b>${needed ? 'Prior permission required (PPR)' : 'Prior permission not required (PPR)'}</b>
+          <div class="meta">${esc(ppr.req || CWC)}</div>
+        </div>
+        <p class="af-line"><b>How to request:</b> ${esc(how || CWC)}</p>
+        <p class="af-line"><b>PPR contact hours:</b> ${esc(pprHours)}</p>
+        <p class="af-line"><b>How far ahead:</b> ${esc(ahead)}</p>
+        ${btns.length ? `<div class="af-ppr-btns">${btns.join('')}</div>` : `<p class="af-cwc">No published phone, email or booking link — ${CWC}.</p>`}
+        <div class="af-dsec">
+          <h4>Information they ask for</h4>
+          <p class="meta af-small">Where the airfield has not published a fixed list, this is a clearly labelled “usually asked for” list for students — confirm when you call.</p>
+          <ul class="af-bul">${usual.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+        </div>
+        <details class="af-ppr-sample">
+          <summary>Sample phone script</summary>
+          <pre class="af-sample">${esc(script)}</pre>
+        </details>
+        <details class="af-ppr-sample">
+          <summary>Sample email</summary>
+          <pre class="af-sample">${esc(emailBody)}</pre>
+        </details>
+        <div class="af-dsec">
+          <h4>What they'll tell you back</h4>
+          <ul class="af-bul">
+            <li>Whether permission is granted, and any conditions.</li>
+            <li>Runway in use, circuit direction, and noise or avoidance notes.</li>
+            <li>Your <b>PPR reference</b> — write it down and quote it on the radio if asked.</li>
+            <li>Any briefing you must read before arrival.</li>
+          </ul>
+          <p class="af-line"><b>If plans change:</b> call or email the same contact as soon as you can to cancel or change your ETA. ${CWC} for a published cancellation rule.</p>
+        </div>
+      </div>`;
+  }
+
+  function jumpBar() {
+    const items = [
+      ['glance', 'At a glance'],
+      ['cando', 'PPR'],
+      ['weather', 'Weather'],
+      ['getthere', 'Getting there'],
+      ['arrival', 'Circuit'],
+      ['facilities', 'Facilities']
+    ];
+    return `<nav class="af-jump" id="af-jump" aria-label="Jump to section">${items.map(([id, lab]) =>
+      `<button type="button" class="af-jump-chip" data-af-jump="${id}">${esc(lab)}</button>`).join('')}</nav>`;
+  }
+
   function viewDetail(ctx, a, d) {
     const M = (typeof AIRFIELD_DETAIL_META !== 'undefined') ? AIRFIELD_DETAIL_META : {};
     const icao = String(a.icao).toUpperCase();
@@ -546,7 +808,7 @@ const AirfieldsUI = (() => {
     const pairs = [];
     rs.forEach(r => { const m = String(r.dim).match(/^(\d+)/); const k = r.surf + r.dim; if (!pairs.find(p => p.k === k)) pairs.push({ k, d: r.d, len: m ? m[1] : '', surf: r.surf }); else pairs.find(p => p.k === k).d += '/' + r.d; });
     const tile = (icon, label, v, sub, cls) => `<div class="af-tile ${cls || ''}">${ic(icon)}<div class="af-tile-l">${label}</div><div class="af-tile-v">${v}</div>${sub ? `<div class="af-tile-s">${sub}</div>` : ''}</div>`;
-    const sec = (icon, t, body, cls) => `<section class="card af-sec ${cls || ''}"><h3 class="af-h">${ic(icon)}<span>${t}</span></h3>${body}</section>`;
+    const sec = (id, icon, t, body, cls, accent) => `<section class="card af-sec ${cls || ''}" id="af-sec-${id}" data-af-sec="${id}"${accent ? ` style="--af-accent:${accent}"` : ''}><h3 class="af-h">${ic(icon)}<span>${t}</span></h3>${body}</section>`;
     const atsFull = (d.ats || []).map(x => `
         <tr><td><span class="af-svc">${esc(x.svc)}</span></td><td><strong>${esc(x.cs)}</strong>${x.note ? `<div class="meta af-small">${esc(x.note)}</div>` : ''}</td><td class="af-f">${esc(x.f)}</td></tr>`).join('');
     const atsShort = (d.ats || []).filter(x => x.svc !== 'Nearby').map(x => `
@@ -554,6 +816,7 @@ const AirfieldsUI = (() => {
     const rw = rs.map(r => `
         <tr><td><strong>${esc(r.d)}</strong><div class="af-small af-nw">${String(Math.round(r.brg) % 360 || 360).padStart(3, '0')}° true heading</div></td><td>${esc(r.surf)}<div class="meta af-small">${esc(r.dim)}</div></td><td>${esc(r.thrElev)} ft${r.disp ? `<div class="meta af-small">${esc(r.disp)}</div>` : ''}</td><td class="${/check/i.test(r.cct) ? 'af-cwc' : 'af-cct'}">${esc(r.cct)}</td></tr>`).join('');
     const nearby = (d.ats || []).filter(x => x.svc === 'Nearby');
+    const open = openBadge(d);
     return `
       <header class="af-hero">
         <div class="af-hero-top">
@@ -561,6 +824,7 @@ const AirfieldsUI = (() => {
           <div class="af-hero-pills">
             <span class="af-pill af-pill-${sk.k}">${ic('radio')}${esc(sk.l)}</span>
             <span class="af-pill ${ppr ? 'af-pill-amber' : 'af-pill-green'}">${ic('ppr')}${ppr ? 'Prior permission required (PPR)' : 'Prior permission not required (PPR)'}</span>
+            ${open}
           </div>
         </div>
         <h2 class="af-name">${esc(d.name || a.name)}</h2>
@@ -569,33 +833,56 @@ const AirfieldsUI = (() => {
       </header>
 
       ${d.notice ? `<div class="card af-notice">${ic('warn')}<div><b>${esc(d.notice.t)}</b><div class="meta af-small">Source: ${srcLink(d.notice.src)} · checked 3 Nov 2026</div></div></div>` : ''}
-      <section class="af-block">
-        <h3 class="af-h">${ic('plan')}<span>At a glance</span></h3>
-        <div class="af-tiles">
+
+      ${jumpBar()}
+
+      ${sec('glance', 'sat', 'At a glance · views', `
+        <div class="af-tiles af-tiles-glance">
           ${tile('radio', 'Talk to', `${esc(main.cs)}`, `<span class="af-mono">${esc(main.f)}</span> megahertz (MHz)`, 'af-tile-wide')}
-          ${tile('ppr', 'Prior permission (PPR)', ppr ? 'Required' : 'Not required', esc(String(d.ppr.req).replace(/^yes\s*—\s*/i, '').replace(/^yes$/i, '')), ppr ? 'af-amber' : 'af-green')}
           ${tile('rwy', 'Runways', pairs.map(p => esc(p.d)).join(' · '), pairs.map(p => `${p.len} m ${esc(p.surf.toLowerCase().replace('grooved ', ''))}`).filter((v, i, ar) => ar.indexOf(v) === i).join(' · '))}
           ${tile('cct', 'Circuit', esc(cc.v), esc(cc.sub), cc.cwc ? 'af-cwc-t' : '')}
           ${tile('fuel', 'Fuel', fu.raw ? fu.v : esc(fu.v), esc(fu.sub || ''))}
-          ${tile('fee', 'Landing fee', esc(fee.v), esc(fee.sub), d.landing && d.landing.pub ? 'af-tile-wide' : 'af-tile-wide af-cwc-t')}
-          ${cafe ? tile('cafe', 'Café', esc((cafe.short || 'On site').split('|')[0]), esc((cafe.short || '|Hours not published').split('|')[1] || ''), 'af-tile-wide') : ''}
-          <div class="af-tile af-hours" id="af-hours">${hoursTile(d)}</div>
         </div>
-      </section>
+        <h4 class="af-subh">Satellite view</h4>
+        ${satView(d)}
+        <h4 class="af-subh">Ground diagram</h4>
+        ${diagram(icao, d)}
+        <h4 class="af-subh">Photo &amp; webcam</h4>
+        ${mediaBlock(icao, d)}
+      `, 'af-sec-glance', '#3b82f6')}
 
-      ${typeof AirfieldWeather !== 'undefined' ? sec('wx', 'Live weather', AirfieldWeather.shell(icao, d.lat, d.lon), 'af-wxsec') : ''}
+      ${sec('cando', 'ppr', 'Can I go?', `
+        ${pprGuide(d, icao)}
+        <div class="af-tile af-hours" id="af-hours">${hoursTile(d)}</div>
+        ${tile('fee', 'Landing fee', esc(fee.v), esc(fee.sub), d.landing && d.landing.pub ? 'af-tile-wide' : 'af-tile-wide af-cwc-t')}
+        <ul class="af-check af-check-tight">${goList.map(t => `<li><span class="af-box" aria-hidden="true"></span><span>${nb(t)}</span></li>`).join('')}</ul>
+      `, 'af-sec-cando', '#f59e0b')}
 
-      ${sec('list', 'Before you go', `<ul class="af-check">${goList.map(t => `<li><span class="af-box" aria-hidden="true"></span><span>${nb(t)}</span></li>`).join('')}</ul>`)}
-      ${sec('info', 'When you get there', `<ul class="af-bul">${st.know.map(t => `<li>${nb(t)}</li>`).join('')}</ul>`)}
-      ${sec('hangar', 'Facilities &amp; fees', facSection(d, src) + feeBlock(d))}
-      ${sec('radio', 'Radio', `<p class="af-svcplain"><span class="af-pill af-pill-${sk.k} sm">${esc(sk.l)}</span> ${esc(SVC_PLAIN[sk.k])}</p>
+      ${typeof AirfieldWeather !== 'undefined' ? sec('weather', 'wx', 'Weather now', AirfieldWeather.shell(icao, d.lat, d.lon), 'af-wxsec af-sec-weather', '#38bdf8') : ''}
+
+      ${sec('getthere', 'radio', 'Getting there', `
+        <p class="af-svcplain"><span class="af-pill af-pill-${sk.k} sm">${esc(sk.l)}</span> ${esc(SVC_PLAIN[sk.k])}</p>
+        <h4 class="af-subh">Radio call order</h4>
         <ol class="af-calls">${st.calls.map(t => `<li>${nb(t)}</li>`).join('')}</ol>
         <table class="af-table af-rtable"><tr><th>Type</th><th>Callsign</th><th>Frequency, megahertz (MHz)</th></tr>${atsShort}</table>
-        ${d.squawk ? `<p class="af-line af-small"><b>Squawk:</b> ${esc(d.squawk)}</p>` : ''}`)}
-      ${sec('sat', 'Satellite view', satView(d))}
-      ${sec('rwy', 'Ground diagram', diagram(icao, d))}
+        ${d.squawk ? `<p class="af-line af-small"><b>Squawk:</b> ${esc(d.squawk)}</p>` : ''}
+        <h4 class="af-subh">Joining</h4>
+        <p class="af-line">${val(d.joining)}</p>
+        ${nearby.map(x => `<p class="af-line"><b>Nearby:</b> ${esc(x.cs)} ${esc(x.f)}. ${esc(x.note || '')}</p>`).join('')}
+      `, 'af-sec-get', '#a78bfa')}
 
-      <details class="card af-details">
+      ${sec('arrival', 'cct', 'On arrival', `
+        <p class="af-line"><b>Circuit height:</b> ${val(d.circuitHeight)}</p>
+        <p class="af-line">${esc(d.cctNote || '')}</p>
+        <p class="af-line"><b>Noise / avoid:</b> ${val(d.noise === CWC ? '' : d.noise)}</p>
+        <h4 class="af-subh">Runways</h4>
+        <table class="af-table af-rwy"><tr><th>Runway</th><th>Surface</th><th>Threshold elevation</th><th>Circuit</th></tr>${rw}</table>
+        <ul class="af-bul">${st.know.map(t => `<li>${nb(t)}</li>`).join('')}</ul>
+      `, 'af-sec-arrival', '#34d399')}
+
+      ${sec('facilities', 'hangar', 'Facilities &amp; fees', facSection(d, src) + feeBlock(d) + (cafe ? `<p class="af-line af-small"><b>Café:</b> ${esc((cafe.short || 'On site').split('|')[0])} · ${esc((cafe.short || '|Hours not published').split('|')[1] || 'Hours not published')}</p>` : ''), 'af-sec-fac', '#f472b6')}
+
+      <details class="card af-details" id="af-sec-details">
         <summary>${ic('doc')}<span>Full details from the AIP</span></summary>
         <div class="af-dsec"><h4>Radio &amp; air traffic services (ATS)</h4><p class="af-line">${esc(d.atsType)}</p><table class="af-table"><tr><th>Type</th><th>Callsign</th><th>Frequency, megahertz (MHz)</th></tr>${atsFull}</table>
           ${d.squawk ? `<p class="af-line"><b>Squawk:</b> ${esc(d.squawk)}</p>` : ''}
@@ -621,12 +908,14 @@ const AirfieldsUI = (() => {
         <button type="button" class="btn btn-secondary" id="af-d-edit">${ic('edit')}Edit my card</button>
         <button type="button" class="btn btn-primary af-wide" id="af-to-trip-d">${ic('trip')}Use in Plan a trip</button>
       </div>
-      <footer class="af-foot">
+      <footer class="af-foot" id="af-sec-sources">
         <p>Study aid only. Not for navigation. ${esc(M.check || '')}</p>
         <p>Source: <a href="${esc(src)}" target="_blank" rel="noopener">UK AIP AD 2 ${esc(icao)}</a> · AIRAC ${esc(M.airac || '')}. Anything not in the AIP shows “${CWC}”.</p>
+        <p class="meta af-small">Photos: Wikimedia Commons only (see credit under each photo). Webcams link out; feeds are not embedded.</p>
       </footer>
     `;
   }
+
 
   function blank() {
     return {
@@ -754,9 +1043,30 @@ const AirfieldsUI = (() => {
           const d = detailFor(get(editId)); if (d) { hrs.innerHTML = hoursTile(d); if (typeof Gloss !== 'undefined') Gloss.expand(hrs); }
         }, 60000);
       }
-      if (typeof Gloss !== 'undefined') document.querySelectorAll('.af-hero, .af-notice, .af-block, .af-sec:not(.af-wxsec), .af-details, .af-foot').forEach(el => Gloss.expand(el));
+      if (typeof Gloss !== 'undefined') document.querySelectorAll('.af-hero, .af-notice, .af-block, .af-sec:not(.af-wxsec), .af-details, .af-foot, .af-ppr-guide').forEach(el => Gloss.expand(el));
       const wxEl = document.getElementById('af-wx');
       if (wxEl && typeof AirfieldWeather !== 'undefined') AirfieldWeather.mount(wxEl);
+      const jump = document.getElementById('af-jump');
+      if (jump) {
+        const chips = [...jump.querySelectorAll('[data-af-jump]')];
+        const scrollTo = id => {
+          const el = document.getElementById('af-sec-' + id);
+          if (!el) return;
+          const top = el.getBoundingClientRect().top + window.scrollY - 120;
+          window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+        };
+        chips.forEach(btn => btn.addEventListener('click', () => scrollTo(btn.dataset.afJump)));
+        const secs = chips.map(c => document.getElementById('af-sec-' + c.dataset.afJump)).filter(Boolean);
+        if (secs.length && 'IntersectionObserver' in window) {
+          const io = new IntersectionObserver(entries => {
+            const vis = entries.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+            if (!vis) return;
+            const id = vis.target.getAttribute('data-af-sec');
+            chips.forEach(c => c.classList.toggle('active', c.dataset.afJump === id));
+          }, { rootMargin: '-30% 0px -55% 0px', threshold: [0.1, 0.4, 0.7] });
+          secs.forEach(s => io.observe(s));
+        }
+      }
       const sat = document.querySelector('.af-sat');
       if (sat) {
         const upd = () => {

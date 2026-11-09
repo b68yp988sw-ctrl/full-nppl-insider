@@ -1,4 +1,4 @@
-/* Live weather for airfield pages (v11).
+/* Live weather for airfield pages (v12).
  * METAR/TAF: MET Norway tafmetar API (api.met.no, keyless, CORS, CC BY 4.0).
  *   aviationweather.gov was tested first but sends no Access-Control-Allow-Origin header, so browsers block it.
  * Site forecast: Open-Meteo (api.open-meteo.com, keyless, CORS, CC BY 4.0), model ukmo_seamless (Met Office UKV + global).
@@ -19,9 +19,13 @@
   const R = Math.PI / 180;
   const pad = n => String(n).padStart(2, '0');
   const p3 = n => String(Math.round(n)).padStart(3, '0');
-  const fmtL = dt => dt.toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit' });
+  const fmtL = dt => dt.toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', hour12: false });
   const fmtU = dt => pad(dt.getUTCHours()) + ':' + pad(dt.getUTCMinutes());
-  const dayL = dt => dt.toLocaleDateString('en-GB', { timeZone: 'Europe/London', weekday: 'short' });
+  const dayL = dt => dt.toLocaleDateString('en-GB', { timeZone: 'Europe/London', weekday: 'long', day: 'numeric', month: 'long' });
+  const dayShort = dt => dt.toLocaleDateString('en-GB', { timeZone: 'Europe/London', weekday: 'short', day: 'numeric', month: 'short' });
+  const fmtLD = dt => dayL(dt) + ', ' + fmtL(dt);
+  const fmtLDateTime = dt => dayL(dt) + ' ' + fmtL(dt);
+  const dayKey = dt => dt.toLocaleDateString('en-CA', { timeZone: 'Europe/London' }); // YYYY-MM-DD
 
   function distBrg(lat1, lon1, lat2, lon2) {
     const p1 = lat1 * R, p2 = lat2 * R, dl = (lon2 - lon1) * R;
@@ -75,6 +79,8 @@
       else if ((m = /^VV(\d{3}|\/\/\/)$/.exec(t))) o.cloud.push({ c: 'VV', ft: m[1] === '///' ? null : +m[1] * 100, t: '' });
       else if (/^(NCD|NSC|SKC|CLR)$/.test(t)) o.cloud.push({ c: t });
       else if (t === 'NSW') o.wx.push('no significant weather (NSW)');
+      else if (t === 'CNL') o.other.push('CNL: forecast cancelled, no current terminal aerodrome forecast (TAF) for this station');
+      else if (t === 'NIL') o.other.push('NIL: no report available for this station');
       else if (wxText(t)) o.wx.push(wxText(t) + ' (' + t + ')');
     }
     return o;
@@ -114,6 +120,15 @@
     let i = 0; if (/^(METAR|SPECI)$/.test(toks[i])) i++;
     const icao = toks[i++]; const tm = /^(\d{2})(\d{2})(\d{2})Z$/.exec(toks[i]) ? toks[i++] : null;
     const time = tm ? dToDate(+tm.slice(0, 2), +tm.slice(2, 4), +tm.slice(4, 6)) : null;
+    const preBody = toks.slice(i).filter(t => !/^(AUTO|COR)$/.test(t));
+    // NIL METAR: station has no current observation.
+    if (preBody.includes('NIL') && preBody.every(t => t === 'NIL' || /^(NOSIG|RMK)$/.test(t))) {
+      return {
+        icao, time, raw: raw.replace(/=\s*$/, '').trim(), wind: null, vis: null, wx: [], cloud: [], cavok: false, other: [],
+        nil: true, nilTxt: 'NIL: no METAR (aviation routine weather report) available for this station',
+        ceil: null, cat: 'VFR', trend: '', temp: null, dew: null, qnh: null
+      };
+    }
     let end = toks.findIndex((t, k) => k >= i && /^(NOSIG|TEMPO|BECMG|RMK)$/.test(t)); if (end < 0) end = toks.length;
     const body = toks.slice(i, end).filter(t => !/^(AUTO|COR)$/.test(t));
     const o = groups(body);
@@ -131,15 +146,23 @@
 
   function parseTaf(raw) {
     const toks = raw.replace(/=\s*$/, '').trim().split(/\s+/);
+    // Cancelled / nil TAF — decode in plain words rather than leaving the bare code.
+    const bodyToks = toks.filter(t => !/^(TAF|AMD|COR)$/.test(t));
+    if (bodyToks.includes('CNL')) {
+      return [{ lab: 'Forecast status', txt: 'CNL: forecast cancelled, no current terminal aerodrome forecast (TAF) for this station' }];
+    }
+    if (bodyToks.includes('NIL') && bodyToks.filter(t => !/^[A-Z]{4}$/.test(t) && !/Z$/.test(t) && !/^\d{4}\/\d{4}$/.test(t)).every(t => t === 'NIL')) {
+      return [{ lab: 'Forecast status', txt: 'NIL: no terminal aerodrome forecast (TAF) available for this station' }];
+    }
     let i = 0; while (/^(TAF|AMD|COR)$/.test(toks[i])) i++;
     i++; if (/Z$/.test(toks[i])) i++;
     const per = s => { const m = /^(\d{2})(\d{2})\/(\d{2})(\d{2})$/.exec(s); return m ? [dToDate(+m[1], +m[2], 0), dToDate(+m[3], +m[4], 0)] : null; };
-    const fmP = p => p ? `${dayL(p[0])} ${fmtL(p[0])}–${dayL(p[1]) !== dayL(p[0]) ? dayL(p[1]) + ' ' : ''}${fmtL(p[1])}` : '';
+    const fmP = p => p ? `${fmtLDateTime(p[0])} to ${fmtLDateTime(p[1])} UK time` : '';
     const segs = []; let cur = { lab: 'Main forecast', toks: [] };
     let k = i; const p0 = per(toks[k]); if (p0) { cur.lab = 'Main forecast ' + fmP(p0); k++; }
     for (; k < toks.length; k++) {
       const t = toks[k]; let m;
-      if ((m = /^FM(\d{2})(\d{2})(\d{2})$/.exec(t))) { segs.push(cur); cur = { lab: 'From (FM) ' + dayL(dToDate(+m[1], +m[2], +m[3])) + ' ' + fmtL(dToDate(+m[1], +m[2], +m[3])), toks: [] }; }
+      if ((m = /^FM(\d{2})(\d{2})(\d{2})$/.exec(t))) { segs.push(cur); cur = { lab: 'From (FM) ' + fmtLDateTime(dToDate(+m[1], +m[2], +m[3])) + ' UK time', toks: [] }; }
       else if (/^(TEMPO|BECMG|PROB30|PROB40)$/.test(t)) {
         segs.push(cur);
         let lab = t === 'TEMPO' ? 'Temporarily (TEMPO)' : t === 'BECMG' ? 'Becoming (BECMG)' : (t.slice(4) + '% chance (' + t + ')');
@@ -151,7 +174,7 @@
     segs.push(cur);
     return segs.filter(s => s.toks.length).map(s => {
       const g = groups(s.toks);
-      const bits = [windTxt(g.wind) && 'wind ' + windTxt(g.wind).replace(/^From/, 'from'), g.vis != null && 'visibility ' + visTxt(g.vis, g.cavok), g.wx.length && g.wx.join(', '), !g.cavok && cloudTxt(g.cloud)].filter(Boolean);
+      const bits = [windTxt(g.wind) && 'wind ' + windTxt(g.wind).replace(/^From/, 'from'), g.vis != null && 'visibility ' + visTxt(g.vis, g.cavok), g.wx.length && g.wx.join(', '), !g.cavok && cloudTxt(g.cloud), g.other.length && g.other.join(', ')].filter(Boolean);
       return { lab: s.lab, txt: bits.join(' · ') || s.toks.join(' ') };
     });
   }
@@ -235,7 +258,9 @@
   function catBadge(c) { return `<div class="wx-catline"><span class="meta">Flight category, US-style:</span> <span class="wx-cat wx-cat-${c.toLowerCase()}">${CATW[c] || c}</span></div>`; }
   function metarCard(s, label) {
     const o = s.metar;
-    const rows = [
+    const rows = o.nil ? [
+      ['Status', o.nilTxt]
+    ] : [
       ['Wind', windTxt(o.wind)], ['Visibility', visTxt(o.vis, o.cavok)], ['Weather', o.wx.join(', ')],
       ['Cloud (feet above the airfield)', o.cavok ? 'No cloud below 5,000 feet' : cloudTxt(o.cloud)], ['Cloud base (ceiling)', o.ceil != null ? o.ceil.toLocaleString('en-GB') + ' feet above the airfield' : (o.cloud.length || o.cavok ? 'No ceiling (no broken or overcast layer)' : null)],
       ['Temperature / dew point', o.temp != null ? `${o.temp}°C / ${o.dew != null ? o.dew + '°C' : '–'}` : null], ['Pressure setting (QNH)', o.qnh ? o.qnh + ' hPa' : null],
@@ -244,7 +269,7 @@
     const old = o.time && Date.now() - o.time > 75 * 60000;
     return `<div class="wx-card">
       <div class="wx-head"><div><div class="wx-l">${label}</div>
-        <div class="wx-age${old ? ' wx-old' : ''}">${o.time ? `Observed at ${fmtU(o.time)} Coordinated Universal Time (UTC), ${fmtL(o.time)} UK time · <b>${ago(o.time)}</b>` : 'Observation time unknown'}${old ? ' · old report' : ''}</div></div></div>${catBadge(o.cat)}
+        <div class="wx-age${old ? ' wx-old' : ''}">${o.time ? `Observed ${fmtLD(o.time)} UK time (${fmtU(o.time)} Coordinated Universal Time (UTC)) · <b>${ago(o.time)}</b>` : 'Observation time unknown'}${old ? ' · old report' : ''}</div></div></div>${o.nil ? '' : catBadge(o.cat)}
       <code class="wx-raw">${esc(o.raw)}</code>
       <table class="af-table wx-dec">${rows.map(r => `<tr><th>${r[0]}</th><td>${esc(r[1])}</td></tr>`).join('')}</table>
       ${s.taf ? `<div class="wx-sub"><b>TAF</b> <span class="meta">(times are UK local time)</span></div><code class="wx-raw">${esc(s.taf)}</code>
@@ -261,9 +286,19 @@
     const h = f.j.hourly; if (!h || !h.time) return '';
     const n = (v, d) => v == null ? '–' : d(v);
     const wd = (d, s, g) => d == null || s == null ? '–' : `${p3(Math.round(d / 10) * 10 % 360 || 360)}° ${Math.round(s)}${g != null && g - s >= 5 ? `<div class="meta">gusts ${Math.round(g)}</div>` : ''}`;
-    const rows = h.time.map((t, i) => `<tr><th>${t.slice(11, 16)}</th><td>${wd(h.wind_direction_10m[i], h.wind_speed_10m[i], h.wind_gusts_10m[i])}</td><td>${wd(h.wind_direction_950hPa[i], h.wind_speed_950hPa[i])}</td><td>${n(h.precipitation[i], v => v ? v.toFixed(1) : '0')}</td><td>${n(h.visibility[i], v => v >= 10000 ? '10 km or more' : (v / 1000).toFixed(1) + ' km')}</td></tr>`).join('');
+    let lastDay = '';
+    const rows = h.time.map((t, i) => {
+      const dt = new Date(t);
+      const dk = dayKey(dt);
+      let dayRow = '';
+      if (dk !== lastDay) {
+        lastDay = dk;
+        dayRow = `<tr class="wx-day"><th colspan="5">${esc(dayL(dt))}</th></tr>`;
+      }
+      return dayRow + `<tr><th>${fmtL(dt)}</th><td>${wd(h.wind_direction_10m[i], h.wind_speed_10m[i], h.wind_gusts_10m[i])}</td><td>${wd(h.wind_direction_950hPa[i], h.wind_speed_950hPa[i])}</td><td>${n(h.precipitation[i], v => v ? v.toFixed(1) : '0')}</td><td>${n(h.visibility[i], v => v >= 10000 ? '10 km or more' : (v / 1000).toFixed(1) + ' km')}</td></tr>`;
+    }).join('');
     return `<div class="wx-card">${inDetails ? '' : '<div class="wx-l">Site forecast, next 12 hours</div>'}
-      <div class="wx-age">Fetched ${fmtL(new Date(f.at))} · times are UK local time</div>
+      <div class="wx-age">Model run fetched ${fmtLD(new Date(f.at))} UK time · times below are UK local time</div>
       <div class="wx-scroll"><table class="af-table wx-fc"><tr><th>Time</th><th>Surface wind, knots (kt)</th><th>Wind at 2,000 feet, knots</th><th>Rain, millimetres per hour</th><th title="10 km or more is 9999 in a METAR">Visibility</th></tr>${rows}</table></div>
       <p class="meta wx-small">Computer model forecast for the airfield position, not an observation: Open-Meteo using Met Office models (UK high-resolution and global). Wind is direction in degrees true, then speed in knots. 2,000 feet is approximated by the 950 hectopascal (hPa) pressure level. Rain in millimetres (mm) per hour. Visibility 10 km or more is written 9999 in a METAR. Cloud cover is not shown because this model gives no cloud base.</p></div>`;
   }
@@ -293,7 +328,7 @@
     else html += `<p class="meta">Site forecast unavailable just now.</p>`;
     if (s && s.stale) html = `<p class="wx-off">Could not refresh. Showing the last report with its age.</p>` + html;
     body.innerHTML = html;
-    const st = el.querySelector('.wx-fetched'); if (st) st.textContent = 'Updated ' + fmtL(new Date(s ? s.fetched : Date.now())) + ' UK time';
+    const st = el.querySelector('.wx-fetched'); if (st) st.textContent = 'Updated ' + fmtLD(new Date(s ? s.fetched : Date.now())) + ' UK time';
     if (typeof Gloss !== 'undefined') Gloss.expand(el);
   }
 
