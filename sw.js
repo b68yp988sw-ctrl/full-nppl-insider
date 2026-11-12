@@ -1,11 +1,12 @@
 /* FULL NPPL INSIDER — service worker
-   Cache-first for static shell/study assets; network-first for live weather/NOTAM APIs. */
+   Network-first for pages/CSS/JS/data (cache fallback offline); cache-first for images;
+   network-first for live weather/NOTAM APIs. */
 /* LIVE build. Live and preview share the same github.io origin, so this worker only
    deletes its own caches: older live caches ('nppl-live-*') and the pre-2026-10-30 live
    caches ('nppl-insider-*'). Preview caches ('nppl-preview-*') are left alone. */
 const CACHE_PREFIX = 'nppl-live-';
 const OLD_LIVE_PREFIXES = [CACHE_PREFIX, 'nppl-insider-'];
-const CACHE_VERSION = CACHE_PREFIX + 'v11-20261109-sharpsplash';
+const CACHE_VERSION = CACHE_PREFIX + 'v12-20261112-clockfix';
 const SHELL = [
   './',
   './index.html',
@@ -136,6 +137,18 @@ function isApi(url) {
   return rel(url).startsWith('/api/');
 }
 
+/* Pages, styles, scripts and data: anything that changes from build to build. */
+function isCode(url) {
+  const p = rel(url);
+  return p === '/' || p.endsWith('.html') || /\.(js|css|webmanifest)$/i.test(p);
+}
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'get-version' && event.ports && event.ports[0]) {
+    event.ports[0].postMessage({ version: CACHE_VERSION });
+  }
+});
+
 function isStatic(url) {
   const p = rel(url);
   return /\.(js|css|png|jpg|jpeg|webp|svg|webmanifest|woff2?)$/i.test(p) ||
@@ -171,7 +184,29 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static / shell — cache first, then network; update cache in background when possible
+  // App code (pages, CSS, JS, data) — NETWORK FIRST so a new build shows straight away;
+  // falls back to the cached copy when offline.
+  if (isCode(url)) {
+    event.respondWith(
+      fetch(revalidate(req))
+        .then((res) => {
+          if (res && res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE_VERSION).then((c) => c.put(req, copy));
+            return res;
+          }
+          return caches.open(CACHE_VERSION).then((c) => c.match(req)).then((cached) => cached || res);
+        })
+        .catch(() =>
+          caches.open(CACHE_VERSION).then((c) =>
+            c.match(req).then((r) => r || (req.mode === 'navigate' ? c.match('./index.html') : undefined))
+          ).then((r) => r || Response.error())
+        )
+    );
+    return;
+  }
+
+  // Images / icons / other static files — cache first, then network; update cache in background
   if (isStatic(url)) {
     event.respondWith(
       caches.open(CACHE_VERSION).then((c) => c.match(req)).then((cached) => {

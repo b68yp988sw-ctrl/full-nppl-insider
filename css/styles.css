@@ -16,6 +16,10 @@
   --border: rgba(96,165,250, 0.18);
   --radius: 14px;
   --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+  --clock-h: 42px;
+  /* Total height of the sticky top stack (top bar + clock). Whole pixels only. */
+  --stack-h: calc(var(--top-h) + var(--safe-t) + var(--clock-h));
   --nav-h: 64px;
   --top-h: 56px;
   --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -81,11 +85,15 @@ body { overflow-x: hidden; }
 .check-row input { margin-top: 3px; accent-color: var(--sky); width: 18px; height: 18px; flex-shrink: 0; }
 
 /* Top bar */
-.topbar {
+.top-stack {
   position: sticky; top: 0; z-index: 40;
-  height: var(--top-h);
+  background: #05050b;
+}
+.topbar {
+  position: relative;
+  height: calc(var(--top-h) + var(--safe-t));
   display: flex; align-items: center; gap: 8px;
-  padding: 0 12px;
+  padding: var(--safe-t) 12px 0;
   background: #06060c;
   border-bottom: 1px solid var(--border);
 }
@@ -277,7 +285,7 @@ body { overflow-x: hidden; }
   display: grid; place-items: center; margin: 0 auto 10px; font-size: 1.2rem;
 }
 .speak-bar {
-  position: sticky; top: var(--top-h); z-index: 30;
+  position: sticky; top: var(--stack-h); z-index: 30;
   display: flex; gap: 8px; padding: 8px 0 12px;
   background: linear-gradient(180deg, var(--navy) 70%, transparent);
 }
@@ -607,7 +615,7 @@ body { overflow-x: hidden; }
 .gloss-intro { color: var(--muted); font-size: 0.85rem; margin-bottom: 12px; }
 .sticky-tools {
   position: sticky;
-  top: var(--top-h);
+  top: var(--stack-h);
   z-index: 25;
   background: rgba(6,6,12, 0.94);
   backdrop-filter: blur(10px);
@@ -636,7 +644,7 @@ body { overflow-x: hidden; }
 .gloss-count { color: var(--muted); font-size: 0.8rem; margin: 4px 0 10px; }
 .gloss-letter {
   position: sticky;
-  top: calc(var(--top-h) + 96px);
+  top: calc(var(--stack-h) + 96px);
   z-index: 20;
   background: var(--navy-2);
   color: var(--sky);
@@ -859,7 +867,7 @@ body { overflow-x: hidden; }
   height: 36px;
   font-size: 1rem;
 }
-.chart-cat-head { top: calc(var(--top-h) + 108px); }
+.chart-cat-head { top: calc(var(--stack-h) + 108px); }
 .chart-quiz-prog { margin-bottom: 10px; color: var(--muted); font-size: 0.85rem; }
 .chart-quiz-q h3 { color: var(--text); font-size: 1.05rem; }
 .chart-opt-ok {
@@ -1568,7 +1576,7 @@ html, body { font-size: 17px; }
 html, body { background: var(--bg); color: var(--text); }
 #app { background: transparent !important; isolation: isolate; }
 #app::before {
-  content: ""; position: fixed; top: 0; bottom: 0; left: 50%; transform: translateX(-50%);
+  content: ""; position: fixed; top: 0; bottom: 0; left: 0; right: 0; margin: 0 auto;
   width: 100%; max-width: 480px; z-index: -1; pointer-events: none;
   background:
     radial-gradient(ellipse 260px 200px at 60% 300px, rgba(139,92,246,.10), transparent 70%),
@@ -1576,7 +1584,7 @@ html, body { background: var(--bg); color: var(--text); }
     var(--bg);
 }
 #app::after {
-  content: ""; position: fixed; top: 0; bottom: 0; left: 50%; transform: translateX(-50%);
+  content: ""; position: fixed; top: 0; bottom: 0; left: 0; right: 0; margin: 0 auto;
   width: 100%; max-width: 480px; z-index: -1; pointer-events: none;
   background: url(../assets/img/web.svg) no-repeat center top / 100% auto; opacity: .075;
 }
@@ -1584,8 +1592,8 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 
 /* Header */
 .topbar {
-  height: var(--top-h); padding: 0 16px; gap: 10px;
-  background: rgba(5,5,11,.92); border-bottom: 1px solid #1c1c2e;
+  height: calc(var(--top-h) + var(--safe-t)); padding: var(--safe-t) 16px 0; gap: 10px;
+  background: #05050b; border-bottom: 1px solid #1c1c2e;
 }
 .brand-logo { display: none; width: 40px; height: 40px; border-radius: 12px; object-fit: cover; border: 1px solid var(--border-hi); flex: none; }
 body[data-route="home"] .brand-logo { display: block; }
@@ -1723,7 +1731,7 @@ body[data-route="home"] #page-title {
 .yt-open { display: inline-flex; align-items: center; min-height: 48px; font-size: 16px; }
 
 /* Preview fixes: header fits full title; chip labels never split mid-word */
-.topbar { padding: 0 12px; gap: 8px; }
+.topbar { padding: var(--safe-t) 12px 0; gap: 8px; }
 body[data-route="home"] #page-title { letter-spacing: .04em; }
 .preview-badge { font-size: 10px; letter-spacing: .08em; padding: 2px 6px; flex: none; }
 .hd-chip { gap: 9px; padding: 10px 10px; }
@@ -2127,32 +2135,28 @@ button, input, select, textarea { font-family: inherit; }
 
 /* ---- Batch1: live clock, section cards, jump bar, PPR, media ---- */
 .app-clock {
-  position: sticky; top: var(--top-h); z-index: 35;
+  /* Lives inside the sticky .top-stack: no own sticky/compositing layer, no transforms,
+     no blur, no opacity, whole-pixel sizes so iOS draws the text crisply. */
+  position: relative; z-index: auto;
   display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
-  gap: 2px; padding: 5px 12px 6px;
+  gap: 2px; height: var(--clock-h); padding: 3px 12px 3px;
   background: #05050b; border-bottom: 1px solid #1c1c2e;
-  min-height: 40px;
   pointer-events: none;
-  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+  transform: none; filter: none; opacity: 1; text-shadow: none;
+  -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+  font-synthesis: none;
 }
-.app-clock-uk {
-  font-size: 0.82rem; font-weight: 700; letter-spacing: 0.01em; color: #ffffff;
-  font-variant-numeric: tabular-nums; line-height: 1.25; text-align: right;
+.app-clock-uk, .app-clock-utc {
+  font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-variant-numeric: tabular-nums; text-align: right; letter-spacing: 0;
+  white-space: nowrap; text-shadow: none;
 }
-.app-clock-utc {
-  font-size: 0.72rem; font-weight: 600; color: #c3c8d4;
-  font-variant-numeric: tabular-nums; line-height: 1.25; text-align: right;
-}
-@media (max-width: 390px) {
-  .app-clock { padding: 4px 10px 5px; }
-  .app-clock-uk { font-size: 0.8rem; }
-  .app-clock-utc { font-size: 0.7rem; }
-}
+.app-clock-uk { font-size: 14px; line-height: 17px; font-weight: 700; color: #ffffff; }
+.app-clock-utc { font-size: 12px; line-height: 15px; font-weight: 600; color: #d0d4dd; }
 body[data-route] .main { padding-top: 8px; }
 
 .af-jump {
-  position: sticky; top: calc(var(--top-h) + 40px); z-index: 34;
+  position: sticky; top: var(--stack-h); z-index: 34;
   display: flex; gap: 6px; overflow-x: auto; overflow-y: hidden;
   margin: 0 -16px 14px; padding: 8px 16px;
   background: rgba(5,5,11,.92); border-bottom: 1px solid rgba(201,206,216,0.12);
@@ -2239,3 +2243,7 @@ body[data-route] .main { padding-top: 8px; }
   background: rgba(255,255,255,0.05); border: 1px solid rgba(201,206,216,0.16);
   border-radius: 8px; padding: 4px 8px; line-height: 1.25; max-width: 100%;
 }
+
+/* App build line (Settings) */
+.app-build { margin: 18px 0 6px; text-align: center; font-size: 13px; line-height: 18px; color: #a6acbb; }
+.app-build b { color: #f1f3f8; font-weight: 700; }

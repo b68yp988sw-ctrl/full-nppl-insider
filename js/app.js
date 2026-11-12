@@ -1106,6 +1106,7 @@
         <p class="backup-msg" id="backup-import-msg" hidden></p>
       </div>
       <button type="button" class="btn btn-danger" id="reset-progress">${esc(t('settings.reset'))}</button>
+      <p class="app-build" id="app-build">App build: <b>checking…</b></p>
     `;
   }
 
@@ -1168,6 +1169,7 @@
   }
 
   function bind() {
+    if (typeof PWA !== 'undefined' && PWA.showBuild) PWA.showBuild();
     main.querySelectorAll('[data-go]').forEach(el => el.addEventListener('click', () => go(el.dataset.go)));
     if (route.name === 'home') bindHomeCarousel();
     const cont = document.getElementById('home-continue');

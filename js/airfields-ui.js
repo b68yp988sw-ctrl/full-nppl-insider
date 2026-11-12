@@ -1052,7 +1052,9 @@ Thank you.
         const scrollTo = id => {
           const el = document.getElementById('af-sec-' + id);
           if (!el) return;
-          const top = el.getBoundingClientRect().top + window.scrollY - 120;
+          const stackEl = document.getElementById('top-stack');
+          const off = (stackEl ? stackEl.offsetHeight : 106) + jump.offsetHeight + 8;
+          const top = el.getBoundingClientRect().top + window.scrollY - off;
           window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
         };
         chips.forEach(btn => btn.addEventListener('click', () => scrollTo(btn.dataset.afJump)));

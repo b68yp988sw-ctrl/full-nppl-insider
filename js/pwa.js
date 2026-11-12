@@ -14,12 +14,54 @@ const PWA = (() => {
     return /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   }
 
+  const RELOAD_KEY = 'nppl_sw_reloaded_for';
+
   function register() {
     if (!('serviceWorker' in navigator)) return;
+    // Only reload when a NEW worker replaces an existing one (not on the very first install).
+    const hadController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!hadController) return;
+      askBuild().then((v) => {
+        // Guard against loops: reload at most once per new build in this tab session.
+        const key = v || ('t' + Math.floor(Date.now() / 60000));
+        try {
+          if (sessionStorage.getItem(RELOAD_KEY) === key) return;
+          sessionStorage.setItem(RELOAD_KEY, key);
+        } catch (_) { return; }
+        window.location.reload();
+      });
+    });
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js', { scope: './' }).catch(() => {
+      navigator.serviceWorker.register('sw.js', { scope: './', updateViaCache: 'none' }).then((reg) => {
+        // iOS keeps home-screen apps suspended: check for a new build whenever the app comes back.
+        const check = () => { try { reg.update(); } catch (_) { /* ignore */ } };
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); });
+        window.addEventListener('pageshow', check);
+      }).catch(() => {
         /* ignore — older browsers / file:// */
       });
+    });
+  }
+
+  /* Ask the active service worker which build (cache version) it is serving. */
+  function askBuild() {
+    return new Promise((resolve) => {
+      const sw = navigator.serviceWorker && navigator.serviceWorker.controller;
+      if (!sw || typeof MessageChannel === 'undefined') return resolve('');
+      const ch = new MessageChannel();
+      const timer = setTimeout(() => resolve(''), 1500);
+      ch.port1.onmessage = (e) => { clearTimeout(timer); resolve((e.data && e.data.version) || ''); };
+      try { sw.postMessage({ type: 'get-version' }, [ch.port2]); } catch (_) { clearTimeout(timer); resolve(''); }
+    });
+  }
+
+  function showBuild() {
+    const el = document.getElementById('app-build');
+    if (!el) return;
+    askBuild().then((v) => {
+      const b = el.querySelector('b') || el;
+      b.textContent = v ? v.replace(/^nppl-(live|preview)-/, '') : 'not installed yet (reopen the app)';
     });
   }
 
@@ -56,7 +98,7 @@ const PWA = (() => {
     setTimeout(showIosHint, 2500);
   }
 
-  return { init, isStandalone, isIos, register };
+  return { init, isStandalone, isIos, register, showBuild, askBuild };
 })();
 
 if (typeof globalThis !== 'undefined') globalThis.PWA = PWA;
