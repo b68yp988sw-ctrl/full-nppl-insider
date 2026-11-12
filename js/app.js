@@ -1157,6 +1157,7 @@
       case 'settings': html = viewSettings(); break;
       default: html = viewHome();
     }
+    if (typeof TaxiUI !== 'undefined') TaxiUI.closeFull();
     main.innerHTML = html;
     bind();
     syncBackButton();

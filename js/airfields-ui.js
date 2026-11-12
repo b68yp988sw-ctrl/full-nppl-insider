@@ -778,9 +778,10 @@ Thank you.
       </div>`;
   }
 
-  function jumpBar() {
+  function jumpBar(icao) {
     const items = [
       ['glance', 'At a glance'],
+      ...((typeof TaxiUI !== 'undefined' && TaxiUI.has(icao)) ? [['taxi', 'Taxi routes']] : []),
       ['cando', 'PPR'],
       ['weather', 'Weather'],
       ['getthere', 'Getting there'],
@@ -834,7 +835,7 @@ Thank you.
 
       ${d.notice ? `<div class="card af-notice">${ic('warn')}<div><b>${esc(d.notice.t)}</b><div class="meta af-small">Source: ${srcLink(d.notice.src)} · checked 3 Nov 2026</div></div></div>` : ''}
 
-      ${jumpBar()}
+      ${jumpBar(icao)}
 
       ${sec('glance', 'sat', 'At a glance · views', `
         <div class="af-tiles af-tiles-glance">
@@ -846,10 +847,12 @@ Thank you.
         <h4 class="af-subh">Satellite view</h4>
         ${satView(d)}
         <h4 class="af-subh">Ground diagram</h4>
-        ${diagram(icao, d)}
+        ${(typeof TaxiUI !== 'undefined' && TaxiUI.has(icao)) ? `<p class="af-line af-small">The detailed ground diagram, with every holding point and animated taxi routes, is in the <button type="button" class="af-linkbtn" data-af-jump="taxi">Ground diagram and taxi routes</button> section below.</p>` : diagram(icao, d)}
         <h4 class="af-subh">Photo &amp; webcam</h4>
         ${mediaBlock(icao, d)}
       `, 'af-sec-glance', '#3b82f6')}
+
+      ${(typeof TaxiUI !== 'undefined' && TaxiUI.has(icao)) ? sec('taxi', 'rwy', 'Ground diagram and taxi routes', TaxiUI.section(icao), 'af-txsec', '#d4af37') : ''}
 
       ${sec('cando', 'ppr', 'Can I go?', `
         ${pprGuide(d, icao)}
@@ -1043,7 +1046,8 @@ Thank you.
           const d = detailFor(get(editId)); if (d) { hrs.innerHTML = hoursTile(d); if (typeof Gloss !== 'undefined') Gloss.expand(hrs); }
         }, 60000);
       }
-      if (typeof Gloss !== 'undefined') document.querySelectorAll('.af-hero, .af-notice, .af-block, .af-sec:not(.af-wxsec), .af-details, .af-foot, .af-ppr-guide').forEach(el => Gloss.expand(el));
+      if (typeof Gloss !== 'undefined') document.querySelectorAll('.af-hero, .af-notice, .af-block, .af-sec:not(.af-wxsec):not(.af-txsec), .af-details, .af-foot, .af-ppr-guide').forEach(el => Gloss.expand(el));
+      if (typeof TaxiUI !== 'undefined') TaxiUI.mount(document.getElementById('main'));
       const wxEl = document.getElementById('af-wx');
       if (wxEl && typeof AirfieldWeather !== 'undefined') AirfieldWeather.mount(wxEl);
       const jump = document.getElementById('af-jump');
@@ -1058,6 +1062,7 @@ Thank you.
           window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
         };
         chips.forEach(btn => btn.addEventListener('click', () => scrollTo(btn.dataset.afJump)));
+        document.querySelectorAll('.af-linkbtn[data-af-jump]').forEach(btn => btn.addEventListener('click', () => scrollTo(btn.dataset.afJump)));
         const secs = chips.map(c => document.getElementById('af-sec-' + c.dataset.afJump)).filter(Boolean);
         if (secs.length && 'IntersectionObserver' in window) {
           const io = new IntersectionObserver(entries => {
