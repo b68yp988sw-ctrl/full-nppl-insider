@@ -17,7 +17,7 @@
   --radius: 14px;
   --safe-b: env(safe-area-inset-bottom, 0px);
   --safe-t: env(safe-area-inset-top, 0px);
-  --clock-h: 42px;
+  --clock-h: 48px;
   /* Total height of the sticky top stack (top bar + clock). Whole pixels only. */
   --stack-h: calc(var(--top-h) + var(--safe-t) + var(--clock-h));
   --nav-h: 64px;
@@ -38,7 +38,8 @@ html, body {
   overscroll-behavior: none;
 }
 
-body { overflow-x: hidden; }
+/* overflow-x on body makes iOS composite the sticky clock and can blur the text. Clip on #app instead. */
+#app { overflow-x: clip; }
 
 #app {
   min-height: 100%;
@@ -2139,20 +2140,26 @@ button, input, select, textarea { font-family: inherit; }
      no blur, no opacity, whole-pixel sizes so iOS draws the text crisply. */
   position: relative; z-index: auto;
   display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
-  gap: 2px; height: var(--clock-h); padding: 3px 12px 3px;
+  gap: 2px; height: var(--clock-h); padding: 5px 12px 5px;
   background: #05050b; border-bottom: 1px solid #1c1c2e;
   pointer-events: none;
   transform: none; filter: none; opacity: 1; text-shadow: none;
   -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
   font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 .app-clock-uk, .app-clock-utc {
-  font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-variant-numeric: tabular-nums; text-align: right; letter-spacing: 0;
   white-space: nowrap; text-shadow: none;
+  transform: none; filter: none; opacity: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
 }
-.app-clock-uk { font-size: 14px; line-height: 17px; font-weight: 700; color: #ffffff; }
-.app-clock-utc { font-size: 12px; line-height: 15px; font-weight: 600; color: #d0d4dd; }
+.app-clock-uk { font-size: 16px; line-height: 20px; font-weight: 700; color: #ffffff; }
+.app-clock-utc { font-size: 13px; line-height: 16px; font-weight: 600; color: #e8eaef; }
 body[data-route] .main { padding-top: 8px; }
 
 .af-jump {
@@ -2245,8 +2252,11 @@ body[data-route] .main { padding-top: 8px; }
 }
 
 /* App build line (Settings) */
-.app-build { margin: 18px 0 6px; text-align: center; font-size: 13px; line-height: 18px; color: #a6acbb; }
-.app-build b { color: #f1f3f8; font-weight: 700; }
+.app-build-card { margin-bottom: 14px; border-color: rgba(34,211,238,0.45); background: rgba(34,211,238,0.08); }
+.app-build-card h3 { margin: 0 0 6px; font-size: 15px; }
+.app-build { margin: 0; text-align: left; font-size: 16px; line-height: 22px; color: #e5e7eb; }
+.app-build b { color: #ffffff; font-weight: 800; font-size: 17px; letter-spacing: 0.01em; }
+.app-build-hint { margin: 8px 0 0; font-size: 13px; line-height: 18px; color: #a6acbb; }
 
 /* ---- Ground diagram + animated taxi routes (TaxiUI) ---- */
 .af-linkbtn { background: none; border: none; padding: 0; color: #93c5fd; font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
@@ -2258,21 +2268,36 @@ body[data-route] .main { padding-top: 8px; }
 .tx-rbtn.on { border-color: #22d3ee; background: rgba(34,211,238,0.12); box-shadow: 0 0 0 1px #22d3ee inset; }
 .tx-stage { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: #0b1a12; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
 .tx-svg { display: block; width: 100%; }
-.tx-bg { fill: #16301f; }
+.tx-bg { fill: #142a1a; }
 .tx-sat image { opacity: 1; }
 .tx-sat-on .tx-bg { fill: #0b1a12; }
-.tx-apron { fill: #3a3f4b; stroke: #8b93a5; stroke-width: 1; vector-effect: non-scaling-stroke; }
-.tx-bld { fill: #2c3a8c; stroke: #a5b4fc; stroke-width: 0.8; vector-effect: non-scaling-stroke; }
-.tx-rwy { fill: #6b7280; stroke: #e5e7eb; stroke-width: 1; vector-effect: non-scaling-stroke; }
-.tx-rwy.grass { fill: #2f8a55; stroke: #6ee7a8; }
-.tx-rcl { stroke: #fff; stroke-width: 1; stroke-dasharray: 5 4; vector-effect: non-scaling-stroke; }
-.tx-twy-edge { fill: none; stroke: #0f172a; stroke-linejoin: round; stroke-linecap: round; }
-.tx-twy { fill: none; stroke: #d6b98c; stroke-linejoin: round; stroke-linecap: round; }
-.tx-twy.grass, .tx-twy-edge.grass { stroke: #9bd9a8; }
-.tx-twy-edge.grass { stroke: #1f5c38; }
-.tx-twy-cl { fill: none; stroke: #facc15; stroke-width: 1; vector-effect: non-scaling-stroke; }
-.tx-hold-bar { stroke: #facc15; stroke-width: 3.5; vector-effect: non-scaling-stroke; stroke-linecap: butt; }
-.tx-hold-bar.on { stroke: #f87171; stroke-width: 5; }
+.tx-apron { fill: #4a4f5a; stroke: #c5cad6; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+.tx-bld { fill: #24378a; stroke: #c7d2fe; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.tx-rwy { fill: #5b616c; stroke: #f3f4f6; stroke-width: 1.1; vector-effect: non-scaling-stroke; }
+.tx-rwy.grass { fill: #2c8a4e; stroke: #86efac; }
+.tx-redge { fill: none; stroke: #f8fafc; stroke-width: 0.7; }
+.tx-thrbar { fill: #f8fafc; stroke: none; }
+.tx-rcl { stroke: #fff; stroke-width: 1.15; stroke-dasharray: 8 6; vector-effect: non-scaling-stroke; }
+.tx-twy-sh { fill: none; stroke: #1a1d24; stroke-linejoin: round; stroke-linecap: round; opacity: 0.9; }
+.tx-twy-sh.grass { stroke: #163d24; }
+.tx-twy-edge { fill: none; stroke: #111827; stroke-linejoin: round; stroke-linecap: round; }
+.tx-twy { fill: none; stroke: #d7c095; stroke-linejoin: round; stroke-linecap: round; }
+.tx-twy.grass, .tx-twy-edge.grass { stroke: #8fd9a0; }
+.tx-twy-edge.grass { stroke: #14532d; }
+.tx-twy-cl { fill: none; stroke: #fde047; stroke-width: 1.25; stroke-dasharray: 10 4; vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round; }
+.tx-hold-bar { stroke: #facc15; stroke-width: 2.4; vector-effect: non-scaling-stroke; stroke-linecap: butt; }
+.tx-hold-bar.on { stroke: #f87171; stroke-width: 3.2; }
+/* Satellite: let the photo show through; keep outlines, holds, windsock and labels sharp. */
+.tx-sat-on .tx-apron { fill: rgba(250,250,250,0.10); stroke: #f8fafc; stroke-width: 1.6; }
+.tx-sat-on .tx-bld { fill: rgba(37,55,140,0.18); stroke: #e0e7ff; stroke-width: 1.3; }
+.tx-sat-on .tx-rwy { fill: rgba(15,15,20,0.08); stroke: #ffffff; stroke-width: 1.5; }
+.tx-sat-on .tx-rwy.grass { fill: rgba(16,185,129,0.16); stroke: #bbf7d0; }
+.tx-sat-on .tx-redge, .tx-sat-on .tx-thrbar { stroke: #fff; fill: #fff; }
+.tx-sat-on .tx-twy-sh { opacity: 0.25; }
+.tx-sat-on .tx-twy { stroke: #fde68a; }
+.tx-sat-on .tx-twy.grass { stroke: #bbf7d0; }
+.tx-sat-on .tx-twy-cl { stroke: #facc15; stroke-width: 1.6; }
+.tx-sat-on .tx-hold-bar { stroke: #fde047; stroke-width: 3; }
 .tx-route-all { fill: none; stroke: #22d3ee; stroke-width: 2; stroke-dasharray: 4 3; opacity: 0.75; vector-effect: non-scaling-stroke; }
 .tx-route-done { fill: none; stroke: #22d3ee; stroke-linecap: round; stroke-linejoin: round; }
 .tx-labels text { font-family: -apple-system, system-ui, "Segoe UI", Roboto, Arial, sans-serif; }
@@ -2284,9 +2309,14 @@ body[data-route] .main { padding-top: 8px; }
 .tx-hold-lbl text { fill: #facc15; font-size: 11px; font-weight: 800; text-anchor: middle; }
 .tx-hold-lbl.on rect { fill: #facc15; stroke: #111; }
 .tx-hold-lbl.on text { fill: #111; }
+.tx-hold-sub { font-size: 7.2px; font-weight: 800; }
 .tx-ctl { fill: #93c5fd; stroke: #0b1a12; stroke-width: 1.5px; }
 .tx-lbl { fill: #e5e7eb; font-size: 11px; font-weight: 700; text-anchor: middle; paint-order: stroke; stroke: #0b1a12; stroke-width: 3px; }
 .tx-lbl.soft { fill: #b7f7cf; font-weight: 600; font-style: italic; }
+.tx-lbl.wdi { fill: #fdba74; font-size: 10px; font-weight: 800; }
+.tx-wdi-pole { stroke: #e5e7eb; stroke-width: 1.8; stroke-linecap: round; }
+.tx-wdi-base { fill: #9ca3af; stroke: #111; stroke-width: 0.6; }
+.tx-wdi-sock { fill: #f97316; stroke: #7c2d12; stroke-width: 0.8; }
 .tx-plane-b { fill: #fff; stroke: #0e7490; stroke-width: 1.4px; stroke-linejoin: round; }
 .tx-north { position: absolute; top: 6px; left: 8px; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
 .tx-north svg { width: 12px; height: 16px; fill: #fff; }
@@ -2310,8 +2340,10 @@ body[data-route] .main { padding-top: 8px; }
 .tx-legend .lg { display: inline-block; width: 16px; height: 8px; border-radius: 2px; }
 .tx-legend .lg.rw { background: #6b7280; } .tx-legend .lg.gr { background: #2f8a55; }
 .tx-legend .lg.ta { background: #d6b98c; } .tx-legend .lg.tb { background: #9bd9a8; }
-.tx-legend .lg.ho { background: #facc15; height: 4px; } .tx-legend .lg.ap { background: #3a3f4b; border: 1px solid #8b93a5; }
-.tx-legend .lg.bd { background: #2c3a8c; } .tx-legend .lg.rt { background: #22d3ee; height: 3px; }
+.tx-legend .lg.ho { background: #facc15; height: 4px; } .tx-legend .lg.pc { background: #111; border: 1.5px solid #facc15; }
+.tx-legend .lg.ap { background: #4a4f5a; border: 1px solid #c5cad6; }
+.tx-legend .lg.bd { background: #24378a; } .tx-legend .lg.wd { background: #f97316; }
+.tx-legend .lg.rt { background: #22d3ee; height: 3px; }
 .tx-facts { margin: 10px 0 0 18px; color: #c9ced8; }
 .tx-facts li { margin-bottom: 5px; }
 .tx-cwc { margin-top: 10px; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(251,146,60,0.5); background: rgba(251,146,60,0.08); font-size: 13px; color: #fdba74; }

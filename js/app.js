@@ -1069,6 +1069,11 @@
         <button type="button" class="btn btn-secondary" style="margin-top:12px" id="btn-change-aircraft">${esc(t('settings.change_aircraft'))}</button>
       </div>`;
     return `
+      <div class="card app-build-card">
+        <h3>App build</h3>
+        <p class="app-build" id="app-build">App build: <b>checking…</b></p>
+        <p class="app-build-hint">This should read <b>v14-20261113-booker-aerial</b>. If it does not, swipe the app away (close it fully) and open it again from the Home Screen.</p>
+      </div>
       <div class="card">
         <h3>${esc(t('settings.language'))}</h3>
         <p style="font-size:0.8rem;color:var(--muted);margin-top:8px">${esc(t('settings.language_hint'))}</p>
@@ -1106,7 +1111,6 @@
         <p class="backup-msg" id="backup-import-msg" hidden></p>
       </div>
       <button type="button" class="btn btn-danger" id="reset-progress">${esc(t('settings.reset'))}</button>
-      <p class="app-build" id="app-build">App build: <b>checking…</b></p>
     `;
   }
 

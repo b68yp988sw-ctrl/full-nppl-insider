@@ -33,11 +33,13 @@ const PWA = (() => {
       });
     });
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js', { scope: './', updateViaCache: 'none' }).then((reg) => {
-        // iOS keeps home-screen apps suspended: check for a new build whenever the app comes back.
+      // Query string forces iOS standalone PWAs to fetch a fresh worker (they often keep a cached sw.js).
+      navigator.serviceWorker.register('sw.js?v=v14-20261113-booker-aerial', { scope: './', updateViaCache: 'none' }).then((reg) => {
         const check = () => { try { reg.update(); } catch (_) { /* ignore */ } };
+        check();
         document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); });
         window.addEventListener('pageshow', check);
+        setInterval(() => { if (!document.hidden) check(); }, 5 * 60 * 1000);
       }).catch(() => {
         /* ignore — older browsers / file:// */
       });

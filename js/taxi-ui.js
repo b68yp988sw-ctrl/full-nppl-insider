@@ -66,16 +66,36 @@ const TaxiUI = (() => {
     (G.apron || []).forEach((a) => { s += `<polygon class="tx-apron" points="${a.p.map(pt).join(' ')}"/>`; });
     (G.bld || []).forEach((b) => { s += `<polygon class="tx-bld" points="${b.map(pt).join(' ')}"/>`; });
     (G.rwy || []).forEach((r) => {
+      const dx = r.p2[0] - r.p1[0], dy = r.p2[1] - r.p1[1], L = Math.hypot(dx, dy);
+      const ux = dx / L, uy = dy / L, nx = -uy, ny = ux, hw = r.w / 2;
       s += `<polygon class="tx-rwy ${r.s === 'grass' ? 'grass' : ''}" points="${rwyPoly(r).map(pt).join(' ')}"/>`;
-      if (r.s !== 'grass') s += `<line class="tx-rcl" x1="${f1(r.p1[0])}" y1="${f1(-r.p1[1])}" x2="${f1(r.p2[0])}" y2="${f1(-r.p2[1])}"/>`;
+      if (r.s !== 'grass') {
+        const e = hw - 0.8;
+        [[e], [-e]].forEach(([off]) => {
+          s += `<line class="tx-redge" x1="${f1(r.p1[0] + nx * off)}" y1="${f1(-(r.p1[1] + ny * off))}" x2="${f1(r.p2[0] + nx * off)}" y2="${f1(-(r.p2[1] + ny * off))}"/>`;
+        });
+        s += `<line class="tx-rcl" x1="${f1(r.p1[0])}" y1="${f1(-r.p1[1])}" x2="${f1(r.p2[0])}" y2="${f1(-r.p2[1])}"/>`;
+        // White threshold bar at each end (as drawn on the aerodrome chart).
+        const bar = (origin, dir) => {
+          const d0 = dir * 2.2, d1 = dir * 4.6, w = hw - 1;
+          const pts = [
+            [origin[0] + ux * d0 + nx * w, origin[1] + uy * d0 + ny * w],
+            [origin[0] + ux * d1 + nx * w, origin[1] + uy * d1 + ny * w],
+            [origin[0] + ux * d1 - nx * w, origin[1] + uy * d1 - ny * w],
+            [origin[0] + ux * d0 - nx * w, origin[1] + uy * d0 - ny * w]
+          ];
+          return `<polygon class="tx-thrbar" points="${pts.map(pt).join(' ')}"/>`;
+        };
+        s += bar(r.p1, 1) + bar(r.p2, -1);
+      }
     });
     (G.twy || []).forEach((t) => {
       const d = 'M' + t.p.map(pt).join(' L');
-      s += `<path class="tx-twy-edge ${t.s}" d="${d}" stroke-width="${t.w + 2}"/><path class="tx-twy ${t.s}" d="${d}" stroke-width="${t.w}"/><path class="tx-twy-cl" d="${d}"/>`;
+      // Shoulder, pavement, then a crisp yellow centreline so the taxiway reads clearly from the air.
+      s += `<path class="tx-twy-sh ${t.s}" d="${d}" stroke-width="${t.w + 5}"/><path class="tx-twy-edge ${t.s}" d="${d}" stroke-width="${t.w + 2}"/><path class="tx-twy ${t.s}" d="${d}" stroke-width="${t.w}"/><path class="tx-twy-cl" d="${d}"/>`;
     });
     (G.holds || []).forEach((h) => {
       const t = (G.twy || []).find((w) => w.id === h.twy);
-      // hold bar across the taxiway, perpendicular to the nearest taxiway segment
       let ang = 0;
       if (t) {
         let best = 1e9;
@@ -87,24 +107,44 @@ const TaxiUI = (() => {
         }
       }
       const hw = ((t && t.w) || 9) / 2 + 3, nx = -Math.sin(ang) * hw, ny = Math.cos(ang) * hw;
-      s += `<line class="tx-hold-bar" data-hold="${esc(h.id)}" x1="${f1(h.p[0] + nx)}" y1="${f1(-(h.p[1] + ny))}" x2="${f1(h.p[0] - nx)}" y2="${f1(-(h.p[1] - ny))}"/>`;
+      const tx = Math.cos(ang), ty = Math.sin(ang);
+      // ICAO-style yellow ladder (several short bars across the taxiway), as on the aerodrome chart.
+      const nBars = 4, spacing = 1.7;
+      for (let i = 0; i < nBars; i++) {
+        const o = (i - (nBars - 1) / 2) * spacing;
+        const cx = h.p[0] + tx * o, cy = h.p[1] + ty * o;
+        s += `<line class="tx-hold-bar" data-hold="${esc(h.id)}" x1="${f1(cx + nx)}" y1="${f1(-(cy + ny))}" x2="${f1(cx - nx)}" y2="${f1(-(cy - ny))}"/>`;
+      }
     });
     s += `</g><g class="tx-route-g"><path class="tx-route-all" d=""/><path class="tx-route-done" d=""/></g><g class="tx-labels">`;
     // runway designators (true heading figures shown in the key, not on the drawing)
     (G.rwy || []).forEach((r) => {
       const dx = r.p2[0] - r.p1[0], dy = r.p2[1] - r.p1[1], L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L;
       const g = r.s === 'grass';
-      // grass labels go on the south side, hard runway labels beyond the ends
       const A = g ? [r.p1[0] - ux * 26 + uy * 22, r.p1[1] - uy * 26 - ux * 22] : [r.p1[0] - ux * 30, r.p1[1] - uy * 30];
       const B = g ? [r.p2[0] + uy * 26, r.p2[1] - ux * 26] : [r.p2[0] - uy * 26 + ux * 4, r.p2[1] + ux * 26 + uy * 4];
       [[A, r.a], [B, r.b]].forEach(([p, t]) => { s += lblGroup(p[0], p[1], `<text class="tx-rno ${g ? 'grass' : ''}" y="4">${esc(t)}</text>`); });
     });
     (G.twy || []).forEach((t) => { if (t.tag) s += lblGroup(t.tag[0], t.tag[1], `<circle class="tx-tag" r="8"/><text class="tx-tag-t" y="3.6">${esc(t.id)}</text>`); });
     (G.holds || []).forEach((h) => {
-      const w = 8 + h.id.length * 7.4;
+      const sub = h.sub || '';
+      const w = Math.max(8 + h.id.length * 7.4, sub ? 10 + sub.length * 6.2 : 0);
+      const ht = sub ? 22 : 14;
       const off = h.off || { e: [10, -7], w: [-10 - w, -7], s: [-w / 2, 8], n: [-w / 2, -22] }[h.side || 'e'];
-      s += lblGroup(h.p[0], h.p[1], `<g class="tx-hold-lbl" data-hold="${esc(h.id)}"><rect x="${off[0]}" y="${off[1]}" width="${w}" height="14" rx="2"/><text x="${off[0] + w / 2}" y="${off[1] + 10.6}">${esc(h.id)}</text></g>`);
+      const mid = off[0] + w / 2;
+      const subTx = sub ? `<text class="tx-hold-sub" x="${mid}" y="${off[1] + 19}">${esc(sub)}</text>` : '';
+      const idY = off[1] + (sub ? 10.2 : 10.6);
+      s += lblGroup(h.p[0], h.p[1], `<g class="tx-hold-lbl" data-hold="${esc(h.id)}"><rect x="${off[0]}" y="${off[1]}" width="${w}" height="${ht}" rx="2"/><text x="${mid}" y="${idY}">${esc(h.id)}</text>${subTx}</g>`);
     });
+    if (G.wdi) {
+      const p = G.wdi.p;
+      s += lblGroup(p[0], p[1], `<g class="tx-wdi" aria-label="Windsock, Wind Direction Indicator (WDI)">
+        <line class="tx-wdi-pole" x1="0" y1="11" x2="0" y2="-13"/>
+        <circle class="tx-wdi-base" cx="0" cy="11" r="2.2"/>
+        <path class="tx-wdi-sock" d="M0,-12 L17,-9 Q19,-6.2 17,-3.4 L0,-1 Z"/>
+        <text class="tx-lbl wdi" x="-12" y="4" text-anchor="end">Windsock (WDI)</text>
+      </g>`);
+    }
     if (G.control) s += lblGroup(G.control.p[0], G.control.p[1], `<circle class="tx-ctl" r="3.4"/><text class="tx-lbl" x="-6" y="3.5" text-anchor="end">${esc(G.control.label)}</text>`);
     (G.apron || []).forEach((a) => { if (a.lbl) s += lblGroup(a.lbl[0], a.lbl[1], `<text class="tx-lbl apron" y="3.5">${esc(a.name)}</text>`); });
     (G.labels || []).forEach((l) => { s += lblGroup(l.p[0], l.p[1], `<text class="tx-lbl soft" y="3.5">${esc(l.t)}</text>`); });
@@ -144,11 +184,14 @@ const TaxiUI = (() => {
         <div class="tx-legend">
           <span><i class="lg rw"></i>Hard runway</span><span><i class="lg gr"></i>Grass runway</span>
           <span><i class="lg ta"></i>Taxiway A (asphalt)</span><span><i class="lg tb"></i>Taxiway B (grass matting)</span>
-          <span><i class="lg ho"></i>Holding point</span><span><i class="lg ap"></i>Apron</span><span><i class="lg bd"></i>Building</span>
-          <span><i class="lg rt"></i>Taxi route</span>
+          <span><i class="lg ho"></i>Holding point</span><span><i class="lg pc"></i>A1 power checks</span>
+          <span><i class="lg ap"></i>Apron</span><span><i class="lg bd"></i>Building</span>
+          <span><i class="lg wd"></i>Windsock (WDI)</span><span><i class="lg rt"></i>Taxi route</span>
         </div>
         <ul class="tx-facts af-small">${rw}
           <li><b>Holding points on the chart:</b> A1, A2 and A3 on taxiway A (Alpha), and B1 on taxiway B (Bravo). Holds B2, B3, C and D were removed from the chart in AIRAC 6/2026, so older charts and maps may still show them.</li>
+          <li><b>A1 · Power Checks:</b> Holding point A1, just before the taxiway A curve onto runway 24, is the power check (run-up) area. Do your power checks here before lining up on runway 24.</li>
+          <li><b>Windsock (Wind Direction Indicator, WDI):</b> Lighted. Published at 51°36′50.32″N 000°48′15.75″W, on the northern airfield boundary, north-west of the runway 24 threshold (UK Aeronautical Information Publication (AIP) AD 2.9). On a runway 06 departure the Visiting Pilot Brief uses it as the turn cue before the M40 motorway.</li>
           <li>Make a call stating your intention before crossing the runway and before crossing A1, A2 or A3 on taxiway A.</li>
           <li>Taxiway B is grass with plastic matting: stay on the matting, as the grass gets waterlogged.</li>
           <li>Air/ground radio (A/G) only, callsign Wycombe Radio, 126.555 megahertz (MHz). No air traffic control (ATC): you are responsible for your own lookout and separation.</li>
@@ -156,9 +199,8 @@ const TaxiUI = (() => {
         <div class="tx-cwc">
           <b>Check with airfield</b> (not published, so not drawn):
           <ul class="af-small">
-            <li>Fuel pump location. The pilot brief mentions a fuel pump island near stands 1 to 10, but it is not mapped on the official chart.</li>
+            <li>Fuel pump location. The Visiting Pilot Brief mentions an AAA 100LL fuel pump island near stands 1 to 10, with a grass pad immediately to the west and Pad 6 (a concrete pad) immediately to the north, but the official chart does not map the exact stand.</li>
             <li>Which parking stand to use, and where visiting aircraft park.</li>
-            <li>Where to do your engine power checks before departure.</li>
             <li>Where to enter and leave the grass runway 06G/24G. It may only be used with the aerodrome authority's approval.</li>
             <li>Where to vacate after landing, where to turn round when backtracking, and whether B1 can be used to vacate.</li>
             <li>The gliders' 'D' line (100 metres west of taxiway A, running north/south) and the helicopter hold points X-ray, Romeo and Zulu. They are described in the brief or chart but not precisely positioned, so they are not drawn. The helicopter hover-taxi route between X-ray and Romeo crosses taxiway A between A2 and A3.</li>
@@ -166,7 +208,7 @@ const TaxiUI = (() => {
         </div>
         <details class="tx-src af-small"><summary>Sources</summary>
           <ul>
-            <li>UK Aeronautical Information Publication (AIP), AD 2.EGTB, AIRAC 11/2026 (effective 29 Oct 2026): AD 2.8 taxiways, AD 2.12 runway threshold co-ordinates, AD 2.20 ground movement and warnings. <a href="https://nats-uk.ead-it.com/cms-nats/opencms/en/Publications/AIP/" target="_blank" rel="noopener">NATS Aeronautical Information Service (AIS)</a></li>
+            <li>UK Aeronautical Information Publication (AIP), AD 2.EGTB, AIRAC 11/2026 (effective 29 Oct 2026): AD 2.8 taxiways, AD 2.9 Wind Direction Indicator (WDI) co-ordinates, AD 2.12 runway threshold co-ordinates, AD 2.15 anemometer, AD 2.20 ground movement and warnings. <a href="https://nats-uk.ead-it.com/cms-nats/opencms/en/Publications/AIP/" target="_blank" rel="noopener">NATS Aeronautical Information Service (AIS)</a></li>
             <li>Aerodrome Chart – ICAO, AD 2.EGTB-2-1 (aero info date 27 Mar 2026). The drawing is traced from this chart, fitted to the four runway threshold co-ordinates to within about 0.2 metres.</li>
             <li>Wycombe Air Park Visiting Pilot Brief, effective 1 June 2025 (Aerodrome Manual Issue 6, Revision 3). <a href="https://bookeraviation.com/visiting-pilot-information/" target="_blank" rel="noopener">Booker Aviation visiting pilot information</a></li>
             <li>Satellite photo (optional, needs signal): Esri World Imagery. Imagery © Esri, Maxar, Earthstar Geographics and the GIS User Community.</li>
@@ -302,11 +344,11 @@ const TaxiUI = (() => {
       view.w = nw; apply();
     }
 
-    /* satellite underlay (Esri World Imagery, zoom 17), loaded only on request */
+    /* satellite underlay (Esri World Imagery, zoom 18), loaded only on request */
     let satLoaded = false;
     function loadSat() {
       if (satLoaded) return; satLoaded = true;
-      const z = 17, n = 2 ** z, A = G.arp, cosl = Math.cos(A[0] * Math.PI / 180);
+      const z = 18, n = 2 ** z, A = G.arp, cosl = Math.cos(A[0] * Math.PI / 180);
       const toLL = (e, nn) => [A[0] + nn / 111195, A[1] + e / (cosl * 111320)];
       const tx = (lon) => (lon + 180) / 360 * n;
       const ty = (lat) => (1 - Math.asinh(Math.tan(lat * Math.PI / 180)) / Math.PI) / 2 * n;
