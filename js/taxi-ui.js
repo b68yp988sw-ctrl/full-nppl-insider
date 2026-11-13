@@ -116,7 +116,7 @@ const TaxiUI = (() => {
         s += `<line class="tx-hold-bar" data-hold="${esc(h.id)}" x1="${f1(cx + nx)}" y1="${f1(-(cy + ny))}" x2="${f1(cx - nx)}" y2="${f1(-(cy - ny))}"/>`;
       }
     });
-    s += `</g><g class="tx-route-g"><path class="tx-route-all" d=""/><path class="tx-route-done" d=""/></g><g class="tx-labels">`;
+    s += `</g><g class="tx-route-g"><path class="tx-route-all" d=""/><path class="tx-route-done" d=""/><g class="tx-arrows"></g></g><g class="tx-labels">`;
     // runway designators (true heading figures shown in the key, not on the drawing)
     (G.rwy || []).forEach((r) => {
       const dx = r.p2[0] - r.p1[0], dy = r.p2[1] - r.p1[1], L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L;
@@ -125,16 +125,38 @@ const TaxiUI = (() => {
       const B = g ? [r.p2[0] + uy * 26, r.p2[1] - ux * 26] : [r.p2[0] - uy * 26 + ux * 4, r.p2[1] + ux * 26 + uy * 4];
       [[A, r.a], [B, r.b]].forEach(([p, t]) => { s += lblGroup(p[0], p[1], `<text class="tx-rno ${g ? 'grass' : ''}" y="4">${esc(t)}</text>`); });
     });
-    (G.twy || []).forEach((t) => { if (t.tag) s += lblGroup(t.tag[0], t.tag[1], `<circle class="tx-tag" r="8"/><text class="tx-tag-t" y="3.6">${esc(t.id)}</text>`); });
+    (G.twy || []).forEach((t) => {
+      if (!t.tag) return;
+      // ICAO-style location sign (yellow board, black letters) on a short post, pointing at the taxiway.
+      s += lblGroup(t.tag[0], t.tag[1], `<g class="tx-sign tx-sign-loc">
+        <line class="tx-sign-pole" x1="0" y1="0" x2="0" y2="-8"/>
+        <circle class="tx-sign-dot" cx="0" cy="0" r="1.7"/>
+        <rect class="tx-sign-board" x="-12" y="-26" width="24" height="18" rx="1.6"/>
+        <text class="tx-sign-id" x="0" y="-13">${esc(t.id)}</text>
+      </g>`);
+    });
     (G.holds || []).forEach((h) => {
       const sub = h.sub || '';
-      const w = Math.max(8 + h.id.length * 7.4, sub ? 10 + sub.length * 6.2 : 0);
-      const ht = sub ? 22 : 14;
-      const off = h.off || { e: [10, -7], w: [-10 - w, -7], s: [-w / 2, 8], n: [-w / 2, -22] }[h.side || 'e'];
+      const subLines = sub ? String(sub).split(/\s+/) : [];
+      const longest = Math.max(h.id.length, 0, ...subLines.map((l) => l.length));
+      const w = Math.max(30, 14 + longest * 6.3);
+      const lineH = 8.2;
+      const ht = subLines.length ? 12.4 + subLines.length * lineH : 16;
+      const side = h.side || 'n';
+      const off = (h.off || { n: [-w / 2, -ht - 8], s: [-w / 2, 11], e: [11, -ht / 2], w: [-11 - w, -ht / 2] }[side]).slice();
+      if (h.shift) { off[0] += h.shift[0]; off[1] += h.shift[1]; }
       const mid = off[0] + w / 2;
-      const subTx = sub ? `<text class="tx-hold-sub" x="${mid}" y="${off[1] + 19}">${esc(sub)}</text>` : '';
-      const idY = off[1] + (sub ? 10.2 : 10.6);
-      s += lblGroup(h.p[0], h.p[1], `<g class="tx-hold-lbl" data-hold="${esc(h.id)}"><rect x="${off[0]}" y="${off[1]}" width="${w}" height="${ht}" rx="2"/><text x="${mid}" y="${idY}">${esc(h.id)}</text>${subTx}</g>`);
+      let ax = mid, ay = (off[1] > 2) ? off[1] : off[1] + ht;
+      if (off[0] > 4) { ax = off[0]; ay = off[1] + ht / 2; }
+      if (off[0] + w < -4) { ax = off[0] + w; ay = off[1] + ht / 2; }
+      const subTx = subLines.map((line, i) => `<text class="tx-sign-sub" x="${f1(mid)}" y="${f1(off[1] + 11.6 + (i + 1) * lineH)}">${esc(line)}</text>`).join('');
+      const idY = off[1] + (subLines.length ? 10.2 : 11.4);
+      s += lblGroup(h.p[0], h.p[1], `<g class="tx-sign tx-sign-mand tx-hold-lbl" data-hold="${esc(h.id)}">
+        <line class="tx-sign-pole" x1="0" y1="0" x2="${f1(ax)}" y2="${f1(ay)}"/>
+        <circle class="tx-sign-dot" cx="0" cy="0" r="1.7"/>
+        <rect class="tx-sign-board" x="${f1(off[0])}" y="${f1(off[1])}" width="${f1(w)}" height="${ht}" rx="1.6"/>
+        <text class="tx-sign-id" x="${f1(mid)}" y="${f1(idY)}">${esc(h.id)}</text>${subTx}
+      </g>`);
     });
     if (G.wdi) {
       const p = G.wdi.p;
@@ -142,7 +164,8 @@ const TaxiUI = (() => {
         <line class="tx-wdi-pole" x1="0" y1="11" x2="0" y2="-13"/>
         <circle class="tx-wdi-base" cx="0" cy="11" r="2.2"/>
         <path class="tx-wdi-sock" d="M0,-12 L17,-9 Q19,-6.2 17,-3.4 L0,-1 Z"/>
-        <text class="tx-lbl wdi" x="-12" y="4" text-anchor="end">Windsock (WDI)</text>
+        <text class="tx-lbl wdi" x="-14" y="-4" text-anchor="end">Windsock</text>
+        <text class="tx-lbl wdi sub" x="-14" y="8" text-anchor="end">(WDI)</text>
       </g>`);
     }
     if (G.control) s += lblGroup(G.control.p[0], G.control.p[1], `<circle class="tx-ctl" r="3.4"/><text class="tx-lbl" x="-6" y="3.5" text-anchor="end">${esc(G.control.label)}</text>`);
@@ -163,7 +186,7 @@ const TaxiUI = (() => {
     const rw = G.rwy.map((r) => `<li><b>${esc(r.a)}/${esc(r.b)}</b> ${r.s === 'grass' ? 'grass' : 'asphalt'}, ${esc(r.dim)}. ${esc(r.a)} is ${esc(r.ha)} true heading, ${esc(r.b)} is ${esc(r.hb)} true heading.</li>`).join('');
     return `
       <div class="tx" id="${uid}" data-tx="${esc(G.icao)}">
-        <p class="af-line af-small tx-intro">Drawn to scale from the official aerodrome chart, north at the top. Pick a route, then press Play. Pinch, use + and −, or tap Enlarge to see it bigger.</p>
+        <p class="af-line af-small tx-intro">Satellite photo is on, so you can match what you will see from the air. Signposts mark each taxiway and holding point. Arrows show which way the aircraft moves. Pick a route, then press Play. Pinch, use + and −, or tap Enlarge. You can turn the photo off if you want the plain diagram.</p>
         <div class="tx-routes" role="group" aria-label="Choose a taxi route">${routes}</div>
         <div class="tx-stage" data-tx-stage>
           <svg class="tx-svg" xmlns="${NS}" role="img" aria-label="Ground diagram of ${esc(G.name)} with the chosen taxi route. Not for navigation." preserveAspectRatio="xMidYMid meet">${svgMarkup(G, uid)}</svg>
@@ -176,7 +199,7 @@ const TaxiUI = (() => {
           <button type="button" class="tx-cbtn tx-sq" data-tx-zoom="out" aria-label="Zoom out">−</button>
           <button type="button" class="tx-cbtn tx-sq" data-tx-zoom="in" aria-label="Zoom in">+</button>
           <button type="button" class="tx-cbtn" data-tx-fit>Whole airfield</button>
-          <button type="button" class="tx-cbtn" data-tx-sat aria-pressed="false">Satellite photo</button>
+          <button type="button" class="tx-cbtn" data-tx-sat aria-pressed="true">Satellite photo</button>
           <button type="button" class="tx-cbtn" data-tx-full>Enlarge</button>
         </div>
         <div class="tx-say" data-tx-say aria-live="polite"></div>
@@ -184,12 +207,14 @@ const TaxiUI = (() => {
         <div class="tx-legend">
           <span><i class="lg rw"></i>Hard runway</span><span><i class="lg gr"></i>Grass runway</span>
           <span><i class="lg ta"></i>Taxiway A (asphalt)</span><span><i class="lg tb"></i>Taxiway B (grass matting)</span>
-          <span><i class="lg ho"></i>Holding point</span><span><i class="lg pc"></i>A1 power checks</span>
-          <span><i class="lg ap"></i>Apron</span><span><i class="lg bd"></i>Building</span>
-          <span><i class="lg wd"></i>Windsock (WDI)</span><span><i class="lg rt"></i>Taxi route</span>
+          <span><i class="lg ho"></i>Holding-point sign (red)</span><span><i class="lg loc"></i>Taxiway sign (yellow)</span>
+          <span><i class="lg pc"></i>A1 power checks</span>
+          <span><i class="lg ap"></i>Apron outline</span><span><i class="lg bd"></i>Building outline</span>
+          <span><i class="lg wd"></i>Windsock (WDI)</span><span><i class="lg rt"></i>Taxi route and arrows</span>
         </div>
         <ul class="tx-facts af-small">${rw}
-          <li><b>Holding points on the chart:</b> A1, A2 and A3 on taxiway A (Alpha), and B1 on taxiway B (Bravo). Holds B2, B3, C and D were removed from the chart in AIRAC 6/2026, so older charts and maps may still show them.</li>
+          <li><b>Holding points on the chart:</b> A1, A2 and A3 on taxiway A (Alpha), and B1 on taxiway B (Bravo). Holding points B2, B3, C (Charlie) and D were removed from the official aerodrome chart in AIRAC 6/2026 (confirmed in the Pooleys Flight Guide 2026 Airnotes for AIRAC 7/2026). They are not drawn, because they are no longer current.</li>
+          <li><b>Landing fees:</b> All landings must be paid for (Visiting Pilot Brief). Briefing is in the Airways Aero Associations (AAA) Ltd control tower building. The exact pay point or desk is not published on the official chart.</li>
           <li><b>A1 · Power Checks:</b> Holding point A1, just before the taxiway A curve onto runway 24, is the power check (run-up) area. Do your power checks here before lining up on runway 24.</li>
           <li><b>Windsock (Wind Direction Indicator, WDI):</b> Lighted. Published at 51°36′50.32″N 000°48′15.75″W, on the northern airfield boundary, north-west of the runway 24 threshold (UK Aeronautical Information Publication (AIP) AD 2.9). On a runway 06 departure the Visiting Pilot Brief uses it as the turn cue before the M40 motorway.</li>
           <li>Make a call stating your intention before crossing the runway and before crossing A1, A2 or A3 on taxiway A.</li>
@@ -199,6 +224,7 @@ const TaxiUI = (() => {
         <div class="tx-cwc">
           <b>Check with airfield</b> (not published, so not drawn):
           <ul class="af-small">
+            <li>Landing-fee pay point (where you actually pay). The brief says all landings must be paid for and that briefing is in the control tower building, but it does not map a pay desk, machine or marked “C”. Older charts showed a holding point C (Charlie), which has been withdrawn, so that mark is not used as a pay point here.</li>
             <li>Fuel pump location. The Visiting Pilot Brief mentions an AAA 100LL fuel pump island near stands 1 to 10, with a grass pad immediately to the west and Pad 6 (a concrete pad) immediately to the north, but the official chart does not map the exact stand.</li>
             <li>Which parking stand to use, and where visiting aircraft park.</li>
             <li>Where to enter and leave the grass runway 06G/24G. It may only be used with the aerodrome authority's approval.</li>
@@ -262,6 +288,10 @@ const TaxiUI = (() => {
         if (g.dataset.fixed) return;
         g.setAttribute('transform', `translate(${g.dataset.x},${g.dataset.y}) scale(${sc.toFixed(4)})`);
       });
+      // Keep route chevrons a readable screen size at every zoom (same scale as signposts).
+      svg.querySelectorAll('.tx-arrow-g').forEach((g) => {
+        g.setAttribute('transform', `translate(${g.dataset.x},${g.dataset.y}) scale(${sc.toFixed(4)}) rotate(${g.dataset.ang})`);
+      });
       plane.dataset.sc = (mpp * Math.pow(zoom, 0.5)).toFixed(4);
       svg.style.setProperty('--px', mpp.toFixed(4));
       rDone.setAttribute('stroke-width', (4.5 * mpp).toFixed(3));
@@ -313,6 +343,29 @@ const TaxiUI = (() => {
       tl = timeline(r);
       const d = 'M' + tl.pts.map(pt).join(' L');
       rAll.setAttribute('d', d); rDone.setAttribute('d', d);
+      const ag = svg.querySelector('.tx-arrows');
+      if (ag) {
+        const every = 64;
+        let next = every * 0.5, ah = '', lastA = null;
+        const P = tl.pts, Ds = tl.dist;
+        for (let i = 1; i < P.length; i++) {
+          while (Ds[i] >= next) {
+            const span = Ds[i] - Ds[i - 1] || 1;
+            const u = (next - Ds[i - 1]) / span;
+            const dx = P[i][0] - P[i - 1][0], dy = P[i][1] - P[i - 1][1];
+            const len = Math.hypot(dx, dy) || 1;
+            // Sit 7 m left of the path so chevrons do not cover runway numbers or the centreline.
+            let x = P[i - 1][0] + dx * u - (dy / len) * 7;
+            let y = P[i - 1][1] + dy * u + (dx / len) * 7;
+            if (lastA && Math.hypot(x - lastA[0], y - lastA[1]) < 44) { next += every; continue; }
+            const ang = Math.atan2(-dy, dx) * 180 / Math.PI;
+            ah += `<g class="tx-arrow-g" data-x="${f1(x)}" data-y="${f1(-y)}" data-ang="${ang.toFixed(1)}"><polygon class="tx-arrow" points="13,0 -8,7 -3.5,0 -8,-7"/></g>`;
+            lastA = [x, y];
+            next += every;
+          }
+        }
+        ag.innerHTML = ah;
+      }
       stepsEl.innerHTML = r.pts.map((q, j) => q.say ? `<li data-j="${j}">${esc(q.say)}</li>` : '').join('');
       root.querySelectorAll('[data-tx-route]').forEach((b, i) => { b.classList.toggle('on', i === ix); b.setAttribute('aria-pressed', String(i === ix)); });
       t = 0; lastEv = -2; stop(); drawPlane(); apply();
@@ -425,6 +478,15 @@ const TaxiUI = (() => {
     const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(() => { const fw0 = fitW(); size(); if (Math.abs(view.w - fw0) < 1) view.w = fitW(); apply(); }) : null;
     if (ro) ro.observe(stage);
     size(); view.w = fitW(); setRoute(opts.route || 0, !!opts.autoplay);
+    // Satellite photo is the default view so the pilot can match the real airfield.
+    const satBtn = root.querySelector('[data-tx-sat]');
+    if (satBtn) {
+      satBtn.setAttribute('aria-pressed', 'true');
+      loadSat();
+      const sat = svg.querySelector('.tx-sat');
+      if (sat) sat.hidden = false;
+      root.classList.add('tx-sat-on');
+    }
     return { destroy() { stop(); if (ro) ro.disconnect(); }, setRoute };
   }
 

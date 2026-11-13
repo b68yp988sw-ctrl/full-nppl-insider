@@ -2287,18 +2287,19 @@ body[data-route] .main { padding-top: 8px; }
 .tx-twy-cl { fill: none; stroke: #fde047; stroke-width: 1.25; stroke-dasharray: 10 4; vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round; }
 .tx-hold-bar { stroke: #facc15; stroke-width: 2.4; vector-effect: non-scaling-stroke; stroke-linecap: butt; }
 .tx-hold-bar.on { stroke: #f87171; stroke-width: 3.2; }
-/* Satellite: let the photo show through; keep outlines, holds, windsock and labels sharp. */
-.tx-sat-on .tx-apron { fill: rgba(250,250,250,0.10); stroke: #f8fafc; stroke-width: 1.6; }
-.tx-sat-on .tx-bld { fill: rgba(37,55,140,0.18); stroke: #e0e7ff; stroke-width: 1.3; }
-.tx-sat-on .tx-rwy { fill: rgba(15,15,20,0.08); stroke: #ffffff; stroke-width: 1.5; }
-.tx-sat-on .tx-rwy.grass { fill: rgba(16,185,129,0.16); stroke: #bbf7d0; }
-.tx-sat-on .tx-redge, .tx-sat-on .tx-thrbar { stroke: #fff; fill: #fff; }
-.tx-sat-on .tx-twy-sh { opacity: 0.25; }
-.tx-sat-on .tx-twy { stroke: #fde68a; }
-.tx-sat-on .tx-twy.grass { stroke: #bbf7d0; }
-.tx-sat-on .tx-twy-cl { stroke: #facc15; stroke-width: 1.6; }
-.tx-sat-on .tx-hold-bar { stroke: #fde047; stroke-width: 3; }
-.tx-route-all { fill: none; stroke: #22d3ee; stroke-width: 2; stroke-dasharray: 4 3; opacity: 0.75; vector-effect: non-scaling-stroke; }
+/* Satellite: let the real pavement, apron stands and markings show through.
+   Hide the thick diagram taxiway/runway fills; keep only thin guides, holds and signs. */
+.tx-sat-on .tx-apron { fill: none; stroke: rgba(255,255,255,0.75); stroke-width: 1.3; }
+.tx-sat-on .tx-bld { fill: none; stroke: rgba(226,232,255,0.85); stroke-width: 1.2; }
+.tx-sat-on .tx-rwy { fill: none; stroke: rgba(255,255,255,0.9); stroke-width: 1.4; }
+.tx-sat-on .tx-rwy.grass { fill: none; stroke: rgba(167,243,208,0.85); }
+.tx-sat-on .tx-redge, .tx-sat-on .tx-thrbar, .tx-sat-on .tx-rcl { opacity: 0.28; }
+.tx-sat-on .tx-twy-sh,
+.tx-sat-on .tx-twy-edge,
+.tx-sat-on .tx-twy { stroke-width: 0 !important; opacity: 0; }
+.tx-sat-on .tx-twy-cl { stroke: #fde047; stroke-width: 1.7; opacity: 0.9; }
+.tx-sat-on .tx-hold-bar { stroke: #facc15; stroke-width: 3; }
+.tx-route-all { fill: none; stroke: #22d3ee; stroke-width: 3; stroke-dasharray: 5 4; opacity: 0.9; vector-effect: non-scaling-stroke; }
 .tx-route-done { fill: none; stroke: #22d3ee; stroke-linecap: round; stroke-linejoin: round; }
 .tx-labels text { font-family: -apple-system, system-ui, "Segoe UI", Roboto, Arial, sans-serif; }
 .tx-rno { fill: #fff; font-size: 12px; font-weight: 800; text-anchor: middle; paint-order: stroke; stroke: #0b1a12; stroke-width: 3px; }
@@ -2317,6 +2318,17 @@ body[data-route] .main { padding-top: 8px; }
 .tx-wdi-pole { stroke: #e5e7eb; stroke-width: 1.8; stroke-linecap: round; }
 .tx-wdi-base { fill: #9ca3af; stroke: #111; stroke-width: 0.6; }
 .tx-wdi-sock { fill: #f97316; stroke: #7c2d12; stroke-width: 0.8; }
+.tx-sign-pole { stroke: #f8fafc; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.tx-sign-dot { fill: #f8fafc; stroke: #111; stroke-width: 0.7; }
+.tx-sign-loc .tx-sign-board { fill: #facc15; stroke: #111; stroke-width: 1.4; }
+.tx-sign-loc .tx-sign-id { fill: #111; font-size: 13px; font-weight: 800; text-anchor: middle; }
+.tx-sign-mand .tx-sign-board { fill: #b91c1c; stroke: #fff; stroke-width: 1.6; }
+.tx-sign-mand .tx-sign-id { fill: #fff; font-size: 11px; font-weight: 800; text-anchor: middle; }
+.tx-sign-mand .tx-sign-sub { fill: #fff; font-size: 6.6px; font-weight: 800; text-anchor: middle; letter-spacing: 0.02em; }
+.tx-sign-mand.on .tx-sign-board { fill: #fde047; stroke: #111; }
+.tx-sign-mand.on .tx-sign-id, .tx-sign-mand.on .tx-sign-sub { fill: #111; }
+.tx-arrow { fill: #22d3ee; stroke: #083344; stroke-width: 0.7; stroke-linejoin: round; }
+.tx-sat-on .tx-arrow { fill: #67e8f9; stroke: #042f2e; }
 .tx-plane-b { fill: #fff; stroke: #0e7490; stroke-width: 1.4px; stroke-linejoin: round; }
 .tx-north { position: absolute; top: 6px; left: 8px; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
 .tx-north svg { width: 12px; height: 16px; fill: #fff; }
@@ -2340,7 +2352,7 @@ body[data-route] .main { padding-top: 8px; }
 .tx-legend .lg { display: inline-block; width: 16px; height: 8px; border-radius: 2px; }
 .tx-legend .lg.rw { background: #6b7280; } .tx-legend .lg.gr { background: #2f8a55; }
 .tx-legend .lg.ta { background: #d6b98c; } .tx-legend .lg.tb { background: #9bd9a8; }
-.tx-legend .lg.ho { background: #facc15; height: 4px; } .tx-legend .lg.pc { background: #111; border: 1.5px solid #facc15; }
+.tx-legend .lg.ho { background: #b91c1c; border: 1px solid #fff; } .tx-legend .lg.loc { background: #facc15; border: 1px solid #111; } .tx-legend .lg.pc { background: #b91c1c; border: 1.5px solid #fff; }
 .tx-legend .lg.ap { background: #4a4f5a; border: 1px solid #c5cad6; }
 .tx-legend .lg.bd { background: #24378a; } .tx-legend .lg.wd { background: #f97316; }
 .tx-legend .lg.rt { background: #22d3ee; height: 3px; }
