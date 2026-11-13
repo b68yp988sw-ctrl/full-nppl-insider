@@ -34,7 +34,7 @@ const PWA = (() => {
     });
     window.addEventListener('load', () => {
       // Query string forces iOS standalone PWAs to fetch a fresh worker (they often keep a cached sw.js).
-      navigator.serviceWorker.register('sw.js?v=v15-20261113-booker-signposts', { scope: './', updateViaCache: 'none' }).then((reg) => {
+      navigator.serviceWorker.register('sw.js?v=v16-20261113-all-taxi-circuits', { scope: './', updateViaCache: 'none' }).then((reg) => {
         const check = () => { try { reg.update(); } catch (_) { /* ignore */ } };
         check();
         document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); });

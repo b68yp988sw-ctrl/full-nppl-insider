@@ -6,7 +6,7 @@
    caches ('nppl-insider-*'). Preview caches ('nppl-preview-*') are left alone. */
 const CACHE_PREFIX = 'nppl-live-';
 const OLD_LIVE_PREFIXES = [CACHE_PREFIX, 'nppl-insider-'];
-const CACHE_VERSION = CACHE_PREFIX + 'v15-20261113-booker-signposts';
+const CACHE_VERSION = CACHE_PREFIX + 'v16-20261113-all-taxi-circuits';
 const SHELL = [
   './',
   './index.html',
@@ -76,6 +76,7 @@ const SHELL = [
   './data/airfields-detail.js',
   './data/airfields-geo.js',
   './data/taxi-diagrams.js',
+  './data/circuit-diagrams.js',
   './js/taxi-ui.js',
   './css/lesson-content.css',
   './assets/img/c42/ext-oil.svg',

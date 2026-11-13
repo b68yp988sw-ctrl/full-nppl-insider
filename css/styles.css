@@ -2262,6 +2262,8 @@ body[data-route] .main { padding-top: 8px; }
 .af-linkbtn { background: none; border: none; padding: 0; color: #93c5fd; font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
 .tx-intro { margin: 0 0 10px; color: #c9ced8; }
 .tx-routes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.tx-routes-many { max-height: 260px; overflow: auto; padding-right: 2px; }
+.tx-kind-cct .tx-rbtn.on { border-color: #22d3ee; }
 .tx-rbtn { text-align: left; border: 1px solid rgba(148,163,184,0.35); background: rgba(255,255,255,0.04); color: #e5e7eb; border-radius: 12px; padding: 9px 10px; min-height: 48px; cursor: pointer; font: inherit; }
 .tx-rbtn b { display: block; font-size: 14px; line-height: 18px; }
 .tx-rbtn span { display: block; font-size: 11px; line-height: 15px; color: #a6acbb; margin-top: 2px; }

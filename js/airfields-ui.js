@@ -782,6 +782,7 @@ Thank you.
     const items = [
       ['glance', 'At a glance'],
       ...((typeof TaxiUI !== 'undefined' && TaxiUI.has(icao)) ? [['taxi', 'Taxi routes']] : []),
+      ...((typeof CircuitUI !== 'undefined' && CircuitUI.has(icao)) ? [['circuits', 'Circuit map']] : []),
       ['cando', 'PPR'],
       ['weather', 'Weather'],
       ['getthere', 'Getting there'],
@@ -853,6 +854,8 @@ Thank you.
       `, 'af-sec-glance', '#3b82f6')}
 
       ${(typeof TaxiUI !== 'undefined' && TaxiUI.has(icao)) ? sec('taxi', 'rwy', 'Ground diagram and taxi routes', TaxiUI.section(icao), 'af-txsec', '#d4af37') : ''}
+
+      ${(typeof CircuitUI !== 'undefined' && CircuitUI.has(icao)) ? sec('circuits', 'cct', 'Circuit map', CircuitUI.section(icao), 'af-txsec af-ccsec', '#34d399') : ''}
 
       ${sec('cando', 'ppr', 'Can I go?', `
         ${pprGuide(d, icao)}

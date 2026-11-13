@@ -1072,7 +1072,7 @@
       <div class="card app-build-card">
         <h3>App build</h3>
         <p class="app-build" id="app-build">App build: <b>checking…</b></p>
-        <p class="app-build-hint">This should read <b>v15-20261113-booker-signposts</b>. If it does not, swipe the app away (close it fully) and open it again from the Home Screen.</p>
+        <p class="app-build-hint">This should read <b>v16-20261113-all-taxi-circuits</b>. If it does not, swipe the app away (close it fully) and open it again from the Home Screen.</p>
       </div>
       <div class="card">
         <h3>${esc(t('settings.language'))}</h3>
